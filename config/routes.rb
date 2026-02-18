@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  get "pages/home"
+  get "pages/contact"
+  get "pages/about"
+  resource :session
+  resources :passwords, param: :token
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -10,5 +15,10 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  # root "posts#index"
+  root "pages#home"
+
+  get "/404", to: "errors#not_found"
+  get "/500", to: "errors#internal_server_error"
+  # Add a catch-all route at the very bottom to handle unfound routes
+  match "*path", to: "errors#not_found", via: :all
 end

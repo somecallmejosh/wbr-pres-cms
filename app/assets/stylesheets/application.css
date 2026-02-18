@@ -8,3 +8,8 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+/* Alpine.js x-cloak directive */
+[x-cloak] {
+  display: none !important;
+}

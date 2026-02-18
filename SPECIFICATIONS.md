@@ -562,23 +562,23 @@ The existing `app/views/layouts/application.html.erb` needs:
 
 ### 6.4 View Partials
 
-| Partial                                  | Purpose                       |
-| ---------------------------------------- | ----------------------------- |
-| `layouts/_navbar.html.erb`               | Navigation bar                |
-| `layouts/_flash.html.erb`                | Flash messages                |
-| `layouts/_footer.html.erb`               | Page footer                   |
-| `events/_event_card.html.erb`            | Event card for index/homepage |
-| `events/_form.html.erb`                  | Event create/edit form        |
-| `galleries/_gallery_card.html.erb`       | Gallery card for index        |
-| `galleries/_form.html.erb`               | Gallery create/edit form      |
-| `galleries/_image_picker.html.erb`       | Image assignment interface    |
-| `galleries/_sortable_image.html.erb`     | Single image in sortable list |
-| `members/_form.html.erb`                 | Member create/edit form       |
-| `members/_member_row.html.erb`           | Member row in index           |
-| `admin/images/_image_thumbnail.html.erb` | Image thumbnail in admin grid |
-| `calendar/_calendar_grid.html.erb`       | Month grid (Turbo Frame)      |
-| `calendar/_calendar_day.html.erb`        | Single day cell               |
-| `shared/_category_badge.html.erb`        | Colored category badge        |
+| File | Render Call | Purpose |
+|---|---|---|
+| `app/views/layouts/_navbar.html.erb` | `render "layouts/navbar"` | Navigation bar |
+| `app/views/layouts/_flash.html.erb` | `render "layouts/flash"` | Flash messages |
+| `app/views/layouts/_footer.html.erb` | `render "layouts/footer"` | Page footer |
+| `app/views/events/_event_card.html.erb` | `render "events/event_card"` | Event card for index/homepage |
+| `app/views/events/_form.html.erb` | `render "events/form"` | Event create/edit form |
+| `app/views/galleries/_gallery_card.html.erb` | `render "galleries/gallery_card"` | Gallery card for index |
+| `app/views/galleries/_form.html.erb` | `render "galleries/form"` | Gallery create/edit form |
+| `app/views/galleries/_image_picker.html.erb` | `render "galleries/image_picker"` | Image assignment interface |
+| `app/views/galleries/_sortable_image.html.erb` | `render "galleries/sortable_image"` | Single image in sortable list |
+| `app/views/members/_form.html.erb` | `render "members/form"` | Member create/edit form |
+| `app/views/members/_member_row.html.erb` | `render "members/member_row"` | Member row in index |
+| `app/views/admin/images/_image_thumbnail.html.erb` | `render "admin/images/image_thumbnail"` | Image thumbnail in admin grid |
+| `app/views/calendar/_calendar_grid.html.erb` | `render "calendar/calendar_grid"` | Month grid (Turbo Frame) |
+| `app/views/calendar/_calendar_day.html.erb` | `render "calendar/calendar_day"` | Single day cell |
+| `app/views/shared/_category_badge.html.erb` | `render "shared/category_badge"` | Colored category badge |
 
 ---
 

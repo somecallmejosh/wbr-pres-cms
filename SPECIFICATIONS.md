@@ -10,7 +10,7 @@ A Content Management System for a Presbyterian church that manages three core do
 
 | Layer           | Technology                     | Version / Notes                              |
 | --------------- | ------------------------------ | -------------------------------------------- |
-| Language        | Ruby                           | 3.2.2                                        |
+| Language        | Ruby                           | 3.3.0                                        |
 | Framework       | Ruby on Rails                  | 8.1.1                                        |
 | Database        | PostgreSQL                     | Multi-database: primary, cache, queue, cable |
 | Asset Pipeline  | Propshaft                      |                                              |

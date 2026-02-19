@@ -20,6 +20,11 @@ Rails.application.routes.draw do
   # Members (admin only)
   resources :members
 
+  # Image management (admin only)
+  namespace :admin do
+    resources :images, only: %i[index new create destroy]
+  end
+
   # Defines the root path route ("/")
   root "pages#home"
 

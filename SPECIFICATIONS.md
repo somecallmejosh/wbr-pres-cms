@@ -10,7 +10,7 @@ A Content Management System for a Presbyterian church that manages three core do
 
 | Layer           | Technology                     | Version / Notes                              |
 | --------------- | ------------------------------ | -------------------------------------------- |
-| Language        | Ruby                           | 3.3.0                                        |
+| Language        | Ruby                           | 3.2.2                                        |
 | Framework       | Ruby on Rails                  | 8.1.1                                        |
 | Database        | PostgreSQL                     | Multi-database: primary, cache, queue, cable |
 | Asset Pipeline  | Propshaft                      |                                              |
@@ -562,23 +562,23 @@ The existing `app/views/layouts/application.html.erb` needs:
 
 ### 6.4 View Partials
 
-| File | Render Call | Purpose |
-|---|---|---|
-| `app/views/layouts/_navbar.html.erb` | `render "layouts/navbar"` | Navigation bar |
-| `app/views/layouts/_flash.html.erb` | `render "layouts/flash"` | Flash messages |
-| `app/views/layouts/_footer.html.erb` | `render "layouts/footer"` | Page footer |
-| `app/views/events/_event_card.html.erb` | `render "events/event_card"` | Event card for index/homepage |
-| `app/views/events/_form.html.erb` | `render "events/form"` | Event create/edit form |
-| `app/views/galleries/_gallery_card.html.erb` | `render "galleries/gallery_card"` | Gallery card for index |
-| `app/views/galleries/_form.html.erb` | `render "galleries/form"` | Gallery create/edit form |
-| `app/views/galleries/_image_picker.html.erb` | `render "galleries/image_picker"` | Image assignment interface |
-| `app/views/galleries/_sortable_image.html.erb` | `render "galleries/sortable_image"` | Single image in sortable list |
-| `app/views/members/_form.html.erb` | `render "members/form"` | Member create/edit form |
-| `app/views/members/_member_row.html.erb` | `render "members/member_row"` | Member row in index |
+| File                                               | Render Call                             | Purpose                       |
+| -------------------------------------------------- | --------------------------------------- | ----------------------------- |
+| `app/views/layouts/_navbar.html.erb`               | `render "layouts/navbar"`               | Navigation bar                |
+| `app/views/layouts/_flash.html.erb`                | `render "layouts/flash"`                | Flash messages                |
+| `app/views/layouts/_footer.html.erb`               | `render "layouts/footer"`               | Page footer                   |
+| `app/views/events/_event_card.html.erb`            | `render "events/event_card"`            | Event card for index/homepage |
+| `app/views/events/_form.html.erb`                  | `render "events/form"`                  | Event create/edit form        |
+| `app/views/galleries/_gallery_card.html.erb`       | `render "galleries/gallery_card"`       | Gallery card for index        |
+| `app/views/galleries/_form.html.erb`               | `render "galleries/form"`               | Gallery create/edit form      |
+| `app/views/galleries/_image_picker.html.erb`       | `render "galleries/image_picker"`       | Image assignment interface    |
+| `app/views/galleries/_sortable_image.html.erb`     | `render "galleries/sortable_image"`     | Single image in sortable list |
+| `app/views/members/_form.html.erb`                 | `render "members/form"`                 | Member create/edit form       |
+| `app/views/members/_member_row.html.erb`           | `render "members/member_row"`           | Member row in index           |
 | `app/views/admin/images/_image_thumbnail.html.erb` | `render "admin/images/image_thumbnail"` | Image thumbnail in admin grid |
-| `app/views/calendar/_calendar_grid.html.erb` | `render "calendar/calendar_grid"` | Month grid (Turbo Frame) |
-| `app/views/calendar/_calendar_day.html.erb` | `render "calendar/calendar_day"` | Single day cell |
-| `app/views/shared/_category_badge.html.erb` | `render "shared/category_badge"` | Colored category badge |
+| `app/views/calendar/_calendar_grid.html.erb`       | `render "calendar/calendar_grid"`       | Month grid (Turbo Frame)      |
+| `app/views/calendar/_calendar_day.html.erb`        | `render "calendar/calendar_day"`        | Single day cell               |
+| `app/views/shared/_category_badge.html.erb`        | `render "shared/category_badge"`        | Colored category badge        |
 
 ---
 
@@ -936,13 +936,13 @@ The application is deployed to **Railway**, a managed platform-as-a-service that
 
 **Estimated monthly cost: ~$5-10/month**
 
-| Service | Cost | Notes |
-|---|---|---|
-| Railway Hobby Plan | $5/month base | Includes $5 of usage credits |
-| Rails App (web) | Usage-based | CPU + memory consumed per second |
-| PostgreSQL | Usage-based | Runs as a Railway service, same billing model |
-| SSL | $0 | Auto-provisioned by Railway |
-| Builds | $0 | Included in plan |
+| Service            | Cost          | Notes                                         |
+| ------------------ | ------------- | --------------------------------------------- |
+| Railway Hobby Plan | $5/month base | Includes $5 of usage credits                  |
+| Rails App (web)    | Usage-based   | CPU + memory consumed per second              |
+| PostgreSQL         | Usage-based   | Runs as a Railway service, same billing model |
+| SSL                | $0            | Auto-provisioned by Railway                   |
+| Builds             | $0            | Included in plan                              |
 
 For a low-traffic church site, the $5 in included credits should cover most or all usage. If usage exceeds the included credits, you pay only for the overage.
 
@@ -972,12 +972,12 @@ For a low-traffic church site, the $5 in included credits should cover most or a
 
 In the Railway dashboard, go to your web service > **Variables** and add:
 
-| Variable | Value | Notes |
-|---|---|---|
-| `RAILS_MASTER_KEY` | Contents of `config/master.key` | Copy the key value, not the file path |
-| `RAILS_ENV` | `production` | |
-| `RAILS_SERVE_STATIC_FILES` | `true` | Railway doesn't use a separate web server |
-| `SOLID_QUEUE_IN_PUMA` | `true` | Runs background jobs inside the web process |
+| Variable                   | Value                           | Notes                                       |
+| -------------------------- | ------------------------------- | ------------------------------------------- |
+| `RAILS_MASTER_KEY`         | Contents of `config/master.key` | Copy the key value, not the file path       |
+| `RAILS_ENV`                | `production`                    |                                             |
+| `RAILS_SERVE_STATIC_FILES` | `true`                          | Railway doesn't use a separate web server   |
+| `SOLID_QUEUE_IN_PUMA`      | `true`                          | Runs background jobs inside the web process |
 
 **Note:** `DATABASE_URL` is set automatically by Railway when you add the PostgreSQL service. Do not set it manually.
 
@@ -1085,16 +1085,16 @@ railway status                    # Check service status
 
 ### 13.8 Environment Variables Summary
 
-| Variable | Location | Purpose |
-|---|---|---|
-| `DATABASE_URL` | Railway (auto-set) | PostgreSQL connection string |
-| `RAILS_MASTER_KEY` | Railway dashboard | Decrypts `credentials.yml.enc` |
-| `RAILS_ENV` | Railway dashboard | Set to `production` |
-| `RAILS_SERVE_STATIC_FILES` | Railway dashboard | Serve assets from Rails |
-| `SOLID_QUEUE_IN_PUMA` | Railway dashboard | Run background jobs in web process |
-| `CLOUDINARY_CLOUD_NAME` | Rails credentials | Cloudinary account |
-| `CLOUDINARY_API_KEY` | Rails credentials | Cloudinary API key |
-| `CLOUDINARY_API_SECRET` | Rails credentials | Cloudinary API secret |
+| Variable                   | Location           | Purpose                            |
+| -------------------------- | ------------------ | ---------------------------------- |
+| `DATABASE_URL`             | Railway (auto-set) | PostgreSQL connection string       |
+| `RAILS_MASTER_KEY`         | Railway dashboard  | Decrypts `credentials.yml.enc`     |
+| `RAILS_ENV`                | Railway dashboard  | Set to `production`                |
+| `RAILS_SERVE_STATIC_FILES` | Railway dashboard  | Serve assets from Rails            |
+| `SOLID_QUEUE_IN_PUMA`      | Railway dashboard  | Run background jobs in web process |
+| `CLOUDINARY_CLOUD_NAME`    | Rails credentials  | Cloudinary account                 |
+| `CLOUDINARY_API_KEY`       | Rails credentials  | Cloudinary API key                 |
+| `CLOUDINARY_API_SECRET`    | Rails credentials  | Cloudinary API secret              |
 
 ---
 

@@ -11,6 +11,7 @@ class EventsController < ApplicationController
 
   def new
     @event = Event.new
+    @images = Image.order(created_at: :desc)
   end
 
   def create
@@ -24,6 +25,7 @@ class EventsController < ApplicationController
   end
 
   def edit
+    @images = Image.order(created_at: :desc)
   end
 
   def update
@@ -46,6 +48,6 @@ class EventsController < ApplicationController
   end
 
   def event_params
-    params.expect(event: [:title, :description, :event_date, :start_time, :end_time, :location, :category])
+    params.expect(event: [:title, :description, :event_date, :start_time, :end_time, :location, :category, :image_id])
   end
 end

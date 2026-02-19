@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_19_013951) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_19_031114) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -20,6 +20,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_19_013951) do
     t.text "description"
     t.time "end_time"
     t.date "event_date", null: false
+    t.bigint "image_id"
     t.string "location"
     t.time "start_time", null: false
     t.string "title", null: false
@@ -27,6 +28,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_19_013951) do
     t.index ["category"], name: "index_events_on_category"
     t.index ["event_date", "category"], name: "index_events_on_event_date_and_category"
     t.index ["event_date"], name: "index_events_on_event_date"
+    t.index ["image_id"], name: "index_events_on_image_id"
+  end
+
+  create_table "images", force: :cascade do |t|
+    t.string "alt_text"
+    t.integer "bytes"
+    t.string "cloudinary_public_id", null: false
+    t.datetime "created_at", null: false
+    t.string "format"
+    t.integer "height"
+    t.string "title"
+    t.datetime "updated_at", null: false
+    t.string "url", null: false
+    t.integer "width"
+    t.index ["cloudinary_public_id"], name: "index_images_on_cloudinary_public_id", unique: true
   end
 
   create_table "members", force: :cascade do |t|
@@ -63,5 +79,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_19_013951) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "events", "images"
   add_foreign_key "sessions", "users"
 end

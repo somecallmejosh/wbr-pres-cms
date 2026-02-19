@@ -1,4 +1,6 @@
 class Event < ApplicationRecord
+  belongs_to :image, optional: true
+
   CATEGORIES = %w[education fellowship meetings community_service].freeze
 
   CATEGORY_LABELS = {

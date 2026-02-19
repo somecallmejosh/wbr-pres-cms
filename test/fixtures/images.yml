@@ -1,0 +1,19 @@
+sanctuary:
+  cloudinary_public_id: wbr-pres-cms/sanctuary_photo
+  url: https://res.cloudinary.com/dwjulenau/image/upload/wbr-pres-cms/sanctuary_photo.jpg
+  title: Sanctuary
+  alt_text: The church sanctuary with wooden pews and stained glass windows
+  width: 1200
+  height: 800
+  format: jpg
+  bytes: 245760
+
+fellowship_hall:
+  cloudinary_public_id: wbr-pres-cms/fellowship_hall
+  url: https://res.cloudinary.com/dwjulenau/image/upload/wbr-pres-cms/fellowship_hall.jpg
+  title: Fellowship Hall
+  alt_text: The fellowship hall set up for a community dinner
+  width: 1600
+  height: 900
+  format: jpg
+  bytes: 312000

@@ -15,7 +15,8 @@
           <li><%= link_to "About", pages_about_path, class: "hover:underline" %></li>
           <li><%= link_to "Contact", pages_contact_path, class: "hover:underline" %></li>
           <% if authenticated? %>
-            <li><%= link_to "Members", members_path, class: "hover:underline" %></li>
+            <li class="border-l-2 border-gray-200 pl-4"><%= link_to "Members", members_path, class: "hover:underline" %></li>
+            <li><%= link_to "Images Librar", admin_images_path, class: "hover:underline" %></li>
           <% end %>
         </ul>
         <button @click="menuOpen = !menuOpen" aria-label="Toggle menu" class="ml-4 lg:hidden">
@@ -31,11 +32,12 @@
       <li>
         <%= link_to "Home", root_path, class: "hover:underline block py-2" %>
       </li>
-      <li><%= link_to "Events", events_path, class: "hover:underline" %></li>
+      <li><%= link_to "Events", events_path, class: "hover:underline block py-2" %></li>
       <li><%= link_to "About", pages_about_path, class: "hover:underline block py-2" %></li>
       <li><%= link_to "Contact", pages_contact_path, class: "hover:underline block py-2" %></li>
       <% if authenticated? %>
-        <li><%= link_to "Members", members_path, class: "hover:underline" %></li>
+        <li><%= link_to "Members", members_path, class: "hover:underline block py-2" %></li>
+        <li><%= link_to "Images Library", admin_images_path, class: "hover:underline block py-2" %></li>
       <% end %>
     </ul>
   </div>

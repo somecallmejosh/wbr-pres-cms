@@ -1,0 +1,47 @@
+alice:
+  first_name: Alice
+  last_name: Anderson
+  email: alice@example.com
+  phone: '(555) 123-4567'
+  address_line1: 123 Main St
+  address_line2:
+  city: Baton Rouge
+  state: LA
+  zip_code: '70801'
+  date_of_birth: 1985-02-15
+
+bob:
+  first_name: Bob
+  last_name: Baker
+  email: bob@example.com
+  phone: '555-987-6543'
+  address_line1: 456 Oak Ave
+  address_line2: Apt 2B
+  city: Baton Rouge
+  state: LA
+  zip_code: '70802'
+  date_of_birth: 1990-07-22
+
+charlie:
+  first_name: Charlie
+  last_name: Clark
+  email:
+  phone:
+  address_line1:
+  address_line2:
+  city:
+  state:
+  zip_code:
+  date_of_birth:
+
+birthday_this_month:
+  first_name: Diana
+  last_name: Davis
+  email: diana@example.com
+  phone:
+  address_line1:
+  address_line2:
+  city:
+  state:
+  zip_code:
+  date_of_birth: <%= Date.new(1992, Date.current.month, [15, Date.current.end_of_month.day].min) %>

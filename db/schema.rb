@@ -10,9 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_18_012155) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_19_010830) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "members", force: :cascade do |t|
+    t.string "address_line1"
+    t.string "address_line2"
+    t.string "city"
+    t.datetime "created_at", null: false
+    t.date "date_of_birth"
+    t.string "email"
+    t.string "first_name", null: false
+    t.string "last_name", null: false
+    t.string "phone"
+    t.string "state"
+    t.datetime "updated_at", null: false
+    t.string "zip_code"
+    t.index ["date_of_birth"], name: "index_members_on_date_of_birth"
+    t.index ["last_name", "first_name"], name: "index_members_on_last_name_and_first_name"
+  end
 
   create_table "sessions", force: :cascade do |t|
     t.datetime "created_at", null: false

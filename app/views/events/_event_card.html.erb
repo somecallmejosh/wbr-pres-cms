@@ -1,0 +1,18 @@
+<div class="rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+  <div class="p-4">
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-sm text-gray-500"><%= full_date_ordinal(event.event_date) %></span>
+      <%= render "shared/category_badge", category: event.category %>
+    </div>
+    <h3 class="font-bold text-lg mb-1">
+      <%= link_to event.title, event_path(event), class: "hover:underline" %>
+    </h3>
+    <p class="text-sm text-gray-600 mb-2"><%= event_time_range(event) %></p>
+    <% if event.location.present? %>
+      <p class="text-sm text-gray-500"><%= event.location %></p>
+    <% end %>
+    <% if event.description.present? %>
+      <p class="text-gray-700 mt-2 text-sm line-clamp-2"><%= event.description %></p>
+    <% end %>
+  </div>
+</div>

@@ -11,6 +11,7 @@
           <li>
             <%= link_to "Home", root_path, class: "hover:underline" %>
           </li>
+          <li><%= link_to "Events", events_path, class: "hover:underline" %></li>
           <li><%= link_to "About", pages_about_path, class: "hover:underline" %></li>
           <li><%= link_to "Contact", pages_contact_path, class: "hover:underline" %></li>
           <% if authenticated? %>
@@ -30,8 +31,12 @@
       <li>
         <%= link_to "Home", root_path, class: "hover:underline block py-2" %>
       </li>
+      <li><%= link_to "Events", events_path, class: "hover:underline" %></li>
       <li><%= link_to "About", pages_about_path, class: "hover:underline block py-2" %></li>
       <li><%= link_to "Contact", pages_contact_path, class: "hover:underline block py-2" %></li>
+      <% if authenticated? %>
+        <li><%= link_to "Members", members_path, class: "hover:underline" %></li>
+      <% end %>
     </ul>
   </div>
 </div>

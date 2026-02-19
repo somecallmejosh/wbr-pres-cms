@@ -1,0 +1,42 @@
+past_event:
+  title: Past Community Dinner
+  description: A wonderful dinner event from last month.
+  event_date: <%= 2.weeks.ago.to_date %>
+  start_time: "18:00:00"
+  end_time: "20:00:00"
+  location: Fellowship Hall
+  category: fellowship
+
+this_week_education:
+  title: Bible Study Group
+  description: Weekly Bible study for all ages.
+  event_date: <%= Date.current %>
+  start_time: "10:00:00"
+  end_time: "11:30:00"
+  location: Room 101
+  category: education
+
+this_week_meeting:
+  title: Session Meeting
+  description: Monthly session meeting.
+  event_date: <%= Date.current + 1.day <= Date.current.end_of_week ? Date.current + 1.day : Date.current %>
+  start_time: "19:00:00"
+  end_time: "21:00:00"
+  location: Conference Room
+  category: meetings
+
+next_month_event:
+  title: Community Service Day
+  description: Volunteer day at the local food bank.
+  event_date: <%= 1.month.from_now.to_date %>
+  start_time: "09:00:00"
+  end_time: "14:00:00"
+  location: Food Bank
+  category: community_service
+
+no_end_time_event:
+  title: Prayer Breakfast
+  event_date: <%= 1.week.from_now.to_date %>
+  start_time: "07:30:00"
+  location: Fellowship Hall
+  category: fellowship

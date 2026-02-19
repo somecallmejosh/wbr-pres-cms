@@ -1,0 +1,46 @@
+<div class="container mx-auto p-4">
+  <div class="mb-6">
+    <%= link_to "&larr; Back to Events".html_safe, events_path, class: "text-blue-700 hover:underline" %>
+  </div>
+
+  <div class="max-w-3xl">
+    <div class="flex items-start justify-between mb-4">
+      <div>
+        <h1 class="font-bold text-4xl mb-2"><%= @event.title %></h1>
+        <%= render "shared/category_badge", category: @event.category %>
+      </div>
+      <% if authenticated? %>
+        <div class="flex gap-2">
+          <%= link_to "Edit", edit_event_path(@event), class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium" %>
+          <%= button_to "Delete", event_path(@event), method: :delete, class: "rounded-md px-3.5 py-2.5 bg-red-600 hover:bg-red-500 text-white font-medium cursor-pointer", data: { turbo_confirm: "Are you sure you want to delete this event?" } %>
+        </div>
+      <% end %>
+    </div>
+
+    <dl class="divide-y divide-gray-200">
+      <div class="py-3 sm:grid sm:grid-cols-3 sm:gap-4">
+        <dt class="font-semibold text-gray-700">Date</dt>
+        <dd class="sm:col-span-2"><%= full_date_ordinal_with_year(@event.event_date) %></dd>
+      </div>
+
+      <div class="py-3 sm:grid sm:grid-cols-3 sm:gap-4">
+        <dt class="font-semibold text-gray-700">Time</dt>
+        <dd class="sm:col-span-2"><%= event_time_range(@event) %></dd>
+      </div>
+
+      <% if @event.location.present? %>
+        <div class="py-3 sm:grid sm:grid-cols-3 sm:gap-4">
+          <dt class="font-semibold text-gray-700">Location</dt>
+          <dd class="sm:col-span-2"><%= @event.location %></dd>
+        </div>
+      <% end %>
+
+      <% if @event.description.present? %>
+        <div class="py-3 sm:grid sm:grid-cols-3 sm:gap-4">
+          <dt class="font-semibold text-gray-700">Description</dt>
+          <dd class="sm:col-span-2"><%= simple_format(@event.description) %></dd>
+        </div>
+      <% end %>
+    </dl>
+  </div>
+</div>

@@ -32,6 +32,9 @@ Rails.application.routes.draw do
     end
   end
 
+  # Calendar (public)
+  get "calendar", to: "calendar#show", as: :calendar
+
   # Defines the root path route ("/")
   root "pages#home"
 

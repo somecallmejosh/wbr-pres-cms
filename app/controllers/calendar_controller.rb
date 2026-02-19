@@ -1,0 +1,20 @@
+class CalendarController < ApplicationController
+  allow_unauthenticated_access
+
+  def show
+    @date = parse_date_params
+    @category = params[:category]
+    @events = Event.for_month(@date).by_category(@category).includes(:image)
+    @events_by_date = @events.group_by(&:event_date)
+  end
+
+  private
+
+  def parse_date_params
+    if params[:month].present? && params[:year].present?
+      Date.new(params[:year].to_i, params[:month].to_i, 1)
+    else
+      Date.current
+    end
+  end
+end

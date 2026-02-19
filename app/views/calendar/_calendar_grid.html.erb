@@ -1,0 +1,41 @@
+<%= turbo_frame_tag "calendar_frame" do %>
+  <%# Month navigation %>
+  <div class="flex items-center justify-between mb-4">
+    <%= link_to calendar_path(month: @date.prev_month.month, year: @date.prev_month.year, category: @category),
+        data: { turbo_frame: "calendar_frame" },
+        class: "rounded-md px-3 py-1 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-medium" do %>
+      &larr; Previous
+    <% end %>
+    <span class="font-semibold text-lg"><%= @date.strftime("%B %Y") %></span>
+    <%= link_to calendar_path(month: @date.next_month.month, year: @date.next_month.year, category: @category),
+        data: { turbo_frame: "calendar_frame" },
+        class: "rounded-md px-3 py-1 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-medium" do %>
+      Next &rarr;
+    <% end %>
+  </div>
+
+  <%# Day-of-week headers %>
+  <div class="grid grid-cols-7 border-b mb-1">
+    <% %w[Sun Mon Tue Wed Thu Fri Sat].each do |day_name| %>
+      <div class="font-bold text-center p-2 text-sm text-gray-600"><%= day_name %></div>
+    <% end %>
+  </div>
+
+  <%# Calendar grid %>
+  <div class="grid grid-cols-7">
+    <%# Leading empty cells %>
+    <% @date.beginning_of_month.wday.times do %>
+      <div class="border p-2 bg-gray-50 min-h-24"></div>
+    <% end %>
+
+    <%# Day cells %>
+    <% (@date.beginning_of_month..@date.end_of_month).each do |day| %>
+      <%= render "calendar/calendar_day", day: day, events: @events_by_date[day] || [] %>
+    <% end %>
+
+    <%# Trailing empty cells %>
+    <% (6 - @date.end_of_month.wday).times do %>
+      <div class="border p-2 bg-gray-50 min-h-24"></div>
+    <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,25 @@
+<div class="container mx-auto p-4">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="font-bold text-4xl">Events</h1>
+    <% if authenticated? %>
+      <%= link_to "New Event", new_event_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium" %>
+    <% end %>
+  </div>
+
+  <div class="flex flex-wrap gap-2 mb-6">
+    <%= link_to "All", events_path, class: "rounded-full px-3 py-1 text-sm font-medium #{params[:category].blank? ? 'bg-gray-800 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}" %>
+    <% Event::CATEGORY_LABELS.each do |value, label| %>
+      <%= link_to label, events_path(category: value), class: "rounded-full px-3 py-1 text-sm font-medium #{params[:category] == value ? 'bg-gray-800 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}" %>
+    <% end %>
+  </div>
+
+  <% if @events.any? %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @events.each do |event| %>
+        <%= render "events/event_card", event: event %>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-gray-500">No upcoming events.</p>
+  <% end %>
+</div>

@@ -39,3 +39,80 @@ members_data.each do |attrs|
 end
 
 puts "Seeded #{Member.count} members"
+
+# Events (at least 3 per week over the next 3 months)
+events_data = [
+  # Week 1: Feb 17–23
+  { title: "Adult Bible Study", description: "Weekly study of the Gospel of John, led by Pastor Reynolds.", event_date: "2026-02-18", start_time: "18:30", end_time: "19:30", location: "Fellowship Hall", category: "education" },
+  { title: "Session Meeting", description: "Monthly meeting of the Session to discuss church business.", event_date: "2026-02-19", start_time: "19:00", end_time: "20:30", location: "Conference Room", category: "meetings" },
+  { title: "Youth Game Night", description: "Fun and fellowship for middle and high school students.", event_date: "2026-02-20", start_time: "18:00", end_time: "20:00", location: "Youth Room", category: "fellowship" },
+
+  # Week 2: Feb 24–Mar 1
+  { title: "Adult Bible Study", description: "Continuing our study of the Gospel of John.", event_date: "2026-02-25", start_time: "18:30", end_time: "19:30", location: "Fellowship Hall", category: "education" },
+  { title: "Community Food Pantry", description: "Distributing food to families in need. Volunteers welcome.", event_date: "2026-02-26", start_time: "09:00", end_time: "12:00", location: "Church Parking Lot", category: "community_service" },
+  { title: "Women's Fellowship Luncheon", description: "Monthly gathering with a potluck meal and devotional.", event_date: "2026-02-27", start_time: "11:30", end_time: "13:00", location: "Fellowship Hall", category: "fellowship" },
+
+  # Week 3: Mar 2–8
+  { title: "Adult Bible Study", description: "Continuing our study of the Gospel of John.", event_date: "2026-03-04", start_time: "18:30", end_time: "19:30", location: "Fellowship Hall", category: "education" },
+  { title: "Deacons Meeting", description: "Monthly deacons meeting to coordinate congregational care.", event_date: "2026-03-05", start_time: "19:00", end_time: "20:00", location: "Conference Room", category: "meetings" },
+  { title: "Family Movie Night", description: "Screening a family-friendly film with popcorn and refreshments.", event_date: "2026-03-06", start_time: "18:30", end_time: "20:30", location: "Fellowship Hall", category: "fellowship" },
+
+  # Week 4: Mar 9–15
+  { title: "Adult Bible Study", description: "Continuing our study of the Gospel of John.", event_date: "2026-03-11", start_time: "18:30", end_time: "19:30", location: "Fellowship Hall", category: "education" },
+  { title: "Finance Committee Meeting", description: "Quarterly review of church finances.", event_date: "2026-03-12", start_time: "18:00", end_time: "19:00", location: "Conference Room", category: "meetings" },
+  { title: "Habitat Build Day", description: "Helping build a home with Habitat for Humanity. All skill levels welcome.", event_date: "2026-03-14", start_time: "08:00", end_time: "15:00", location: "Habitat Build Site", category: "community_service" },
+  { title: "Men's Breakfast", description: "Fellowship over a hot breakfast with a short devotional.", event_date: "2026-03-14", start_time: "07:30", end_time: "09:00", location: "Fellowship Hall", category: "fellowship" },
+
+  # Week 5: Mar 16–22
+  { title: "Adult Bible Study", description: "Continuing our study of the Gospel of John.", event_date: "2026-03-18", start_time: "18:30", end_time: "19:30", location: "Fellowship Hall", category: "education" },
+  { title: "Session Meeting", description: "Monthly meeting of the Session.", event_date: "2026-03-19", start_time: "19:00", end_time: "20:30", location: "Conference Room", category: "meetings" },
+  { title: "Spring Fellowship Dinner", description: "A church-wide dinner to celebrate the coming of spring.", event_date: "2026-03-21", start_time: "17:30", end_time: "19:30", location: "Fellowship Hall", category: "fellowship" },
+
+  # Week 6: Mar 23–29
+  { title: "Adult Bible Study", description: "Continuing our study of the Gospel of John.", event_date: "2026-03-25", start_time: "18:30", end_time: "19:30", location: "Fellowship Hall", category: "education" },
+  { title: "Neighborhood Cleanup Day", description: "Joining neighbors to clean up streets and parks around the church.", event_date: "2026-03-28", start_time: "09:00", end_time: "12:00", location: "Church Grounds", category: "community_service" },
+  { title: "Youth Lock-In", description: "Overnight event for youth with games, worship, and small groups.", event_date: "2026-03-27", start_time: "19:00", location: "Youth Room", category: "fellowship" },
+
+  # Week 7: Mar 30–Apr 5
+  { title: "Adult Bible Study", description: "Continuing our study of the Gospel of John.", event_date: "2026-04-01", start_time: "18:30", end_time: "19:30", location: "Fellowship Hall", category: "education" },
+  { title: "Deacons Meeting", description: "Monthly deacons meeting.", event_date: "2026-04-02", start_time: "19:00", end_time: "20:00", location: "Conference Room", category: "meetings" },
+  { title: "Easter Egg Hunt", description: "Annual egg hunt for children ages 2-10 on the church lawn.", event_date: "2026-04-04", start_time: "10:00", end_time: "11:30", location: "Church Lawn", category: "fellowship" },
+
+  # Week 8: Apr 6–12
+  { title: "Adult Bible Study", description: "Holy Week study focusing on the Passion narrative.", event_date: "2026-04-08", start_time: "18:30", end_time: "19:30", location: "Fellowship Hall", category: "education" },
+  { title: "Women's Fellowship Luncheon", description: "Monthly gathering with a potluck meal and devotional.", event_date: "2026-04-09", start_time: "11:30", end_time: "13:00", location: "Fellowship Hall", category: "fellowship" },
+  { title: "Clothing Drive Collection", description: "Collecting gently used clothing for local shelters.", event_date: "2026-04-11", start_time: "09:00", end_time: "14:00", location: "Church Parking Lot", category: "community_service" },
+
+  # Week 9: Apr 13–19
+  { title: "Adult Bible Study", description: "Beginning a new series on the book of Psalms.", event_date: "2026-04-15", start_time: "18:30", end_time: "19:30", location: "Fellowship Hall", category: "education" },
+  { title: "Session Meeting", description: "Monthly meeting of the Session.", event_date: "2026-04-16", start_time: "19:00", end_time: "20:30", location: "Conference Room", category: "meetings" },
+  { title: "Church Picnic", description: "Annual spring picnic at the park. Bring a side dish to share.", event_date: "2026-04-18", start_time: "11:00", end_time: "14:00", location: "Highland Road Park", category: "fellowship" },
+
+  # Week 10: Apr 20–26
+  { title: "Adult Bible Study", description: "Continuing our study of the Psalms.", event_date: "2026-04-22", start_time: "18:30", end_time: "19:30", location: "Fellowship Hall", category: "education" },
+  { title: "Community Food Pantry", description: "Monthly food distribution. Volunteers needed starting at 8 AM.", event_date: "2026-04-23", start_time: "09:00", end_time: "12:00", location: "Church Parking Lot", category: "community_service" },
+  { title: "Men's Breakfast", description: "Fellowship over a hot breakfast with a short devotional.", event_date: "2026-04-25", start_time: "07:30", end_time: "09:00", location: "Fellowship Hall", category: "fellowship" },
+
+  # Week 11: Apr 27–May 3
+  { title: "Adult Bible Study", description: "Continuing our study of the Psalms.", event_date: "2026-04-29", start_time: "18:30", end_time: "19:30", location: "Fellowship Hall", category: "education" },
+  { title: "Property Committee Meeting", description: "Reviewing building maintenance needs and summer projects.", event_date: "2026-04-30", start_time: "18:00", end_time: "19:00", location: "Conference Room", category: "meetings" },
+  { title: "Game Night", description: "Board games and card games for all ages.", event_date: "2026-05-01", start_time: "18:30", end_time: "20:30", location: "Fellowship Hall", category: "fellowship" },
+
+  # Week 12: May 4–10
+  { title: "Adult Bible Study", description: "Continuing our study of the Psalms.", event_date: "2026-05-06", start_time: "18:30", end_time: "19:30", location: "Fellowship Hall", category: "education" },
+  { title: "Deacons Meeting", description: "Monthly deacons meeting.", event_date: "2026-05-07", start_time: "19:00", end_time: "20:00", location: "Conference Room", category: "meetings" },
+  { title: "Mother's Day Tea", description: "Honoring the mothers and women of the congregation with tea and desserts.", event_date: "2026-05-09", start_time: "14:00", end_time: "15:30", location: "Fellowship Hall", category: "fellowship" },
+
+  # Week 13: May 11–17
+  { title: "Adult Bible Study", description: "Continuing our study of the Psalms.", event_date: "2026-05-13", start_time: "18:30", end_time: "19:30", location: "Fellowship Hall", category: "education" },
+  { title: "Vacation Bible School Planning", description: "Planning committee meeting for this summer's VBS.", event_date: "2026-05-14", start_time: "19:00", end_time: "20:00", location: "Conference Room", category: "meetings" },
+  { title: "Habitat Build Day", description: "Continuing our partnership with Habitat for Humanity.", event_date: "2026-05-16", start_time: "08:00", end_time: "15:00", location: "Habitat Build Site", category: "community_service" },
+]
+
+events_data.each do |attrs|
+  Event.find_or_create_by!(title: attrs[:title], event_date: attrs[:event_date]) do |event|
+    event.assign_attributes(attrs)
+  end
+end
+
+puts "Seeded #{Event.count} events"

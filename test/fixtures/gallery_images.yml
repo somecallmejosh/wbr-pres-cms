@@ -1,0 +1,9 @@
+worship_sanctuary:
+  gallery: worship
+  image: sanctuary
+  position: 1
+
+worship_fellowship_hall:
+  gallery: worship
+  image: fellowship_hall
+  position: 2

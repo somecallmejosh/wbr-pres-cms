@@ -1,0 +1,48 @@
+<div class="container mx-auto p-4">
+  <div class="mb-6">
+    <%= link_to "&larr; Back to Galleries".html_safe, galleries_path, class: "text-blue-700 hover:underline" %>
+  </div>
+
+  <div class="flex items-start justify-between mb-6">
+    <div>
+      <h1 class="font-bold text-4xl mb-2"><%= @gallery.title %></h1>
+      <% if @gallery.description.present? %>
+        <p class="text-gray-600 max-w-2xl"><%= @gallery.description %></p>
+      <% end %>
+    </div>
+    <% if authenticated? %>
+      <div class="flex gap-2 shrink-0 ml-4">
+        <%= link_to "Edit", edit_gallery_path(@gallery), class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium" %>
+        <%= button_to "Delete", gallery_path(@gallery), method: :delete,
+              class: "rounded-md px-3.5 py-2.5 bg-red-600 hover:bg-red-500 text-white font-medium cursor-pointer",
+              data: { turbo_confirm: "Are you sure you want to delete this gallery?" } %>
+      </div>
+    <% end %>
+  </div>
+
+  <% if @gallery_images.any? %>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+         data-controller="lightbox"
+         role="list"
+         aria-label="<%= @gallery.title %> images">
+      <% @gallery_images.each_with_index do |gi, index| %>
+        <div role="listitem">
+          <button type="button"
+                  class="block w-full aspect-square overflow-hidden rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-opacity"
+                  data-lightbox-target="item"
+                  data-lightbox-src="<%= gi.image.display_url(width: 1600) %>"
+                  data-lightbox-alt="<%= gi.image.alt_text.presence || gi.image.title.presence || "" %>"
+                  data-action="click->lightbox#open"
+                  aria-label="<%= "View #{gi.image.title.presence || "image #{index + 1}"} — click to enlarge" %>">
+            <img src="<%= gi.image.thumbnail_url(width: 400, height: 400) %>"
+                 alt=""
+                 aria-hidden="true"
+                 class="w-full h-full object-cover">
+          </button>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-gray-500">No images in this gallery yet.</p>
+  <% end %>
+</div>

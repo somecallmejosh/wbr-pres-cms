@@ -1,0 +1,14 @@
+worship:
+  title: Worship Services
+  description: Photos from our worship services throughout the year
+  published: true
+
+community:
+  title: Community Events
+  description: Photos from community gatherings and fellowship events
+  published: true
+
+draft_gallery:
+  title: Draft Gallery
+  description: An unpublished gallery not visible to the public
+  published: false

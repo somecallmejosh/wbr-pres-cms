@@ -1,0 +1,16 @@
+<div class="flex items-center gap-3 p-2 bg-white rounded-md border border-gray-200 shadow-sm"
+     data-sortable-id="<%= gallery_image.id %>"
+     tabindex="0"
+     role="listitem"
+     aria-label="<%= gallery_image.image.title.presence || "Image #{gallery_image.position}" %>, position <%= gallery_image.position %>. Use arrow keys to reorder.">
+  <span class="cursor-grab text-gray-400 shrink-0" aria-hidden="true" data-sortable-handle>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M8.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm0 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm7-7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm0 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"/>
+    </svg>
+  </span>
+  <img src="<%= gallery_image.image.thumbnail_url(width: 80, height: 80) %>"
+       alt=""
+       aria-hidden="true"
+       class="size-12 rounded object-cover shrink-0">
+  <span class="text-sm text-gray-700 flex-1 truncate"><%= gallery_image.image.title.presence || gallery_image.image.cloudinary_public_id %></span>
+</div>

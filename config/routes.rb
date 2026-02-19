@@ -14,6 +14,11 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
+  # Galleries (public index/show, admin CRUD + reorder)
+  resources :galleries do
+    patch :reorder, on: :member
+  end
+
   # Events (public index/show, admin CRUD)
   resources :events
 
@@ -22,7 +27,9 @@ Rails.application.routes.draw do
 
   # Image management (admin only)
   namespace :admin do
-    resources :images, only: %i[index new create destroy]
+    resources :images, only: %i[index new create destroy] do
+      post :sync, on: :collection
+    end
   end
 
   # Defines the root path route ("/")

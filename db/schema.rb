@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_19_031114) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_19_164102) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -29,6 +29,27 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_19_031114) do
     t.index ["event_date", "category"], name: "index_events_on_event_date_and_category"
     t.index ["event_date"], name: "index_events_on_event_date"
     t.index ["image_id"], name: "index_events_on_image_id"
+  end
+
+  create_table "galleries", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.boolean "published", default: false, null: false
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["published"], name: "index_galleries_on_published"
+  end
+
+  create_table "gallery_images", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "gallery_id", null: false
+    t.bigint "image_id", null: false
+    t.integer "position", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.index ["gallery_id", "image_id"], name: "index_gallery_images_on_gallery_id_and_image_id", unique: true
+    t.index ["gallery_id", "position"], name: "index_gallery_images_on_gallery_id_and_position"
+    t.index ["gallery_id"], name: "index_gallery_images_on_gallery_id"
+    t.index ["image_id"], name: "index_gallery_images_on_image_id"
   end
 
   create_table "images", force: :cascade do |t|
@@ -80,5 +101,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_19_031114) do
   end
 
   add_foreign_key "events", "images"
+  add_foreign_key "gallery_images", "galleries"
+  add_foreign_key "gallery_images", "images"
   add_foreign_key "sessions", "users"
 end

@@ -1,0 +1,29 @@
+<article class="rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+  <% if gallery.cover_image %>
+    <%= link_to gallery_path(gallery), aria: { label: gallery.title } do %>
+      <img src="<%= gallery.cover_image.thumbnail_url(width: 600, height: 400) %>"
+           alt=""
+           aria-hidden="true"
+           class="w-full h-48 object-cover">
+    <% end %>
+  <% else %>
+    <div class="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-400 text-sm" aria-hidden="true">
+      No images
+    </div>
+  <% end %>
+
+  <div class="p-4">
+    <h2 class="font-bold text-lg">
+      <%= link_to gallery.title, gallery_path(gallery), class: "hover:underline" %>
+    </h2>
+    <p class="text-sm text-gray-500 mt-1"><%= pluralize(gallery.images.size, "image") %></p>
+    <% if gallery.description.present? %>
+      <p class="text-gray-700 mt-2 text-sm line-clamp-2"><%= gallery.description %></p>
+    <% end %>
+    <% if authenticated? %>
+      <div class="mt-3">
+        <%= link_to "Edit", edit_gallery_path(gallery), class: "text-sm text-blue-600 hover:underline" %>
+      </div>
+    <% end %>
+  </div>
+</article>

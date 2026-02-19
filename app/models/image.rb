@@ -1,5 +1,7 @@
 class Image < ApplicationRecord
   has_many :events, dependent: :nullify
+  has_many :gallery_images, dependent: :destroy
+  has_many :galleries, through: :gallery_images
 
   validates :cloudinary_public_id, presence: true, uniqueness: true
   validates :url, presence: true

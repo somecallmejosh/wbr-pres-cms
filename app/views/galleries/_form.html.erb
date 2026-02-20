@@ -27,11 +27,13 @@
     </div>
   </div>
 
-  <% if @images.present? %>
-    <%= render "galleries/image_picker", selected_ids: gallery.images.pluck(:id) %>
-  <% end %>
+
 
   <div class="mt-6">
     <%= form.submit class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium cursor-pointer" %>
   </div>
+
+  <% if @images.present? %>
+    <%= render "galleries/image_picker", selected_ids: gallery.images.pluck(:id) %>
+  <% end %>
 <% end %>

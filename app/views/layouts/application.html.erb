@@ -25,14 +25,15 @@
   </head>
 
   <body
-    class="flex flex-col min-h-dvh"
+    class="flex flex-col min-h-dvh bg-amber-950/5 text-yellow-950"
     x-data="{ menuOpen: false }"
   >
     <%= render "/layouts/navbar" %>
     <%= render "/layouts/flash" %>
-    <main class="flex-1 flex flex-col" id="main-content">
+    <main class="flex-1 flex flex-col relative z-10" id="main-content">
       <%= yield %>
     </main>
     <%= render "/layouts/footer" %>
+    <img role="presentation" class="fixed inset-0 w-full h-full object-cover opacity-5 z-0" src="https://res.cloudinary.com/dwjulenau/image/upload/v1/wbr-pres-cms/image012?_a=BACJ3SDL" alt="">
   </body>
 </html>

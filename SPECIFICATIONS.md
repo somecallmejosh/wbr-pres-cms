@@ -11,7 +11,7 @@ A Content Management System for a Presbyterian church that manages three core do
 | Layer           | Technology                     | Version / Notes                              |
 | --------------- | ------------------------------ | -------------------------------------------- |
 | Language        | Ruby                           | 3.2.2                                        |
-| Framework       | Ruby on Rails                  | 8.1.1                                        |
+| Framework       | Ruby on Rails                  | 8.1.2                                        |
 | Database        | PostgreSQL                     | Multi-database: primary, cache, queue, cable |
 | Asset Pipeline  | Propshaft                      |                                              |
 | JavaScript      | Import Maps + Stimulus         |                                              |
@@ -965,8 +965,9 @@ For a low-traffic church site, the $5 in included credits should cover most or a
 #### Step 2: Add a PostgreSQL Database
 
 1. In your Railway project dashboard, click **New** > **Database** > **PostgreSQL**
-2. Railway provisions the database and automatically sets the `DATABASE_URL` environment variable on your app service
-3. No manual database configuration needed -- Rails will use `DATABASE_URL` when present
+2. Railway provisions the database service
+
+**Important:** Railway does NOT automatically inject a resolved `DATABASE_URL` into your web service. The Postgres service's `DATABASE_URL` variable is itself a template string (e.g., `postgresql://${{PGUSER}}:...`) that does not resolve when cross-referenced between services. You must manually construct the `DATABASE_URL` in your web service using the actual values from the Postgres service's Variables tab.
 
 #### Step 3: Set Environment Variables
 
@@ -974,12 +975,21 @@ In the Railway dashboard, go to your web service > **Variables** and add:
 
 | Variable                   | Value                           | Notes                                       |
 | -------------------------- | ------------------------------- | ------------------------------------------- |
+| `DATABASE_URL`             | See construction guide below    | Must be manually set — see note             |
 | `RAILS_MASTER_KEY`         | Contents of `config/master.key` | Copy the key value, not the file path       |
 | `RAILS_ENV`                | `production`                    |                                             |
 | `RAILS_SERVE_STATIC_FILES` | `true`                          | Railway doesn't use a separate web server   |
 | `SOLID_QUEUE_IN_PUMA`      | `true`                          | Runs background jobs inside the web process |
 
-**Note:** `DATABASE_URL` is set automatically by Railway when you add the PostgreSQL service. Do not set it manually.
+**Constructing `DATABASE_URL` manually:**
+
+Railway's cross-service `${{Postgres.DATABASE_URL}}` reference does not work because that variable is itself a template. Instead, go to the Postgres service → Variables tab and find the literal values for `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, and the TCP proxy domain/port (`RAILWAY_TCP_PROXY_DOMAIN`, `RAILWAY_TCP_PROXY_PORT`). Then set `DATABASE_URL` in the web service to:
+
+```
+postgresql://postgres:<POSTGRES_PASSWORD>@<RAILWAY_TCP_PROXY_DOMAIN>:<RAILWAY_TCP_PROXY_PORT>/railway
+```
+
+Alternatively, enable **Private Networking** in Railway project settings and use the `.railway.internal` hostname.
 
 Cloudinary credentials are stored in Rails encrypted credentials (`bin/rails credentials:edit`), which are decrypted at runtime using `RAILS_MASTER_KEY`. No need to set them as separate environment variables.
 
@@ -1056,7 +1066,7 @@ railway run bin/rails console
 curl https://wbr-pres-cms.up.railway.app/up
 ```
 
-If you prefer not to install the Railway CLI, you can also run one-off commands from the Railway dashboard under your service's **Shell** tab.
+The Railway CLI is the only way to run one-off commands against the production environment. There is no Shell tab in the Railway dashboard UI.
 
 ### 13.6 Ongoing Deployments
 
@@ -1087,7 +1097,7 @@ railway status                    # Check service status
 
 | Variable                   | Location           | Purpose                            |
 | -------------------------- | ------------------ | ---------------------------------- |
-| `DATABASE_URL`             | Railway (auto-set) | PostgreSQL connection string       |
+| `DATABASE_URL`             | Railway dashboard (manually set) | PostgreSQL connection string  |
 | `RAILS_MASTER_KEY`         | Railway dashboard  | Decrypts `credentials.yml.enc`     |
 | `RAILS_ENV`                | Railway dashboard  | Set to `production`                |
 | `RAILS_SERVE_STATIC_FILES` | Railway dashboard  | Serve assets from Rails            |
@@ -1174,12 +1184,19 @@ railway status                    # Check service status
 
 1. Create Railway account and project, connect GitHub repo
 2. Add PostgreSQL database service in Railway dashboard
-3. Set environment variables (`RAILS_MASTER_KEY`, `RAILS_ENV`, `RAILS_SERVE_STATIC_FILES`, `SOLID_QUEUE_IN_PUMA`)
-4. Update `config/database.yml` production section to use `DATABASE_URL`
+3. Update `config/database.yml` production section to use `DATABASE_URL` for all four databases (primary, cache, queue, cable), with `migrations_paths` set for each secondary database
+4. Create migration files for secondary databases:
+   - `db/cache_migrate/20260101000001_create_solid_cache_entries.rb`
+   - `db/queue_migrate/20260101000002_create_solid_queue_tables.rb`
+   - `db/cable_migrate/20260101000003_create_solid_cable_messages.rb`
+   - Version numbers must be unique across all migration files (they share one `schema_migrations` table)
 5. Enable `assume_ssl` and `force_ssl` in `config/environments/production.rb`
 6. Push to GitHub to trigger auto-deploy
-7. Run seeds, create admin user, verify all features
-8. Configure custom domain (optional)
+7. In Railway dashboard, go to Postgres service → Variables and copy the literal values for `POSTGRES_USER`, `POSTGRES_PASSWORD`, `RAILWAY_TCP_PROXY_DOMAIN`, and `RAILWAY_TCP_PROXY_PORT`
+8. Manually construct and set `DATABASE_URL` in the web service Variables tab: `postgresql://postgres:<POSTGRES_PASSWORD>@<RAILWAY_TCP_PROXY_DOMAIN>:<RAILWAY_TCP_PROXY_PORT>/railway`
+9. Set remaining environment variables: `RAILS_MASTER_KEY`, `RAILS_ENV`, `RAILS_SERVE_STATIC_FILES`, `SOLID_QUEUE_IN_PUMA`
+10. Install Railway CLI (`brew install railway`), link project (`railway link`), create admin user (`railway run bin/rails console`)
+11. Configure custom domain (optional)
 
 ---
 
@@ -1260,6 +1277,12 @@ config/
   importmap.rb                       (modified)
 db/
   migrate/ (6 migrations)
+  cache_migrate/
+    20260101000001_create_solid_cache_entries.rb
+  queue_migrate/
+    20260101000002_create_solid_queue_tables.rb
+  cable_migrate/
+    20260101000003_create_solid_cable_messages.rb
   seeds.rb                           (modified)
 test/
   fixtures/ (6 fixture files)

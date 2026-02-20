@@ -1,13 +1,13 @@
 <article class="rounded-lg border border-gray-200 shadow-sm overflow-hidden">
   <% if gallery.cover_image %>
     <%= link_to gallery_path(gallery), aria: { label: gallery.title } do %>
-      <img src="<%= gallery.cover_image.thumbnail_url(width: 600, height: 400) %>"
+      <img src="<%= gallery.cover_image.thumbnail_url(width: 800, height: 450) %>"
            alt=""
            aria-hidden="true"
-           class="w-full h-48 object-cover">
+           class="w-full aspect-[16/9] object-cover">
     <% end %>
   <% else %>
-    <div class="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-400 text-sm" aria-hidden="true">
+    <div class="w-full aspect-[16/9] bg-gray-100 flex items-center justify-center text-gray-400 text-sm" aria-hidden="true">
       No images
     </div>
   <% end %>

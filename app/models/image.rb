@@ -11,7 +11,7 @@ class Image < ApplicationRecord
   def thumbnail_url(width: 200, height: 200)
     Cloudinary::Utils.cloudinary_url(
       cloudinary_public_id,
-      width: width, height: height, crop: :fill, gravity: :auto, quality: :auto, fetch_format: :auto
+      width: width, height: height, crop: :fill, gravity: "face", quality: :auto, fetch_format: :auto, dpr: :auto
     )
   end
 

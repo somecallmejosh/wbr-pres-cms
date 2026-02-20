@@ -106,7 +106,7 @@ events_data = [
   # Week 13: May 11–17
   { title: "Adult Bible Study", description: "Continuing our study of the Psalms.", event_date: "2026-05-13", start_time: "18:30", end_time: "19:30", location: "Fellowship Hall", category: "education" },
   { title: "Vacation Bible School Planning", description: "Planning committee meeting for this summer's VBS.", event_date: "2026-05-14", start_time: "19:00", end_time: "20:00", location: "Conference Room", category: "meetings" },
-  { title: "Habitat Build Day", description: "Continuing our partnership with Habitat for Humanity.", event_date: "2026-05-16", start_time: "08:00", end_time: "15:00", location: "Habitat Build Site", category: "community_service" },
+  { title: "Habitat Build Day", description: "Continuing our partnership with Habitat for Humanity.", event_date: "2026-05-16", start_time: "08:00", end_time: "15:00", location: "Habitat Build Site", category: "community_service" }
 ]
 
 events_data.each do |attrs|

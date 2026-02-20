@@ -15,7 +15,7 @@ class CreateMembers < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :members, [:last_name, :first_name]
+    add_index :members, [ :last_name, :first_name ]
     add_index :members, :date_of_birth
   end
 end

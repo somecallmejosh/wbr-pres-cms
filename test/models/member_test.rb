@@ -66,7 +66,7 @@ class MemberTest < ActiveSupport::TestCase
   end
 
   test "phone allows valid formats" do
-    ["555-1234", "(555) 123-4567", "5551234567"].each do |phone|
+    [ "555-1234", "(555) 123-4567", "5551234567" ].each do |phone|
       member = Member.new(first_name: "John", last_name: "Doe", phone: phone)
       assert member.valid?, "Expected #{phone} to be valid"
     end

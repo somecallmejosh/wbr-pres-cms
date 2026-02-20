@@ -45,7 +45,7 @@ class Admin::ImagesControllerTest < ActionDispatch::IntegrationTest
 
   test "create requires authentication" do
     sign_out
-    post admin_images_url, params: { files: [fixture_file_upload("test_image.jpg", "image/jpeg")] }
+    post admin_images_url, params: { files: [ fixture_file_upload("test_image.jpg", "image/jpeg") ] }
     assert_redirected_to new_session_path
   end
 
@@ -68,13 +68,13 @@ class Admin::ImagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create a single image via Cloudinary upload" do
-    temp_file = Tempfile.new(["test_image", ".jpg"])
+    temp_file = Tempfile.new([ "test_image", ".jpg" ])
     temp_file.write("fake image data")
     temp_file.rewind
 
     assert_difference("Image.count", 1) do
       post admin_images_url, params: {
-        files: [Rack::Test::UploadedFile.new(temp_file.path, "image/jpeg")]
+        files: [ Rack::Test::UploadedFile.new(temp_file.path, "image/jpeg") ]
       }
     end
 
@@ -93,7 +93,7 @@ class Admin::ImagesControllerTest < ActionDispatch::IntegrationTest
     WebMock.stub_request(:post, /api\.cloudinary\.com/).to_return(*responses)
 
     files = 2.times.map do |i|
-      tmp = Tempfile.new(["test_#{i}", ".jpg"])
+      tmp = Tempfile.new([ "test_#{i}", ".jpg" ])
       tmp.write("fake image data")
       tmp.rewind
       tmp
@@ -119,7 +119,7 @@ class Admin::ImagesControllerTest < ActionDispatch::IntegrationTest
     WebMock.stub_request(:post, /api\.cloudinary\.com/).to_return(*responses)
 
     files = 21.times.map do |i|
-      tmp = Tempfile.new(["cap_#{i}", ".jpg"])
+      tmp = Tempfile.new([ "cap_#{i}", ".jpg" ])
       tmp.write("fake image data")
       tmp.rewind
       tmp

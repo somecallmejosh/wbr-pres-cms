@@ -65,7 +65,7 @@ class GalleriesController < ApplicationController
   end
 
   def gallery_params
-    params.expect(gallery: [:title, :description, :published])
+    params.expect(gallery: [ :title, :description, :published ])
   end
 
   def sync_images(gallery, image_ids)

@@ -14,6 +14,6 @@ class CreateEvents < ActiveRecord::Migration[8.1]
 
     add_index :events, :event_date
     add_index :events, :category
-    add_index :events, [:event_date, :category]
+    add_index :events, [ :event_date, :category ]
   end
 end

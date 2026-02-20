@@ -45,6 +45,6 @@ class MembersController < ApplicationController
   end
 
   def member_params
-    params.expect(member: [:first_name, :last_name, :email, :phone, :address_line1, :address_line2, :city, :state, :zip_code, :date_of_birth])
+    params.expect(member: [ :first_name, :last_name, :email, :phone, :address_line1, :address_line2, :city, :state, :zip_code, :date_of_birth ])
   end
 end

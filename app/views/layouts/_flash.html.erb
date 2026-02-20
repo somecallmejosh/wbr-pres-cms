@@ -1,11 +1,27 @@
 <% if alert = flash[:alert] %>
-  <div class="container mx-auto px-4">
-    <p class="py-2 px-3 bg-red-50 mb-5 text-red-500 font-medium rounded-lg inline-block" id="alert"><%= alert %></p>
+  <div class="container mx-auto px-4" data-controller="flash">
+    <div class="flex items-center justify-between py-2 px-3 bg-red-50 mb-5 text-red-500 font-medium rounded-lg" id="alert">
+      <span><%= alert %></span>
+      <button type="button"
+              data-action="flash#close"
+              aria-label="Dismiss"
+              class="ml-4 text-red-400 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 rounded">
+        &times;
+      </button>
+    </div>
   </div>
 <% end %>
 
 <% if notice = flash[:notice] %>
-  <div class="container mx-auto px-4">
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+  <div class="container mx-auto px-4" data-controller="flash">
+    <div class="flex items-center justify-between py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg" id="notice">
+      <span><%= notice %></span>
+      <button type="button"
+              data-action="flash#close"
+              aria-label="Dismiss"
+              class="ml-4 text-green-400 hover:text-green-600 focus:outline-none focus:ring-2 focus:ring-green-300 rounded">
+        &times;
+      </button>
+    </div>
   </div>
 <% end %>

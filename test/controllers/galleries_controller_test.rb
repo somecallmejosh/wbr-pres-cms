@@ -99,7 +99,7 @@ class GalleriesControllerTest < ActionDispatch::IntegrationTest
     assert_difference("GalleryImage.count") do
       post galleries_url, params: {
         gallery: { title: "With Images", published: true },
-        image_ids: [image.id]
+        image_ids: [ image.id ]
       }
     end
     assert_equal image, Gallery.last.images.first
@@ -129,10 +129,10 @@ class GalleriesControllerTest < ActionDispatch::IntegrationTest
     image = images(:fellowship_hall)
     patch gallery_url(@gallery), params: {
       gallery: { title: @gallery.title },
-      image_ids: [image.id]
+      image_ids: [ image.id ]
     }
     assert_redirected_to gallery_url(@gallery)
-    assert_equal [image], @gallery.reload.images.to_a
+    assert_equal [ image ], @gallery.reload.images.to_a
   end
 
   test "should destroy gallery" do
@@ -161,7 +161,7 @@ class GalleriesControllerTest < ActionDispatch::IntegrationTest
     gi2 = gallery_images(:worship_fellowship_hall)
 
     patch reorder_gallery_url(@gallery),
-          params: { ordered_ids: [gi2.id.to_s, gi1.id.to_s] },
+          params: { ordered_ids: [ gi2.id.to_s, gi1.id.to_s ] },
           as: :json
 
     assert_response :ok

@@ -1,5 +1,5 @@
-<div class="group relative rounded-lg overflow-hidden border border-gray-200 bg-white shadow-sm">
-  <div class="aspect-square overflow-hidden bg-gray-100">
+<div class="group relative rounded-lg overflow-hidden border border-stone-200 bg-white shadow-sm">
+  <div class="aspect-square overflow-hidden bg-stone-100">
     <img src="<%= image.thumbnail_url(width: 300, height: 300) %>"
          alt="<%= image.alt_text.presence || image.title.presence || image.cloudinary_public_id %>"
          class="w-full h-full object-cover">
@@ -7,17 +7,17 @@
 
   <div class="p-2">
     <% if image.title.present? %>
-      <p class="text-xs font-medium text-gray-800 truncate"><%= image.title %></p>
+      <p class="text-xs font-medium text-stone-800 truncate"><%= image.title %></p>
     <% end %>
-    <p class="text-xs text-gray-400 truncate"><%= image.cloudinary_public_id %></p>
+    <p class="text-xs text-stone-400 truncate"><%= image.cloudinary_public_id %></p>
     <% if image.bytes.present? %>
-      <p class="text-xs text-gray-400"><%= number_to_human_size(image.bytes) %></p>
+      <p class="text-xs text-stone-400"><%= number_to_human_size(image.bytes) %></p>
     <% end %>
   </div>
 
   <div class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity">
     <%= button_to admin_image_path(image), method: :delete,
-        class: "px-3 py-1.5 bg-red-600 text-white text-sm font-medium rounded hover:bg-red-700",
+        class: "px-3 py-1.5 bg-red-700 text-white text-sm font-medium rounded hover:bg-red-600 cursor-pointer",
         data: { turbo_confirm: "Delete this image? This cannot be undone." } do %>
       Delete
     <% end %>

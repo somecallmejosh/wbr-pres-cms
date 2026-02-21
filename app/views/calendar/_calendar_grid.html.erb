@@ -3,29 +3,29 @@
   <div class="flex items-center justify-between mb-4">
     <%= link_to calendar_path(month: @date.prev_month.month, year: @date.prev_month.year, category: @category),
         data: { turbo_frame: "calendar_frame" },
-        class: "rounded-md px-3 py-1 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-medium" do %>
+        class: "rounded-md px-4 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 text-sm font-medium transition-colors" do %>
       &larr; Previous
     <% end %>
-    <span class="font-semibold text-lg"><%= @date.strftime("%B %Y") %></span>
+    <span class="font-marcellus text-xl text-stone-900"><%= @date.strftime("%B %Y") %></span>
     <%= link_to calendar_path(month: @date.next_month.month, year: @date.next_month.year, category: @category),
         data: { turbo_frame: "calendar_frame" },
-        class: "rounded-md px-3 py-1 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-medium" do %>
+        class: "rounded-md px-4 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 text-sm font-medium transition-colors" do %>
       Next &rarr;
     <% end %>
   </div>
 
   <%# Day-of-week headers %>
-  <div class="grid grid-cols-7 border-b mb-1">
+  <div class="grid grid-cols-7 bg-stone-800 rounded-t-lg mb-1">
     <% %w[Sun Mon Tue Wed Thu Fri Sat].each do |day_name| %>
-      <div class="font-bold text-center p-2 text-sm text-gray-600"><%= day_name %></div>
+      <div class="font-semibold text-center p-2 text-sm text-stone-200"><%= day_name %></div>
     <% end %>
   </div>
 
   <%# Calendar grid %>
-  <div class="grid grid-cols-7">
+  <div class="grid grid-cols-7 border border-stone-200 rounded-b-lg overflow-hidden">
     <%# Leading empty cells %>
     <% @date.beginning_of_month.wday.times do %>
-      <div class="border p-2 bg-gray-50 min-h-24"></div>
+      <div class="border-r border-b border-stone-100 p-2 bg-stone-50 min-h-24"></div>
     <% end %>
 
     <%# Day cells %>
@@ -35,7 +35,7 @@
 
     <%# Trailing empty cells %>
     <% (6 - @date.end_of_month.wday).times do %>
-      <div class="border p-2 bg-gray-50 min-h-24"></div>
+      <div class="border-r border-b border-stone-100 p-2 bg-stone-50 min-h-24"></div>
     <% end %>
   </div>
 <% end %>

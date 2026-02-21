@@ -1,11 +1,11 @@
 module EventsHelper
   def category_badge_class(category)
     case category
-    when "education"         then "bg-blue-100 text-blue-800"
+    when "education"         then "bg-blue-100 text-blue-900"
     when "fellowship"        then "bg-green-100 text-green-800"
-    when "meetings"          then "bg-yellow-100 text-yellow-800"
-    when "community_service" then "bg-purple-100 text-purple-800"
-    else "bg-gray-100 text-gray-800"
+    when "meetings"          then "bg-amber-100 text-amber-800"
+    when "community_service" then "bg-stone-100 text-stone-800"
+    else "bg-stone-100 text-stone-800"
     end
   end
 

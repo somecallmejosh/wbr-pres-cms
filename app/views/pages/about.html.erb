@@ -1,4 +1,97 @@
-<div class="container mx-auto p-4">
-  <h1 class="font-bold text-4xl">Pages#about</h1>
-  <p>Find me in app/views/pages/about.html.erb</p>
+<% content_for :title, "About Us — West Baton Rouge Presbyterian Church" %>
+
+<%# Page Hero %>
+<section class="relative w-full min-h-[260px] flex items-center justify-center bg-stone-800 overflow-hidden">
+  <div class="absolute inset-0 opacity-20" style="background-image: url('https://res.cloudinary.com/dwjulenau/image/upload/v1/wbr-pres-cms/image012?_a=BACJ3SDL'); background-size: cover; background-position: center;"></div>
+  <div class="relative z-10 text-center px-4 py-12">
+    <h1 class="font-marcellus text-4xl md:text-5xl text-white">About Our Church</h1>
+    <p class="text-stone-300 mt-2 text-lg">A community of faith in West Baton Rouge since 1872</p>
+  </div>
+</section>
+
+<div class="container mx-auto px-4 py-12 max-w-4xl">
+
+  <%# Our History %>
+  <section class="mb-12">
+    <h2 class="font-marcellus text-3xl text-stone-900 mb-4 border-b-2 border-amber-500 pb-2 inline-block">Our History</h2>
+    <div class="mt-4 space-y-4 text-stone-700 leading-relaxed">
+      <p>
+        West Baton Rouge Presbyterian Church was founded in 1872, rooted in the conviction that the
+        gospel of Jesus Christ transforms lives and communities. From our earliest days meeting in a
+        modest hall on the river road, we have grown into a congregation that serves the people of
+        West Baton Rouge and the surrounding parishes.
+      </p>
+      <p>
+        Over more than 150 years, our church family has weathered floods, wars, and seasons of great
+        change — always returning to the same source of strength: the Word of God and the fellowship
+        of believers. Our current sanctuary, with its beloved stained glass windows, was dedicated in
+        1958 and remains the heart of our shared worship.
+      </p>
+    </div>
+  </section>
+
+  <%# Our Mission %>
+  <section class="mb-12">
+    <h2 class="font-marcellus text-3xl text-stone-900 mb-4 border-b-2 border-amber-500 pb-2 inline-block">Our Mission</h2>
+    <p class="text-stone-700 leading-relaxed mt-4">
+      We exist to worship God, grow in faith together, and serve our neighbors in West Baton Rouge
+      with the love of Christ. We are a welcoming congregation — young and old, longtime members and
+      new friends — committed to living out the gospel in practical ways.
+    </p>
+    <ul class="mt-6 space-y-3">
+      <li class="flex items-start gap-3">
+        <span class="mt-1 size-5 shrink-0 rounded-full bg-amber-700 flex items-center justify-center text-white text-xs font-bold">✓</span>
+        <span class="text-stone-700"><strong class="text-stone-900">Worship</strong> — Gathering weekly to praise God through Scripture, prayer, and song.</span>
+      </li>
+      <li class="flex items-start gap-3">
+        <span class="mt-1 size-5 shrink-0 rounded-full bg-amber-700 flex items-center justify-center text-white text-xs font-bold">✓</span>
+        <span class="text-stone-700"><strong class="text-stone-900">Grow</strong> — Deepening our faith through Bible study, Sunday school, and Christian fellowship.</span>
+      </li>
+      <li class="flex items-start gap-3">
+        <span class="mt-1 size-5 shrink-0 rounded-full bg-amber-700 flex items-center justify-center text-white text-xs font-bold">✓</span>
+        <span class="text-stone-700"><strong class="text-stone-900">Serve</strong> — Reaching out to our community through service projects and care for our neighbors.</span>
+      </li>
+    </ul>
+  </section>
+
+  <%# Our Pastor %>
+  <section class="mb-12">
+    <h2 class="font-marcellus text-3xl text-stone-900 mb-4 border-b-2 border-amber-500 pb-2 inline-block">Our Pastor</h2>
+    <div class="mt-4 flex flex-col sm:flex-row gap-6 items-start">
+      <div class="size-28 rounded-full bg-stone-200 flex items-center justify-center text-stone-400 shrink-0 overflow-hidden">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+      </div>
+      <div>
+        <h3 class="font-marcellus text-xl text-stone-900">Rev. [Pastor Name]</h3>
+        <p class="text-stone-600 text-sm mb-3">Senior Pastor</p>
+        <p class="text-stone-700 leading-relaxed">
+          [Pastor name] has served West Baton Rouge Presbyterian Church since [year]. A graduate of
+          [seminary], [he/she/they] brings a deep love for Scripture and a shepherd's heart to every
+          aspect of ministry. [He/She/They] and [his/her/their] family are grateful to call West
+          Baton Rouge home.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <%# Worship Times %>
+  <section class="bg-stone-800 text-white rounded-xl p-8">
+    <h2 class="font-marcellus text-2xl text-amber-400 mb-4">Join Us for Worship</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <p class="font-semibold text-stone-200">Sunday Morning</p>
+        <p class="text-stone-300 text-sm">Sunday School — 9:45 AM</p>
+        <p class="text-stone-300 text-sm">Worship Service — 11:00 AM</p>
+      </div>
+      <div>
+        <p class="font-semibold text-stone-200">Location</p>
+        <p class="text-stone-300 text-sm">123 Church Street</p>
+        <p class="text-stone-300 text-sm">Port Allen, LA 70767</p>
+      </div>
+    </div>
+    <div class="mt-6">
+      <%= link_to "Get in Touch", pages_contact_path, class: "inline-block bg-amber-700 hover:bg-amber-600 text-white font-semibold px-6 py-2.5 rounded-md transition-colors" %>
+    </div>
+  </section>
+
 </div>

@@ -1,13 +1,12 @@
-<div class="container mx-auto p-4">
-  <h1 class="font-bold text-4xl mb-6">Church Calendar</h1>
+<div class="container mx-auto px-4 py-8">
+  <h1 class="font-marcellus text-4xl text-stone-900 mb-6">Church Calendar</h1>
 
-  <%# Category filter links (outside Turbo Frame) %>
   <div class="flex flex-wrap gap-2 mb-6">
     <%= link_to "All", calendar_path(month: @date.month, year: @date.year),
-        class: "rounded-full px-3 py-1 text-sm font-medium #{@category.blank? ? 'bg-gray-800 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}" %>
+        class: "rounded-full px-4 py-1.5 text-sm font-medium transition-colors #{@category.blank? ? 'bg-stone-800 text-white' : 'bg-stone-100 text-stone-700 hover:bg-stone-200'}" %>
     <% Event::CATEGORY_LABELS.each do |value, label| %>
       <%= link_to label, calendar_path(month: @date.month, year: @date.year, category: value),
-          class: "rounded-full px-3 py-1 text-sm font-medium #{@category == value ? 'bg-gray-800 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}" %>
+          class: "rounded-full px-4 py-1.5 text-sm font-medium transition-colors #{@category == value ? 'bg-stone-800 text-white' : 'bg-stone-100 text-stone-700 hover:bg-stone-200'}" %>
     <% end %>
   </div>
 

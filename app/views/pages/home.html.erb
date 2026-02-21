@@ -1,16 +1,15 @@
 <% content_for :title, "West Baton Rouge Presbyterian Church" %>
-        <div class="grid grid-cols-4 gap-0.5">
-        <img src="/theme/God%20(1).png"           alt="Stained glass depicting God"  class="w-full aspect-square object-cover shadow-sm">
-        <img src="/theme/stainedglass%20(1).png"  alt="Church stained glass window"  class="w-full aspect-square object-cover shadow-sm">
-        <img src="/theme/stainedglass2.webp"      alt="Church stained glass window"  class="w-full aspect-square object-cover shadow-sm">
-        <img src="/theme/Mary%20(1).png"          alt="Stained glass depicting Mary" class="w-full aspect-square object-cover shadow-sm">
-      </div>
-<%# History / Stained Glass Section %>
+<div class="grid md:grid-cols-4 gap-0.5">
+  <img src="/theme/God%20(1).png"           alt="Stained glass depicting God"  class="hidden md:block w-full aspect-square object-cover shadow-sm">
+  <img src="/theme/stainedglass%20(1).png"  alt="Church stained glass window"  class="w-full aspect-video md:aspect-square object-cover shadow-sm">
+  <img src="/theme/stainedglass2.webp"      alt="Church stained glass window"  class="hidden md:block w-full aspect-square object-cover shadow-sm">
+  <img src="/theme/Mary%20(1).png"          alt="Stained glass depicting Mary" class="hidden md:block w-full aspect-square object-cover shadow-sm">
+</div>
+
 <section class="bg-stone-100 border-b border-stone-200 py-16">
 
   <div class="container mx-auto px-4 space-y-12">
-
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-12 xl:gap-16 2xl:gap-24 items-center">
       <div>
         <h1 class="font-marcellus text-4xl md:text-5xl lg:text-6xl leading-tight text-balance mb-6">
           Welcome to West Baton Rouge Presbyterian Church
@@ -23,7 +22,7 @@
         <%= link_to "Learn More About Us \u2192", pages_about_path, class: "mt-6 inline-block text-amber-700 hover:text-amber-800 font-medium transition-colors mb-12" %>
       </div>
       <div>
-                <section class="mb-12">
+        <section class="mb-12">
           <div class="flex items-end gap-4 mb-6">
             <h2 class="font-marcellus text-2xl text-stone-900 border-b-2 border-amber-500 pb-1">This Week's Events</h2>
           </div>

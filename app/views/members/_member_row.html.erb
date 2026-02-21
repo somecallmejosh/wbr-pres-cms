@@ -1,11 +1,11 @@
-<tr class="border-b border-gray-200 hover:bg-gray-50">
+<tr class="border-b border-stone-200 hover:bg-amber-50 transition-colors">
   <td class="py-3 px-4">
-    <%= link_to member.full_name, member_path(member), class: "text-blue-700 hover:underline" %>
+    <%= link_to member.full_name, member_path(member), class: "text-amber-700 hover:text-amber-800 font-medium transition-colors" %>
   </td>
-  <td class="py-3 px-4 hidden sm:table-cell"><%= member.email %></td>
-  <td class="py-3 px-4 hidden md:table-cell"><%= member.phone %></td>
-  <td class="py-3 px-4 hidden lg:table-cell"><%= member.birthday_display %></td>
+  <td class="py-3 px-4 hidden sm:table-cell text-stone-700"><%= member.email %></td>
+  <td class="py-3 px-4 hidden md:table-cell text-stone-700"><%= member.phone %></td>
+  <td class="py-3 px-4 hidden lg:table-cell text-stone-700"><%= member.birthday_display %></td>
   <td class="py-3 px-4">
-    <%= link_to "Edit", edit_member_path(member), class: "text-blue-700 hover:underline" %>
+    <%= link_to "Edit", edit_member_path(member), class: "text-amber-700 hover:text-amber-800 font-medium transition-colors" %>
   </td>
 </tr>

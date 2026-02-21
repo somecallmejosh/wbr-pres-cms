@@ -1,8 +1,8 @@
-<div class="border p-2 min-h-24 <%= day == Date.current ? 'bg-blue-50' : 'bg-white' %>">
-  <span class="font-semibold text-sm"><%= day.day %></span>
+<div class="border-r border-b border-stone-100 p-2 min-h-24 <%= day == Date.current ? 'bg-amber-50' : 'bg-white' %> hover:bg-stone-50 transition-colors">
+  <span class="font-semibold text-sm <%= day == Date.current ? 'text-amber-700' : 'text-stone-700' %>"><%= day.day %></span>
   <% events.each do |event| %>
     <%= link_to event.title, event_path(event),
-        class: "block text-xs truncate text-blue-700 hover:underline mt-0.5",
+        class: "block text-xs truncate text-amber-700 hover:text-amber-800 transition-colors mt-0.5",
         data: { turbo_frame: "_top" } %>
   <% end %>
 </div>

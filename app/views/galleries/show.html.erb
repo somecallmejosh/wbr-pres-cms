@@ -28,7 +28,7 @@
       <% @gallery_images.each_with_index do |gi, index| %>
         <div role="listitem">
           <button type="button"
-                  class="block w-full aspect-square overflow-hidden rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 transition-opacity"
+                  class="block w-full aspect-square overflow-hidden hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 transition-opacity cursor-pointer"
                   data-lightbox-target="item"
                   data-lightbox-src="<%= gi.image.display_url(width: 1600) %>"
                   data-lightbox-alt="<%= gi.image.alt_text.presence || gi.image.title.presence || "" %>"

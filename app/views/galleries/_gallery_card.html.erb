@@ -1,4 +1,4 @@
-<article class="bg-white rounded-lg border border-stone-200 shadow-sm overflow-hidden flex flex-col">
+<article class="bg-white overflow-hidden flex flex-col">
   <% if gallery.cover_image %>
     <%= link_to gallery_path(gallery), aria: { label: gallery.title } do %>
       <img src="<%= gallery.cover_image.thumbnail_url(width: 800, height: 450) %>"

@@ -1,60 +1,69 @@
 <% content_for :title, "West Baton Rouge Presbyterian Church" %>
+        <div class="grid grid-cols-4 gap-0.5">
+        <img src="/theme/God%20(1).png"           alt="Stained glass depicting God"  class="w-full aspect-square object-cover shadow-sm">
+        <img src="/theme/stainedglass%20(1).png"  alt="Church stained glass window"  class="w-full aspect-square object-cover shadow-sm">
+        <img src="/theme/stainedglass2.webp"      alt="Church stained glass window"  class="w-full aspect-square object-cover shadow-sm">
+        <img src="/theme/Mary%20(1).png"          alt="Stained glass depicting Mary" class="w-full aspect-square object-cover shadow-sm">
+      </div>
+<%# History / Stained Glass Section %>
+<section class="bg-stone-100 border-b border-stone-200 py-16">
 
-<%# Hero Section %>
-<section class="relative w-full min-h-[420px] flex items-center justify-center overflow-hidden bg-stone-800">
-  <img
-    src="https://res.cloudinary.com/dwjulenau/image/upload/v1/wbr-pres-cms/image012?_a=BACJ3SDL"
-    alt=""
-    aria-hidden="true"
-    class="absolute inset-0 w-full h-full object-cover opacity-30"
-  >
-  <div class="relative z-10 text-center px-4 py-16 max-w-3xl mx-auto">
-    <h1 class="font-marcellus text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-4 text-balance">
-      Welcome to West Baton Rouge<br>Presbyterian Church
-    </h1>
-    <p class="text-stone-200 text-lg md:text-xl mb-8">Rooted in faith. Growing together.</p>
-    <%= link_to "Learn About Our Church", pages_about_path, class: "inline-block bg-amber-700 hover:bg-amber-600 text-white font-semibold px-8 py-3 rounded-md transition-colors text-base" %>
+  <div class="container mx-auto px-4 space-y-12">
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+      <div>
+        <h1 class="font-marcellus text-4xl md:text-5xl lg:text-6xl leading-tight text-balance mb-6">
+          Welcome to West Baton Rouge Presbyterian Church
+        </h1>
+        <h2 class="font-marcellus text-3xl text-stone-900 mb-3">Our Story</h2>
+        <div class="w-14 h-1 bg-amber-600 mb-6"></div>
+        <p class="text-stone-700 leading-relaxed text-lg">
+          Originating in 1939, and being sponsored by the First Presbyterian Church in Louisiana, we have made a name for ourselves as one of the oldest churches in West Baton Rouge. We are a part of The Presbytery of South Louisiana with nearly a century of worship and we're still going strong!
+        </p>
+        <%= link_to "Learn More About Us \u2192", pages_about_path, class: "mt-6 inline-block text-amber-700 hover:text-amber-800 font-medium transition-colors mb-12" %>
+      </div>
+      <div>
+                <section class="mb-12">
+          <div class="flex items-end gap-4 mb-6">
+            <h2 class="font-marcellus text-2xl text-stone-900 border-b-2 border-amber-500 pb-1">This Week's Events</h2>
+          </div>
+
+          <% if @weekly_events.any? %>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <% @weekly_events.each do |event| %>
+                <%= render "events/event_card", event: event %>
+              <% end %>
+            </div>
+          <% else %>
+            <p class="text-stone-600">No events scheduled this week.</p>
+          <% end %>
+
+          <div class="mt-6">
+            <%= link_to "View All Events &rarr;".html_safe, events_path, class: "text-amber-700 hover:text-amber-800 font-medium transition-colors" %>
+          </div>
+        </section>
+
+        <section>
+          <div class="flex items-end gap-4 mb-6">
+          <h2 class="font-marcellus text-2xl text-stone-900 border-b-2 border-amber-500 pb-1">
+            <%= Date.current.strftime("%B") %> Birthdays
+          </h2>
+          </div>
+
+          <% if @birthdays.any? %>
+            <ul class="divide-y divide-stone-200 max-w-lg">
+              <% @birthdays.each do |member| %>
+                <li class="py-3 flex justify-between items-center">
+                  <span class="font-medium text-stone-800"><%= member.full_name %></span>
+                  <span class="text-stone-600 text-sm"><%= member.birthday_display %></span>
+                </li>
+              <% end %>
+            </ul>
+          <% else %>
+            <p class="text-stone-600">No birthdays this month.</p>
+          <% end %>
+        </section>
+      </div>
+    </div>
   </div>
 </section>
-
-<%# Main Content %>
-<div class="container mx-auto px-4 py-10">
-  <section class="mb-12">
-    <div class="flex items-end gap-4 mb-6">
-      <h2 class="font-marcellus text-2xl text-stone-900 border-b-2 border-amber-500 pb-1">This Week's Events</h2>
-    </div>
-
-    <% if @weekly_events.any? %>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <% @weekly_events.each do |event| %>
-          <%= render "events/event_card", event: event %>
-        <% end %>
-      </div>
-    <% else %>
-      <p class="text-stone-600">No events scheduled this week.</p>
-    <% end %>
-
-    <div class="mt-6">
-      <%= link_to "View All Events &rarr;".html_safe, events_path, class: "text-amber-700 hover:text-amber-800 font-medium transition-colors" %>
-    </div>
-  </section>
-
-  <section>
-    <h2 class="font-marcellus text-2xl text-stone-900 border-b-2 border-amber-500 pb-1 mb-6">
-      <%= Date.current.strftime("%B") %> Birthdays
-    </h2>
-
-    <% if @birthdays.any? %>
-      <ul class="divide-y divide-stone-200 max-w-lg">
-        <% @birthdays.each do |member| %>
-          <li class="py-3 flex justify-between items-center">
-            <span class="font-medium text-stone-800"><%= member.full_name %></span>
-            <span class="text-stone-600 text-sm"><%= member.birthday_display %></span>
-          </li>
-        <% end %>
-      </ul>
-    <% else %>
-      <p class="text-stone-600">No birthdays this month.</p>
-    <% end %>
-  </section>
-</div>

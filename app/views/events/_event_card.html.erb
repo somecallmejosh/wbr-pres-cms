@@ -1,18 +1,18 @@
-<div class="bg-white overflow-hidden flex flex-col">
+<div class="bg-white flex flex-col relative group transition-all hover:shadow-lg duration-200">
   <div class="p-4 flex-1">
     <div class="flex items-center justify-between mb-2">
       <span class="text-sm text-stone-600"><%= full_date_ordinal(event.event_date) %></span>
-      <%= render "shared/category_badge", category: event.category %>
     </div>
-    <h3 class="font-marcellus text-lg text-stone-900 mb-1">
-      <%= link_to event.title, event_path(event), class: "hover:text-amber-700 transition-colors" %>
+    <h3 class="font-marcellus text-lg text-stone-900 mb-1 group-hover:text-amber-700 transition-colors">
+      <%= event.title %>
     </h3>
     <p class="text-sm text-stone-600 mb-2"><%= event_time_range(event) %></p>
     <% if event.location.present? %>
       <p class="text-sm text-stone-600"><%= event.location %></p>
     <% end %>
-    <% if event.description.present? %>
-      <p class="text-stone-700 mt-2 text-sm line-clamp-2"><%= event.description %></p>
-    <% end %>
+
   </div>
+  <%= link_to event_path(event), class: "absolute inset-0 block" do %>
+    <span class="sr-only"><%= event.title %></span>
+  <% end %>
 </div>

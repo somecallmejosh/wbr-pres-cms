@@ -14,9 +14,9 @@
   </div>
 
   <% if @events.any? %>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid lg:grid-cols-3 gap-6">
       <% @events.each do |event| %>
-        <%= render "events/event_card", event: event %>
+        <%= render "events/event_row", event: event %>
       <% end %>
     </div>
   <% else %>

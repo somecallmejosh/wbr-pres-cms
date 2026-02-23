@@ -9,6 +9,22 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <%# Social meta tags %>
+    <% _og_title       = content_for?(:og_title)       ? yield(:og_title)       : (content_for?(:title) ? yield(:title) : "West Belmar Presbyterian Church") %>
+    <% _og_description = content_for?(:og_description) ? yield(:og_description) : "West Belmar Presbyterian Church — worship, community, and service in Belmar, NJ." %>
+    <% _og_image       = content_for?(:og_image)       ? yield(:og_image)       : "https://res.cloudinary.com/dwjulenau/image/upload/v1771469323/wbr-pres-cms/image012.jpg" %>
+    <% _og_url         = content_for?(:og_url)         ? yield(:og_url)         : request.url %>
+    <meta property="og:type"        content="website">
+    <meta property="og:site_name"   content="West Belmar Presbyterian Church">
+    <meta property="og:title"       content="<%= _og_title %>">
+    <meta property="og:description" content="<%= _og_description %>">
+    <meta property="og:image"       content="<%= _og_image %>">
+    <meta property="og:url"         content="<%= _og_url %>">
+    <meta name="twitter:card"        content="summary_large_image">
+    <meta name="twitter:title"       content="<%= _og_title %>">
+    <meta name="twitter:description" content="<%= _og_description %>">
+    <meta name="twitter:image"       content="<%= _og_image %>">
+
     <%= yield :head %>
 
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>

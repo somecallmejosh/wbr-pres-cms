@@ -2155,6 +2155,80 @@ project (<code>railway link</code>), create admin user
 <li>Configure custom domain (optional)</li>
 </ol>
 <hr />
+<h2 id="15-seo--social-meta-tags">15. SEO &amp; Social Meta Tags</h2>
+<h3 id="151-overview">15.1 Overview</h3>
+<p>The application layout includes Open Graph and Twitter Card meta tags
+to control how pages appear when shared on social media (Facebook,
+X/Twitter, iMessage link previews, etc.).</p>
+<h3 id="152-implementation">15.2 Implementation</h3>
+<p>All tags are rendered in
+<code>app/views/layouts/application.html.erb</code> using local ERB
+variables populated via <code>content_for?</code> / <code>yield</code>
+with site-wide defaults.</p>
+<table>
+<thead>
+<tr>
+<th>Tag</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>og:type</code></td>
+<td><code>website</code></td>
+</tr>
+<tr>
+<td><code>og:site_name</code></td>
+<td>West Belmar Presbyterian Church</td>
+</tr>
+<tr>
+<td><code>og:title</code> / <code>twitter:title</code></td>
+<td>Falls back to <code>content_for(:title)</code>, then "West Belmar Presbyterian Church"</td>
+</tr>
+<tr>
+<td><code>og:description</code> / <code>twitter:description</code></td>
+<td>"West Belmar Presbyterian Church — worship, community, and service in Belmar, NJ."</td>
+</tr>
+<tr>
+<td><code>og:image</code> / <code>twitter:image</code></td>
+<td>Cloudinary URL: <code>https://res.cloudinary.com/dwjulenau/image/upload/v1771469323/wbr-pres-cms/image012.jpg</code></td>
+</tr>
+<tr>
+<td><code>og:url</code></td>
+<td><code>request.url</code></td>
+</tr>
+<tr>
+<td><code>twitter:card</code></td>
+<td><code>summary_large_image</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="153-per-page-overrides">15.3 Per-Page Overrides</h3>
+<p>Any view can override the defaults using <code>content_for</code>:</p>
+<pre><code>&lt;% content_for :og_title,       "Page-Specific Title" %&gt;
+&lt;% content_for :og_description, "Page-specific description." %&gt;
+&lt;% content_for :og_image,       "https://res.cloudinary.com/..." %&gt;
+&lt;% content_for :og_url,         "https://example.com/custom-url" %&gt;</code></pre>
+<h3 id="154-pages-with-custom-overrides">15.4 Pages with Custom Overrides</h3>
+<table>
+<thead>
+<tr>
+<th>View</th>
+<th>Overrides</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pages/specifications.html.erb</code></td>
+<td><code>og_title</code>, <code>og_description</code></td>
+</tr>
+<tr>
+<td><code>pages/admin_guide.html.erb</code></td>
+<td><code>og_title</code>, <code>og_description</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
 <h2 id="appendix-a-gemfile-changes">Appendix A: Gemfile Changes</h2>
 <pre class="ruby"><code># Uncomment (already present):
 gem &quot;bcrypt&quot;, &quot;~&gt; 3.1.7&quot;

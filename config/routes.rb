@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   get "pages/home"
   get "pages/contact"
   get "pages/about"
+  get "specifications", to: "pages#specifications", as: :specifications
+  get "admin-guide",    to: "pages#admin_guide",    as: :admin_guide
+  get "dashboard",      to: "pages#dashboard",      as: :dashboard
   resource :session
   resources :passwords, param: :token
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

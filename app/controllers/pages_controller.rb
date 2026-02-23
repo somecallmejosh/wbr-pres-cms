@@ -10,4 +10,13 @@ class PagesController < ApplicationController
 
   def about
   end
+
+  def specifications
+  end
+
+  def admin_guide
+  end
+
+  def dashboard
+  end
 end

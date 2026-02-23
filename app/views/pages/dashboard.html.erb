@@ -1,0 +1,162 @@
+<% content_for :title, "Admin Dashboard — West Baton Rouge Presbyterian Church" %>
+
+<div class="container mx-auto px-4 py-12 max-w-5xl">
+
+  <div class="mb-10">
+    <h1 class="font-marcellus text-4xl text-stone-900">Admin Dashboard</h1>
+    <p class="mt-2 text-stone-500">What would you like to do today?</p>
+  </div>
+
+  <%# ── Quick Actions ─────────────────────────────────────────────────── %>
+  <section class="mb-12" aria-labelledby="actions-heading">
+    <h2 id="actions-heading" class="text-xs font-semibold uppercase tracking-widest text-stone-400 mb-4">Create New</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+      <%# New Event %>
+      <%= link_to new_event_path, class: "group flex flex-col gap-4 rounded-xl border-2 border-stone-200 bg-white p-6 hover:border-amber-500 hover:shadow-md transition-all" do %>
+        <div class="size-12 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center group-hover:bg-amber-200 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="12" y1="14" x2="12" y2="18"/><line x1="10" y1="16" x2="14" y2="16"/>
+          </svg>
+        </div>
+        <div>
+          <p class="font-semibold text-lg text-stone-900 group-hover:text-amber-700 transition-colors">New Event</p>
+          <p class="mt-1 text-sm text-stone-500">Add a service, meeting, or community event to the calendar.</p>
+        </div>
+        <span class="mt-auto text-sm font-medium text-amber-700 group-hover:underline">Add event &rarr;</span>
+      <% end %>
+
+      <%# New Gallery %>
+      <%= link_to new_gallery_path, class: "group flex flex-col gap-4 rounded-xl border-2 border-stone-200 bg-white p-6 hover:border-amber-500 hover:shadow-md transition-all" do %>
+        <div class="size-12 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center group-hover:bg-amber-200 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+          </svg>
+        </div>
+        <div>
+          <p class="font-semibold text-lg text-stone-900 group-hover:text-amber-700 transition-colors">New Photo Gallery</p>
+          <p class="mt-1 text-sm text-stone-500">Create a photo album and choose which pictures to include.</p>
+        </div>
+        <span class="mt-auto text-sm font-medium text-amber-700 group-hover:underline">Add gallery &rarr;</span>
+      <% end %>
+
+      <%# New Member %>
+      <%= link_to new_member_path, class: "group flex flex-col gap-4 rounded-xl border-2 border-stone-200 bg-white p-6 hover:border-amber-500 hover:shadow-md transition-all" do %>
+        <div class="size-12 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center group-hover:bg-amber-200 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/>
+          </svg>
+        </div>
+        <div>
+          <p class="font-semibold text-lg text-stone-900 group-hover:text-amber-700 transition-colors">New Member</p>
+          <p class="mt-1 text-sm text-stone-500">Add someone to the private church member directory.</p>
+        </div>
+        <span class="mt-auto text-sm font-medium text-amber-700 group-hover:underline">Add member &rarr;</span>
+      <% end %>
+
+      <%# Upload Photos %>
+      <%= link_to new_admin_image_path, class: "group flex flex-col gap-4 rounded-xl border-2 border-stone-200 bg-white p-6 hover:border-amber-500 hover:shadow-md transition-all" do %>
+        <div class="size-12 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center group-hover:bg-amber-200 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+          </svg>
+        </div>
+        <div>
+          <p class="font-semibold text-lg text-stone-900 group-hover:text-amber-700 transition-colors">Upload Photos</p>
+          <p class="mt-1 text-sm text-stone-500">Add new photos to the image library to use in events and galleries.</p>
+        </div>
+        <span class="mt-auto text-sm font-medium text-amber-700 group-hover:underline">Upload photos &rarr;</span>
+      <% end %>
+
+    </div>
+  </section>
+
+
+
+  <%# ── Browse ───────────────────────────────────────────────────────── %>
+  <section class="mb-12" aria-labelledby="browse-heading">
+    <h2 id="browse-heading" class="text-xs font-semibold uppercase tracking-widest text-stone-400 mb-4">Browse</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+      <%# All Events %>
+      <%= link_to events_path, class: "group flex items-center gap-4 rounded-xl border-2 border-stone-200 bg-white px-6 py-5 hover:border-amber-500 hover:shadow-md transition-all" do %>
+        <div class="size-10 shrink-0 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center group-hover:bg-amber-200 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="font-semibold text-stone-900 group-hover:text-amber-700 transition-colors">All Events</p>
+          <p class="text-sm text-stone-500 truncate">View, edit, or delete existing events</p>
+        </div>
+        <span class="text-stone-400 group-hover:text-amber-600 transition-colors shrink-0">&rarr;</span>
+      <% end %>
+
+      <%# All Galleries %>
+      <%= link_to galleries_path, class: "group flex items-center gap-4 rounded-xl border-2 border-stone-200 bg-white px-6 py-5 hover:border-amber-500 hover:shadow-md transition-all" do %>
+        <div class="size-10 shrink-0 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center group-hover:bg-amber-200 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+          </svg>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="font-semibold text-stone-900 group-hover:text-amber-700 transition-colors">All Photo Galleries</p>
+          <p class="text-sm text-stone-500 truncate">View, edit, or delete existing galleries</p>
+        </div>
+        <span class="text-stone-400 group-hover:text-amber-600 transition-colors shrink-0">&rarr;</span>
+      <% end %>
+
+      <%# All Members %>
+      <%= link_to members_path, class: "group flex items-center gap-4 rounded-xl border-2 border-stone-200 bg-white px-6 py-5 hover:border-amber-500 hover:shadow-md transition-all" do %>
+        <div class="size-10 shrink-0 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center group-hover:bg-amber-200 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="font-semibold text-stone-900 group-hover:text-amber-700 transition-colors">All Members</p>
+          <p class="text-sm text-stone-500 truncate">View, edit, or remove member records</p>
+        </div>
+        <span class="text-stone-400 group-hover:text-amber-600 transition-colors shrink-0">&rarr;</span>
+      <% end %>
+
+    </div>
+  </section>
+
+  <%# ── Reference ─────────────────────────────────────────────────────── %>
+  <section aria-labelledby="reference-heading">
+    <h2 id="reference-heading" class="text-xs font-semibold uppercase tracking-widest text-stone-400 mb-4">Reference</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+      <%# User Manual %>
+      <%= link_to admin_guide_path, class: "group flex flex-col gap-4 rounded-xl border-2 border-stone-200 bg-white p-6 hover:border-stone-400 hover:shadow-md transition-all" do %>
+        <div class="size-12 rounded-lg bg-stone-100 text-stone-600 flex items-center justify-center group-hover:bg-stone-200 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+          </svg>
+        </div>
+        <div>
+          <p class="font-semibold text-lg text-stone-900 group-hover:text-stone-700 transition-colors">User Manual</p>
+          <p class="mt-1 text-sm text-stone-500">Step-by-step instructions for managing events, galleries, members, and photos.</p>
+        </div>
+        <span class="mt-auto text-sm font-medium text-stone-600 group-hover:underline">Read the guide &rarr;</span>
+      <% end %>
+
+      <%# Technical Specifications %>
+      <%= link_to specifications_path, class: "group flex flex-col gap-4 rounded-xl border-2 border-stone-200 bg-white p-6 hover:border-stone-400 hover:shadow-md transition-all" do %>
+        <div class="size-12 rounded-lg bg-stone-100 text-stone-600 flex items-center justify-center group-hover:bg-stone-200 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+          </svg>
+        </div>
+        <div>
+          <p class="font-semibold text-lg text-stone-900 group-hover:text-stone-700 transition-colors">Technical Specifications</p>
+          <p class="mt-1 text-sm text-stone-500">Full technical documentation covering architecture, data models, and deployment.</p>
+        </div>
+        <span class="mt-auto text-sm font-medium text-stone-600 group-hover:underline">Read the docs &rarr;</span>
+      <% end %>
+
+    </div>
+  </section>
+
+</div>

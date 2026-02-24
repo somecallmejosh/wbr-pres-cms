@@ -1,6 +1,6 @@
 <% if alert = flash[:alert] %>
   <div class="container mx-auto px-4 pt-4 relative z-10" data-controller="flash">
-    <div class="flex items-center justify-between py-3 px-4 bg-red-50 border border-red-200 text-red-800 font-medium rounded-lg" id="alert">
+    <div class="flex items-center justify-between py-3 px-4 bg-red-50 border border-red-200 text-red-800 font-medium rounded-lg" id="alert" role="alert">
       <span><%= alert %></span>
       <button type="button"
               data-action="flash#close"
@@ -14,7 +14,7 @@
 
 <% if notice = flash[:notice] %>
   <div class="container mx-auto px-4 pt-4" data-controller="flash">
-    <div class="flex items-center justify-between py-3 px-4 bg-green-50 border border-green-200 text-green-800 font-medium rounded-lg" id="notice">
+    <div class="flex items-center justify-between py-3 px-4 bg-green-50 border border-green-200 text-green-800 font-medium rounded-lg" id="notice" role="status">
       <span><%= notice %></span>
       <button type="button"
               data-action="flash#close"

@@ -1,4 +1,4 @@
-<div class="border-r border-b border-stone-100 p-2 min-h-24 <%= day == Date.current ? 'bg-amber-50' : 'bg-white' %> hover:bg-stone-50 transition-colors">
+<div class="border-r border-b border-stone-100 p-2 min-h-24 <%= day == Date.current ? 'bg-amber-50' : 'bg-white' %> hover:bg-stone-50 transition-colors" <%= "aria-current='date'" if day == Date.current %>>
   <span class="font-semibold text-sm <%= day == Date.current ? 'text-amber-700' : 'text-stone-700' %>"><%= day.day %></span>
   <% events.each do |event| %>
     <%= link_to event.title, event_path(event),

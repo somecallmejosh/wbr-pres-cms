@@ -3,14 +3,16 @@
   <div class="flex items-center justify-between mb-4">
     <%= link_to calendar_path(month: @date.prev_month.month, year: @date.prev_month.year, category: @category),
         data: { turbo_frame: "calendar_frame" },
+        aria: { label: "Previous month, #{@date.prev_month.strftime("%B %Y")}" },
         class: "rounded-md px-4 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 text-sm font-medium transition-colors" do %>
-      &larr; Previous
+      <span aria-hidden="true">&larr;</span> Previous
     <% end %>
-    <span class="font-marcellus text-xl text-stone-900"><%= @date.strftime("%B %Y") %></span>
+    <span class="font-marcellus text-xl text-stone-900" aria-live="polite" aria-atomic="true"><%= @date.strftime("%B %Y") %></span>
     <%= link_to calendar_path(month: @date.next_month.month, year: @date.next_month.year, category: @category),
         data: { turbo_frame: "calendar_frame" },
+        aria: { label: "Next month, #{@date.next_month.strftime("%B %Y")}" },
         class: "rounded-md px-4 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 text-sm font-medium transition-colors" do %>
-      Next &rarr;
+      Next <span aria-hidden="true">&rarr;</span>
     <% end %>
   </div>
 

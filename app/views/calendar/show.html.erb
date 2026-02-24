@@ -1,12 +1,15 @@
+<% content_for :title, "Church Calendar — West Baton Rouge Presbyterian Church" %>
 <div class="container mx-auto px-4 py-8">
   <h1 class="font-marcellus text-4xl text-stone-900 mb-6">Church Calendar</h1>
 
-  <div class="flex flex-wrap gap-2 mb-6">
+  <div class="flex flex-wrap gap-2 mb-6" role="group" aria-label="Filter calendar by category">
     <%= link_to "All", calendar_path(month: @date.month, year: @date.year),
-        class: "rounded-full px-4 py-1.5 text-sm font-medium transition-colors #{@category.blank? ? 'bg-stone-800 text-white' : 'bg-stone-100 text-stone-700 hover:bg-stone-200'}" %>
+        class: "rounded-full px-4 py-1.5 text-sm font-medium transition-colors #{@category.blank? ? 'bg-stone-800 text-white' : 'bg-stone-100 text-stone-700 hover:bg-stone-200'}",
+        aria: { current: @category.blank? ? "true" : false } %>
     <% Event::CATEGORY_LABELS.each do |value, label| %>
       <%= link_to label, calendar_path(month: @date.month, year: @date.year, category: value),
-          class: "rounded-full px-4 py-1.5 text-sm font-medium transition-colors #{@category == value ? 'bg-stone-800 text-white' : 'bg-stone-100 text-stone-700 hover:bg-stone-200'}" %>
+          class: "rounded-full px-4 py-1.5 text-sm font-medium transition-colors #{@category == value ? 'bg-stone-800 text-white' : 'bg-stone-100 text-stone-700 hover:bg-stone-200'}",
+          aria: { current: @category == value ? "true" : false } %>
     <% end %>
   </div>
 

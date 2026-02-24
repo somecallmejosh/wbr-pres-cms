@@ -3,7 +3,7 @@
   <nav aria-label="Main navigation" class="px-4">
     <div class="container mx-auto flex items-center justify-between py-3 lg:py-6">
       <div class="flex items-center gap-3">
-        <img src="https://res.cloudinary.com/dwjulenau/image/upload/v1765035098/WBR%20Presbyterian/logo.png" alt="Logo" class="size-14">
+        <img src="https://res.cloudinary.com/dwjulenau/image/upload/v1765035098/WBR%20Presbyterian/logo.png" alt="" aria-hidden="true" class="size-14">
         <a href="/" class="font-marcellus lg:text-xl text-stone-900 leading-tight hover:text-amber-700 transition-colors">
           West Baton Rouge<br>
           <span class="text-amber-700">Presbyterian Church</span>
@@ -17,22 +17,22 @@
         %>
         <ul class="hidden lg:flex items-center space-x-0.5">
           <li>
-            <%= link_to "Home", root_path, class: current_page?(root_path) ? active_lnk : idle_lnk %>
+            <%= link_to "Home", root_path, class: current_page?(root_path) ? active_lnk : idle_lnk, aria: { current: current_page?(root_path) ? "page" : false } %>
           </li>
-          <li><%= link_to "Events", events_path, class: controller_name == "events" ? active_lnk : idle_lnk %></li>
-          <li><%= link_to "Calendar", calendar_path, class: controller_name == "calendar" ? active_lnk : idle_lnk %></li>
-          <li><%= link_to "Galleries", galleries_path, class: controller_name == "galleries" ? active_lnk : idle_lnk %></li>
-          <li><%= link_to "About", pages_about_path, class: current_page?(pages_about_path) ? active_lnk : idle_lnk %></li>
-          <li><%= link_to "Contact", pages_contact_path, class: current_page?(pages_contact_path) ? active_lnk : idle_lnk %></li>
+          <li><%= link_to "Events", events_path, class: controller_name == "events" ? active_lnk : idle_lnk, aria: { current: controller_name == "events" ? "page" : false } %></li>
+          <li><%= link_to "Calendar", calendar_path, class: controller_name == "calendar" ? active_lnk : idle_lnk, aria: { current: controller_name == "calendar" ? "page" : false } %></li>
+          <li><%= link_to "Galleries", galleries_path, class: controller_name == "galleries" ? active_lnk : idle_lnk, aria: { current: controller_name == "galleries" ? "page" : false } %></li>
+          <li><%= link_to "About", pages_about_path, class: current_page?(pages_about_path) ? active_lnk : idle_lnk, aria: { current: current_page?(pages_about_path) ? "page" : false } %></li>
+          <li><%= link_to "Contact", pages_contact_path, class: current_page?(pages_contact_path) ? active_lnk : idle_lnk, aria: { current: current_page?(pages_contact_path) ? "page" : false } %></li>
           <% if authenticated? %>
           <li class="border-l border-stone-300 pl-2 ml-1">
-            <%= link_to "Dashboard", dashboard_path, class: current_page?(dashboard_path) ? active_lnk : idle_lnk %>
+            <%= link_to "Dashboard", dashboard_path, class: current_page?(dashboard_path) ? active_lnk : idle_lnk, aria: { current: current_page?(dashboard_path) ? "page" : false } %>
           </li>
 
           <% end %>
         </ul>
         <button @click="open = !open" aria-label="Toggle menu" class="ml-4 lg:hidden text-stone-700 p-1 hover:bg-stone-200 rounded-md transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M3 18v-2h18v2zm0-5v-2h18v2zm0-5V6h18v2z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 18v-2h18v2zm0-5v-2h18v2zm0-5V6h18v2z"/></svg>
         </button>
       </div>
     </div>

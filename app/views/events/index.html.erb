@@ -1,3 +1,4 @@
+<% content_for :title, "Events — West Baton Rouge Presbyterian Church" %>
 <div class="container mx-auto px-4 py-8">
   <div class="flex items-center justify-between mb-6">
     <h1 class="font-marcellus text-4xl text-stone-900">Events</h1>
@@ -6,10 +7,10 @@
     <% end %>
   </div>
 
-  <div class="flex flex-wrap gap-2 mb-8">
-    <%= link_to "All", events_path, class: "rounded-full px-4 py-1.5 text-sm font-medium transition-colors #{params[:category].blank? ? 'bg-stone-800 text-white' : 'bg-stone-100 text-stone-700 hover:bg-stone-200'}" %>
+  <div class="flex flex-wrap gap-2 mb-8" role="group" aria-label="Filter events by category">
+    <%= link_to "All", events_path, class: "rounded-full px-4 py-1.5 text-sm font-medium transition-colors #{params[:category].blank? ? 'bg-stone-800 text-white' : 'bg-stone-100 text-stone-700 hover:bg-stone-200'}", aria: { current: params[:category].blank? ? "true" : false } %>
     <% Event::CATEGORY_LABELS.each do |value, label| %>
-      <%= link_to label, events_path(category: value), class: "rounded-full px-4 py-1.5 text-sm font-medium transition-colors #{params[:category] == value ? 'bg-stone-800 text-white' : 'bg-stone-100 text-stone-700 hover:bg-stone-200'}" %>
+      <%= link_to label, events_path(category: value), class: "rounded-full px-4 py-1.5 text-sm font-medium transition-colors #{params[:category] == value ? 'bg-stone-800 text-white' : 'bg-stone-100 text-stone-700 hover:bg-stone-200'}", aria: { current: params[:category] == value ? "true" : false } %>
     <% end %>
   </div>
 

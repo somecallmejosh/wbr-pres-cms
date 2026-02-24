@@ -40,8 +40,9 @@
       </div>
     </div>
 
-    <div class="border-t border-stone-700 mt-8 pt-4 text-center text-xs text-stone-100">
+    <div class="border-t border-stone-700 mt-8 pt-4 text-center text-xs text-stone-100 space-y-1">
       <p>&copy; <%= Time.current.year %> West Baton Rouge Presbyterian Church. All rights reserved.</p>
+      <p><%= link_to "Accessibility Statement", accessibility_statement_path, class: "text-stone-400 hover:text-amber-400 transition-colors underline" %></p>
     </div>
   </div>
 </footer>

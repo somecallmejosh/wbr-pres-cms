@@ -20,8 +20,8 @@
                 <div class="h-full flex flex-col bg-white shadow-lg overflow-y-auto p-8">
                     <!-- Close Button -->
                     <div class="absolute right-0 top-0 mr-4 mt-4">
-                        <button type="button" @click="$dialog.close()" class="relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md bg-transparent p-1.5 font-medium text-gray-400 hover:bg-gray-800/10 hover:text-gray-800">
-                            <span class="sr-only">Close modal</span>
+                        <button type="button" @click="$dialog.close()" class="relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md bg-transparent p-1.5 font-medium text-gray-400 hover:bg-gray-800/10 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-stone-400">
+                            <span class="sr-only">Close navigation menu</span>
                             <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                 <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z"></path>
                             </svg>
@@ -31,7 +31,7 @@
                     <!-- Body -->
                     <div class="space-y-6">
                           <div class="flex items-center gap-3">
-        <img src="https://res.cloudinary.com/dwjulenau/image/upload/v1765035098/WBR%20Presbyterian/logo.png" alt="Logo" class="size-14">
+        <img src="https://res.cloudinary.com/dwjulenau/image/upload/v1765035098/WBR%20Presbyterian/logo.png" alt="" aria-hidden="true" class="size-14">
         <a href="/" class="font-marcellus lg:text-xl text-stone-900 leading-tight hover:text-amber-700 transition-colors">
           West Baton Rouge<br>
           <span class="text-amber-700">Presbyterian Church</span>
@@ -39,15 +39,15 @@
       </div>
                             <ul class="divide-y divide-stone-200">
       <li>
-        <%= link_to "Home", root_path, class: "block py-3 text-sm font-medium #{current_page?(root_path) ? 'text-amber-700 font-semibold' : 'text-stone-600 hover:text-stone-900'} transition-colors" %>
+        <%= link_to "Home", root_path, class: "block py-3 text-sm font-medium #{current_page?(root_path) ? 'text-amber-700 font-semibold' : 'text-stone-600 hover:text-stone-900'} transition-colors", aria: { current: current_page?(root_path) ? "page" : false } %>
       </li>
-      <li><%= link_to "Events", events_path, class: "block py-3 text-sm font-medium #{controller_name == 'events' ? 'text-amber-700 font-semibold' : 'text-stone-600 hover:text-stone-900'} transition-colors" %></li>
-      <li><%= link_to "Calendar", calendar_path, class: "block py-3 text-sm font-medium #{controller_name == 'calendar' ? 'text-amber-700 font-semibold' : 'text-stone-600 hover:text-stone-900'} transition-colors" %></li>
-      <li><%= link_to "Galleries", galleries_path, class: "block py-3 text-sm font-medium #{controller_name == 'galleries' ? 'text-amber-700 font-semibold' : 'text-stone-600 hover:text-stone-900'} transition-colors" %></li>
-      <li><%= link_to "About", pages_about_path, class: "block py-3 text-sm font-medium #{current_page?(pages_about_path) ? 'text-amber-700 font-semibold' : 'text-stone-600 hover:text-stone-900'} transition-colors" %></li>
-      <li><%= link_to "Contact", pages_contact_path, class: "block py-3 text-sm font-medium #{current_page?(pages_contact_path) ? 'text-amber-700 font-semibold' : 'text-stone-600 hover:text-stone-900'} transition-colors" %></li>
+      <li><%= link_to "Events", events_path, class: "block py-3 text-sm font-medium #{controller_name == 'events' ? 'text-amber-700 font-semibold' : 'text-stone-600 hover:text-stone-900'} transition-colors", aria: { current: controller_name == "events" ? "page" : false } %></li>
+      <li><%= link_to "Calendar", calendar_path, class: "block py-3 text-sm font-medium #{controller_name == 'calendar' ? 'text-amber-700 font-semibold' : 'text-stone-600 hover:text-stone-900'} transition-colors", aria: { current: controller_name == "calendar" ? "page" : false } %></li>
+      <li><%= link_to "Galleries", galleries_path, class: "block py-3 text-sm font-medium #{controller_name == 'galleries' ? 'text-amber-700 font-semibold' : 'text-stone-600 hover:text-stone-900'} transition-colors", aria: { current: controller_name == "galleries" ? "page" : false } %></li>
+      <li><%= link_to "About", pages_about_path, class: "block py-3 text-sm font-medium #{current_page?(pages_about_path) ? 'text-amber-700 font-semibold' : 'text-stone-600 hover:text-stone-900'} transition-colors", aria: { current: current_page?(pages_about_path) ? "page" : false } %></li>
+      <li><%= link_to "Contact", pages_contact_path, class: "block py-3 text-sm font-medium #{current_page?(pages_contact_path) ? 'text-amber-700 font-semibold' : 'text-stone-600 hover:text-stone-900'} transition-colors", aria: { current: current_page?(pages_contact_path) ? "page" : false } %></li>
       <% if authenticated? %>
-        <li><%= link_to "Dashboard", dashboard_path, class: "block py-3 text-sm font-medium #{current_page?(dashboard_path) ? 'text-amber-700 font-semibold' : 'text-stone-600 hover:text-stone-900'} transition-colors" %></li>
+        <li><%= link_to "Dashboard", dashboard_path, class: "block py-3 text-sm font-medium #{current_page?(dashboard_path) ? 'text-amber-700 font-semibold' : 'text-stone-600 hover:text-stone-900'} transition-colors", aria: { current: current_page?(dashboard_path) ? "page" : false } %></li>
       <% end %>
     </ul>
                     </div>

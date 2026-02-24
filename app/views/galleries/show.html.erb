@@ -34,7 +34,7 @@
                   data-lightbox-alt="<%= gi.image.alt_text.presence || gi.image.title.presence || "" %>"
                   data-action="click->lightbox#open"
                   aria-label="<%= "View #{gi.image.title.presence || "image #{index + 1}"} — click to enlarge" %>">
-            <img src="<%= gi.image.thumbnail_url(width: 400, height: 400) %>"
+            <img src="<%= gi.image.thumbnail_url(width: 800, height: 800) %>"
                  alt=""
                  aria-hidden="true"
                  class="w-full h-full object-cover">

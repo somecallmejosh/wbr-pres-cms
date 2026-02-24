@@ -20,9 +20,8 @@
       <% end %>
     </div>
       <% if @event.image.present? %>
-        <img src="<%= @event.image.display_url(width: 1200) %>"
-             alt=""
-             aria-hidden="true"
+        <img src="<%= @event.image.display_url(width: 800) %>"
+             alt="Event image"
              class="w-full aspect-[16/9] object-cover">
       <% end %>
 

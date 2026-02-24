@@ -3,7 +3,8 @@
         <img src="<%= event.image.display_url(width: 800) %>"
              alt=""
              aria-hidden="true"
-             class="w-full aspect-[16/9] object-cover">
+             class="w-full aspect-[16/9] object-cover"
+             loading="lazy">
         <% else %>
         <div class="w-full aspect-[16/9] bg-stone-200 flex items-center justify-center text-stone-400 text-sm" aria-hidden="true">
           No image

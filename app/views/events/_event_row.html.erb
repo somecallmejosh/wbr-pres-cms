@@ -1,24 +1,41 @@
-<div class="flex items-center gap-5 py-5 bg-white px-4 relative group transition-all hover:shadow-lg duration-200 ">
-  <div class="flex flex-col items-center justify-center text-center w-16 flex-shrink-0 bg-stone-100 rounded-lg py-3 px-2">
-    <span class="text-xs font-semibold tracking-widest uppercase text-stone-500"><%= event.event_date.strftime("%a") %></span>
-    <span class="text-3xl font-bold text-stone-800 leading-none my-1"><%= event.event_date.day %></span>
-    <span class="text-xs font-semibold tracking-widest uppercase text-stone-500"><%= event.event_date.strftime("%b") %></span>
+<div class="flex gap-5 bg-white relative group transition-all hover:shadow-lg duration-200 relative">
+  <div class="absolute top-4 left-4">
+    <div class="flex flex-col items-center justify-center text-center w-16 flex-shrink-0 bg-stone-100 rounded-lg py-3 px-2">
+        <span class="text-xs font-semibold tracking-widest uppercase text-stone-500"><%= event.event_date.strftime("%a") %></span>
+        <span class="text-3xl font-bold text-stone-800 leading-none my-1"><%= event.event_date.day %></span>
+        <span class="text-xs font-semibold tracking-widest uppercase text-stone-500"><%= event.event_date.strftime("%b") %></span>
+      </div>
   </div>
 
   <div class="flex-1 min-w-0">
-    <div class="flex flex-wrap items-center gap-x-2 gap-y-1 mb-0.5 lg:justify-between">
-      <h3 class="font-marcellus text-lg text-stone-900 group-hover:text-amber-700 ">
-        <%= event.title %>
-      </h3>
-      <%= render "shared/category_badge", category: event.category %>
+    <div>
+      <% if event.image.present? %>
+        <img src="<%= event.image.display_url(width: 800) %>"
+             alt=""
+             aria-hidden="true"
+             class="w-full aspect-[16/9] object-cover">
+        <% else %>
+        <div class="w-full aspect-[16/9] bg-stone-200 flex items-center justify-center text-stone-400 text-sm" aria-hidden="true">
+          No image
+        </div>
+      <% end %>
+      <div class="p-4">
+        <div class="flex flex-wrap items-center gap-x-2 gap-y-1 mb-0.5 lg:justify-between">
+          <h3 class="font-marcellus text-lg text-stone-900 group-hover:text-amber-700 ">
+            <%= event.title %>
+          </h3>
+          <%= render "shared/category_badge", category: event.category %>
+
+        </div>
+        <p class="text-sm text-stone-600 mb-2"><%= event_time_range(event) %></p>
+        <% if event.description.present? %>
+          <p class="text-stone-600 mb-1 text-sm line-clamp-2"><%= event.description %></p>
+        <% end %>
+        <% if event.location.present? %>
+          <p class="text-sm text-stone-600"><%= event.location %></p>
+        <% end %>
+      </div>
     </div>
-    <p class="text-sm text-stone-600"><%= event_time_range(event) %></p>
-    <% if event.location.present? %>
-      <p class="text-sm text-stone-600"><%= event.location %></p>
-    <% end %>
-    <% if event.description.present? %>
-      <p class="text-stone-600 mt-1 text-sm line-clamp-2"><%= event.description %></p>
-    <% end %>
   </div>
   <%= link_to event_path(event), class: "absolute inset-0" do %>
     <span class="sr-only"><%= event.title %></span>

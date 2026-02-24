@@ -64,7 +64,7 @@
         <% @images.each do |image| %>
           <label class="relative cursor-pointer">
             <%= form.radio_button :image_id, image.id, class: "sr-only peer" %>
-            <div class="h-24 rounded-md border-2 border-stone-200 overflow-hidden peer-checked:border-amber-500 hover:border-stone-300 transition-colors">
+            <div class="h-24 rounded-md border-2 border-stone-200 bg-stone-100 overflow-hidden peer-checked:border-amber-500 hover:border-stone-300 transition-colors">
               <img src="<%= image.thumbnail_url(width: 200, height: 200) %>"
                    alt="<%= image.alt_text.presence || image.title.presence || "" %>"
                    class="w-full h-full object-cover">

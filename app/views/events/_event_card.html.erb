@@ -1,4 +1,14 @@
 <div class="bg-white flex flex-col relative group transition-all hover:shadow-lg duration-200">
+        <% if event.image.present? %>
+        <img src="<%= event.image.display_url(width: 800) %>"
+             alt=""
+             aria-hidden="true"
+             class="w-full aspect-[16/9] object-cover">
+        <% else %>
+        <div class="w-full aspect-[16/9] bg-stone-200 flex items-center justify-center text-stone-400 text-sm" aria-hidden="true">
+          No image
+        </div>
+      <% end %>
   <div class="p-4 flex-1">
     <div class="flex items-center justify-between mb-2">
       <span class="text-sm text-stone-600"><%= full_date_ordinal(event.event_date) %></span>
@@ -6,7 +16,7 @@
     <h3 class="font-marcellus text-lg text-stone-900 mb-1 group-hover:text-amber-700 transition-colors">
       <%= event.title %>
     </h3>
-    <p class="text-sm text-stone-600 mb-2"><%= event_time_range(event) %></p>
+    <p class="text-sm text-stone-600"><%= event_time_range(event) %></p>
     <% if event.location.present? %>
       <p class="text-sm text-stone-600"><%= event.location %></p>
     <% end %>

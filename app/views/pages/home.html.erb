@@ -29,7 +29,7 @@
           </div>
 
           <% if @weekly_events.any? %>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <% @weekly_events.each do |event| %>
                 <%= render "events/event_card", event: event %>
               <% end %>

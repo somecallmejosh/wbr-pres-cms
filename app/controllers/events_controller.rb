@@ -20,6 +20,7 @@ class EventsController < ApplicationController
     if @event.save
       redirect_to @event, notice: "Event was successfully created."
     else
+      @images = Image.order(created_at: :desc)
       render :new, status: :unprocessable_entity
     end
   end
@@ -32,6 +33,7 @@ class EventsController < ApplicationController
     if @event.update(event_params)
       redirect_to @event, notice: "Event was successfully updated."
     else
+      @images = Image.order(created_at: :desc)
       render :edit, status: :unprocessable_entity
     end
   end

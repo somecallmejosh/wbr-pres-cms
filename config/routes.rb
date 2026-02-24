@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   get "pages/home"
   get "pages/contact"
+  post "pages/contact", to: "pages#submit_contact"
   get "pages/about"
   get "specifications",  to: "pages#specifications",  as: :specifications
   get "admin-guide",     to: "pages#admin_guide",     as: :admin_guide

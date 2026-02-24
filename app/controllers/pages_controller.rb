@@ -1,11 +1,26 @@
 class PagesController < ApplicationController
-  allow_unauthenticated_access only: %i[ home contact about accessibility ]
+  allow_unauthenticated_access only: %i[ home contact submit_contact about accessibility ]
   def home
     @weekly_events = Event.this_week.limit(2)
     @birthdays = Member.birthdays_this_month
   end
 
   def contact
+  end
+
+  def submit_contact
+    name    = params[:name].to_s.strip
+    email   = params[:email].to_s.strip
+    message = params[:message].to_s.strip
+
+    if name.blank? || email.blank? || message.blank?
+      flash[:alert] = "Please fill in all fields before sending."
+      redirect_to pages_contact_path and return
+    end
+
+    ContactMailer.inquiry(name: name, email: email, message: message).deliver_later
+    flash[:notice] = "Thank you! Your message has been sent. We'll be in touch soon."
+    redirect_to pages_contact_path
   end
 
   def about

@@ -26,7 +26,7 @@ administrators.</p>
 <tr>
 <td>Framework</td>
 <td>Ruby on Rails</td>
-<td>8.1.2</td>
+<td>8.1.1</td>
 </tr>
 <tr>
 <td>Database</td>
@@ -475,7 +475,7 @@ scope :by_category, -&gt;(category) { where(category: category) if category.pres
 <pre class="ruby"><code>def thumbnail_url(width: 200, height: 200)
   Cloudinary::Utils.cloudinary_url(
     cloudinary_public_id,
-    width: width, height: height, crop: :fill, gravity: :auto, quality: :auto, fetch_format: :auto
+    width: width, height: height, crop: :fill, gravity: "face", quality: :auto, fetch_format: :auto, dpr: :auto
   )
 end
 
@@ -817,34 +817,48 @@ end</code></pre>
 <hr />
 <h2 id="4-routes">4. Routes</h2>
 <pre class="ruby"><code>Rails.application.routes.draw do
-  # Authentication (generated)
-  resource  :session,   only: [:new, :create, :destroy]
-  resources :passwords, param: :token, only: [:new, :create, :edit, :update]
+  get &quot;pages/home&quot;
+  get &quot;pages/contact&quot;
+  get &quot;pages/about&quot;
+  get &quot;specifications&quot;, to: &quot;pages#specifications&quot;, as: :specifications
+  get &quot;admin-guide&quot;,    to: &quot;pages#admin_guide&quot;,    as: :admin_guide
+  get &quot;dashboard&quot;,      to: &quot;pages#dashboard&quot;,      as: :dashboard
 
-  # Events (public index/show, admin CRUD)
-  resources :events
+  # Authentication (generated)
+  resource  :session
+  resources :passwords, param: :token
 
   # Galleries (public index/show, admin CRUD + reorder)
   resources :galleries do
     patch :reorder, on: :member
   end
 
-  # Calendar (public)
-  get &quot;calendar&quot;, to: &quot;calendar#show&quot;, as: :calendar
+  # Events (public index/show, admin CRUD)
+  resources :events
 
   # Members (admin only)
   resources :members
 
   # Image management (admin only)
   namespace :admin do
-    resources :images, only: [:index, :new, :create, :destroy]
+    resources :images, only: %i[index new create destroy] do
+      post :sync, on: :collection
+    end
   end
+
+  # Calendar (public)
+  get &quot;calendar&quot;, to: &quot;calendar#show&quot;, as: :calendar
 
   # Homepage
   root &quot;pages#home&quot;
 
-  # Health check (existing)
+  # Health check
   get &quot;up&quot; =&gt; &quot;rails/health#show&quot;, as: :rails_health_check
+
+  # Error pages + catch-all
+  get &quot;/404&quot;, to: &quot;errors#not_found&quot;
+  get &quot;/500&quot;, to: &quot;errors#internal_server_error&quot;
+  match &quot;*path&quot;, to: &quot;errors#not_found&quot;, via: :all
 end</code></pre>
 <h3 id="route-table">Route Table</h3>
 <table>
@@ -864,6 +878,41 @@ end</code></pre>
 <td><code>pages#home</code></td>
 <td>Public</td>
 <td>Homepage</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/pages/contact</code></td>
+<td><code>pages#contact</code></td>
+<td>Public</td>
+<td>Contact page</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/pages/about</code></td>
+<td><code>pages#about</code></td>
+<td>Public</td>
+<td>About page</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/dashboard</code></td>
+<td><code>pages#dashboard</code></td>
+<td>Auth</td>
+<td>Admin dashboard</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/specifications</code></td>
+<td><code>pages#specifications</code></td>
+<td>Auth</td>
+<td>Technical specs document</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/admin-guide</code></td>
+<td><code>pages#admin_guide</code></td>
+<td>Auth</td>
+<td>Admin user guide</td>
 </tr>
 <tr>
 <td>GET</td>
@@ -1055,6 +1104,34 @@ end</code></pre>
 <td>Delete image</td>
 </tr>
 <tr>
+<td>POST</td>
+<td><code>/admin/images/sync</code></td>
+<td><code>admin/images#sync</code></td>
+<td>Auth</td>
+<td>Sync library with Cloudinary</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/404</code></td>
+<td><code>errors#not_found</code></td>
+<td>Public</td>
+<td>404 error page</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/500</code></td>
+<td><code>errors#internal_server_error</code></td>
+<td>Public</td>
+<td>500 error page</td>
+</tr>
+<tr>
+<td>GET/POST/…</td>
+<td><code>*path</code></td>
+<td><code>errors#not_found</code></td>
+<td>Public</td>
+<td>Catch-all (any unmatched path)</td>
+</tr>
+<tr>
 <td>GET</td>
 <td><code>/members</code></td>
 <td><code>members#index</code></td>
@@ -1109,10 +1186,13 @@ end</code></pre>
 <h2 id="5-controllers">5. Controllers</h2>
 <h3 id="51-pagescontroller">5.1 PagesController</h3>
 <ul>
-<li><code>home</code> -- Queries
-<code>Event.this_week.includes(:image)</code> and
-<code>Member.birthdays_this_month</code>.</li>
-<li>Auth: <code>allow_unauthenticated_access</code></li>
+<li><code>home</code> -- Queries <code>Event.this_week.limit(2)</code> and <code>Member.birthdays_this_month</code>.</li>
+<li><code>contact</code> -- Static contact page.</li>
+<li><code>about</code> -- Static about page.</li>
+<li><code>dashboard</code> -- Admin home base with quick-action links.</li>
+<li><code>specifications</code> -- Renders the technical specification document.</li>
+<li><code>admin_guide</code> -- Renders the admin user guide.</li>
+<li>Auth: <code>allow_unauthenticated_access only: %i[home contact about]</code>. All other actions (dashboard, specifications, admin_guide) require authentication.</li>
 </ul>
 <h3 id="52-eventscontroller">5.2 EventsController</h3>
 <ul>
@@ -1155,11 +1235,10 @@ updates positions in a transaction.</li>
 </ul>
 <h3 id="55-adminimagescontroller">5.5 Admin::ImagesController</h3>
 <ul>
-<li><code>index</code> -- Lists all uploaded images with
-thumbnails.</li>
-<li><code>new</code> -- Upload form.</li>
-<li><code>create</code> -- Sends file to Cloudinary, stores metadata in
-<code>Image</code> model.</li>
+<li><code>index</code> -- Lists all uploaded images with thumbnails, ordered by <code>created_at desc</code>. Includes a "Sync with Cloudinary" button.</li>
+<li><code>new</code> -- Upload form; accepts up to 20 files at once.</li>
+<li><code>create</code> -- Accepts <code>params[:files]</code> (array), uploads each to Cloudinary, stores metadata in <code>Image</code> model. Reports partial-success if some files fail.</li>
+<li><code>sync</code> (POST collection) -- Fetches all images from the Cloudinary folder, adds any missing <code>Image</code> records, removes any stale records whose <code>cloudinary_public_id</code> no longer exists in Cloudinary. Useful for reconciling images uploaded directly to Cloudinary outside the app.</li>
 <li><code>destroy</code> -- Removes from Cloudinary and database.</li>
 <li>Auth: All actions require authentication.</li>
 </ul>
@@ -1187,10 +1266,9 @@ needs:</p>
 <li><strong>Navigation bar</strong> -- Sticky top nav with:
 <ul>
 <li>Church name/logo (links to root)</li>
-<li>Public links: Home, Events, Calendar, Galleries</li>
-<li>Admin links (shown when <code>authenticated?</code>): Members,
-Images</li>
-<li>Login/Logout toggle</li>
+<li>Public links: Home, Events, Calendar, Galleries, About, Contact</li>
+<li>Admin links (shown when <code>authenticated?</code>): Dashboard</li>
+<li>Mobile hamburger menu (Alpine.js toggle)</li>
 </ul></li>
 <li><strong>Flash messages</strong> -- Partial for <code>notice</code>
 and <code>alert</code> with Tailwind styling, dismissible via
@@ -1378,16 +1456,15 @@ end</code></pre>
 <h3 id="73-upload-flow">7.3 Upload Flow</h3>
 <ol type="1">
 <li>Admin navigates to <code>/admin/images/new</code></li>
-<li>Admin selects a file via standard file input</li>
+<li>Admin selects up to 20 files via a multiple-file input (<code>name="files[]"</code>)</li>
 <li>Form submits to <code>Admin::ImagesController#create</code></li>
-<li>Controller calls
-<code>Cloudinary::Uploader.upload(params[:file], folder: "wbr-pres-cms", resource_type: "image", allowed_formats: %w[jpg jpeg png webp gif])</code></li>
-<li>Cloudinary returns metadata: <code>public_id</code>,
+<li>Controller iterates <code>Array(params[:files]).first(MAX_UPLOAD_COUNT)</code>, calling
+<code>Cloudinary::Uploader.upload(file, folder: "wbr-pres-cms", resource_type: "image", allowed_formats: %w[jpg jpeg png webp gif])</code> for each</li>
+<li>Cloudinary returns metadata per file: <code>public_id</code>,
 <code>secure_url</code>, <code>width</code>, <code>height</code>,
 <code>format</code>, <code>bytes</code></li>
-<li>Controller creates <code>Image</code> record with these
-attributes</li>
-<li>Redirect to <code>admin_images_path</code> with success flash</li>
+<li>Controller creates an <code>Image</code> record for each successful upload; tracks failures separately</li>
+<li>Redirect to <code>admin_images_path</code> with a flash summarizing how many succeeded / failed</li>
 </ol>
 <h3 id="74-image-deletion">7.4 Image Deletion</h3>
 <ol type="1">
@@ -1484,7 +1561,7 @@ end</code></pre>
 <h2 id="9-homepage">9. Homepage</h2>
 <h3 id="91-data-queries">9.1 Data Queries</h3>
 <pre class="ruby"><code># In PagesController#home:
-@weekly_events = Event.this_week.includes(:image)
+@weekly_events = Event.this_week.limit(2)
 @birthdays = Member.birthdays_this_month</code></pre>
 <h3 id="92-display">9.2 Display</h3>
 <p><strong>This Week's Events</strong> -- Event cards showing:</p>
@@ -2179,19 +2256,19 @@ with site-wide defaults.</p>
 </tr>
 <tr>
 <td><code>og:site_name</code></td>
-<td>West Belmar Presbyterian Church</td>
+<td>West Baton Rouge Presbyterian Church</td>
 </tr>
 <tr>
 <td><code>og:title</code> / <code>twitter:title</code></td>
-<td>Falls back to <code>content_for(:title)</code>, then "West Belmar Presbyterian Church"</td>
+<td>Falls back to <code>content_for(:title)</code>, then "West Baton Rouge Presbyterian Church"</td>
 </tr>
 <tr>
 <td><code>og:description</code> / <code>twitter:description</code></td>
-<td>"West Belmar Presbyterian Church — worship, community, and service in Belmar, NJ."</td>
+<td>"West Baton Rouge Presbyterian Church — worship, community, and service in Baton Rouge, NJ."</td>
 </tr>
 <tr>
 <td><code>og:image</code> / <code>twitter:image</code></td>
-<td>Cloudinary URL: <code>https://res.cloudinary.com/dwjulenau/image/upload/v1771469323/wbr-pres-cms/image012.jpg</code></td>
+<td>Local asset: <code>/theme/church-sketch.jpg</code></td>
 </tr>
 <tr>
 <td><code>og:url</code></td>

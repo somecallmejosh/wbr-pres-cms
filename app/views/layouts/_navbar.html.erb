@@ -38,7 +38,7 @@
     </div>
   </nav>
 </header>
-<div x-show="menuOpen" x-transition.scale.origin.top @click.away="menuOpen = false" class="bg-stone-100 shadow-md lg:hidden border-t border-stone-200">
+<div x-show="menuOpen" x-transition.origin.top @click.away="menuOpen = false" class="fixed top-20 left-0 right-0 bg-stone-100 shadow-md lg:hidden border-t border-stone-200 z-50">
   <div class="container mx-auto px-4 py-2">
     <ul class="divide-y divide-stone-200">
       <li>

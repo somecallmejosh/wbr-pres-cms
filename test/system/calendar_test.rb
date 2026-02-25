@@ -61,6 +61,6 @@ class CalendarTest < ApplicationSystemTestCase
   test "highlights today's date" do
     visit calendar_url
     # Today's cell has the bg-blue-50 class applied
-    assert_selector "div.bg-blue-50", minimum: 1
+    assert_selector "div.bg-amber-50", minimum: 1
   end
 end

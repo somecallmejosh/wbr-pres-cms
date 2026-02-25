@@ -1,5 +1,5 @@
 class ContactMailer < ApplicationMailer
-  CONTACT_EMAIL = "josh@thebrileys.com"
+  CONTACT_EMAIL = ENV['CONTACT_EMAIL']
 
   def inquiry(name:, email:, message:)
     @name = name

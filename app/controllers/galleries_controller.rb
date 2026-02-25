@@ -3,7 +3,7 @@ class GalleriesController < ApplicationController
   before_action :set_gallery, only: %i[show edit update destroy reorder]
 
   def index
-    @galleries = Gallery.ordered
+    @galleries = authenticated? ? Gallery.ordered : Gallery.published.ordered
   end
 
   def show
@@ -70,6 +70,7 @@ class GalleriesController < ApplicationController
 
   def sync_images(gallery, image_ids)
     image_ids = Array(image_ids).map(&:to_i).reject(&:zero?)
+    image_ids &= Image.where(id: image_ids).pluck(:id)
     existing_image_ids = gallery.gallery_images.pluck(:image_id)
 
     gallery.gallery_images.where.not(image_id: image_ids).destroy_all

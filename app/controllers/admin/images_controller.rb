@@ -94,6 +94,8 @@ class Admin::ImagesController < ApplicationController
     Cloudinary::Uploader.destroy(@image.cloudinary_public_id)
     @image.destroy!
     redirect_to admin_images_path, notice: "Image was successfully deleted.", status: :see_other
+  rescue Cloudinary::Api::Error => e
+    redirect_to admin_images_path, alert: "Could not delete image from Cloudinary: #{e.message}", status: :see_other
   end
 
   private

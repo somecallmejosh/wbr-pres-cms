@@ -12,7 +12,7 @@ class CalendarController < ApplicationController
 
   def parse_date_params
     if params[:month].present? && params[:year].present?
-      Date.new(params[:year].to_i, params[:month].to_i, 1)
+      Date.new(params[:year].to_i.clamp(1900, 2100), params[:month].to_i.clamp(1, 12), 1)
     else
       Date.current
     end

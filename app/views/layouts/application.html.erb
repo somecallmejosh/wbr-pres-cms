@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title><%= content_for(:title) || "Wbr Pres Cms" %></title>
+    <title><%= content_for(:title) || "WBR Presbyterian Church" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Wbr Pres Cms">
+    <meta name="application-name" content="WBR Pres Cms">
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%# Social meta tags %>
     <% _og_title       = content_for?(:og_title)       ? yield(:og_title)       : (content_for?(:title) ? yield(:title) : "West Baton Rouge Presbyterian Church") %>
-    <% _og_description = content_for?(:og_description) ? yield(:og_description) : "West Baton Rouge Presbyterian Church — worship, community, and service in Baton Rouge, NJ." %>
+    <% _og_description = content_for?(:og_description) ? yield(:og_description) : "West Baton Rouge Presbyterian Church — worship, community, and service in Baton Rouge, LA." %>
     <% _og_image       = content_for?(:og_image)       ? yield(:og_image)       : "/theme/church-sketch.jpg" %>
     <% _og_url         = content_for?(:og_url)         ? yield(:og_url)         : request.url %>
     <meta property="og:type"        content="website">
@@ -39,9 +39,15 @@
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
-    <script defer src="https://unpkg.com/@alpinejs/ui@3.15.8/dist/cdn.min.js"></script>
-    <script defer src="https://unpkg.com/@alpinejs/focus@3.15.8/dist/cdn.min.js"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.15.8/dist/cdn.min.js"></script>
+    <script defer src="https://unpkg.com/@alpinejs/ui@3.15.8/dist/cdn.min.js"
+            integrity="sha384-gQgys+2QIc8GXXBgCdQABDdxYSW3jUqIe3/kH4dHac2P//s3U7hAVVhn+uJi2K10"
+            crossorigin="anonymous"></script>
+    <script defer src="https://unpkg.com/@alpinejs/focus@3.15.8/dist/cdn.min.js"
+            integrity="sha384-Gmeh4VyN/P4cqn36bj18c9FrLk6J7IwWH6Yt9OB2bgMDOph7bm7dtJg6m+lvxDa7"
+            crossorigin="anonymous"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.15.8/dist/cdn.min.js"
+            integrity="sha384-LXWjKwDZz29o7TduNe+r/UxaolHh5FsSvy2W7bDHSZ8jJeGgDeuNnsDNHoxpSgDi"
+            crossorigin="anonymous"></script>
   </head>
 
   <body

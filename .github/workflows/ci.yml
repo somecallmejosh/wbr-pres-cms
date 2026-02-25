@@ -100,6 +100,9 @@ jobs:
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/wbr_pres_cms_test
+          CLOUDINARY_CLOUD_NAME: test
+          CLOUDINARY_API_KEY: dummy_key
+          CLOUDINARY_API_SECRET: dummy_secret
           # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:test:prepare test
@@ -140,6 +143,8 @@ jobs:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/wbr_pres_cms_test
           CLOUDINARY_CLOUD_NAME: test
+          CLOUDINARY_API_KEY: dummy_key
+          CLOUDINARY_API_SECRET: dummy_secret
           # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:test:prepare test:system

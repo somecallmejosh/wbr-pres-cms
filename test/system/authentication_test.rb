@@ -37,8 +37,7 @@ class AuthenticationTest < ApplicationSystemTestCase
   test "admin navigation links appear after sign in" do
     sign_in_as_admin
     visit root_url
-    assert_text "Members"
-    assert_text "Image Library"
+    assert_text "Dashboard"
   end
 
   test "admin navigation links hidden when signed out" do

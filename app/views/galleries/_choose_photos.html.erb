@@ -1,0 +1,32 @@
+<%#
+  "Choose photos" library pane, shared by the gallery new + edit pages.
+  locals:
+    selected_ids: image ids already in this gallery
+
+  The "Upload images" link opens the shared upload modal (picker: "gallery");
+  on success the new photos stream into the grid and auto-add to the gallery.
+%>
+<section aria-labelledby="choose-heading" data-controller="reveal">
+  <div class="admin-shell">
+    <div class="admin-core p-6 sm:p-8">
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <h2 id="choose-heading" class="font-marcellus text-xl text-stone-900">Choose photos</h2>
+          <p class="mt-1 text-sm text-stone-500">Tap a photo to add it to this gallery; tap it again to remove it. Selected photos appear under <span class="font-medium text-stone-700">Photos in this gallery</span>.</p>
+        </div>
+        <%= link_to new_admin_image_path(picker: "gallery"), data: { turbo_frame: "upload_modal" }, class: "group inline-flex shrink-0 items-center gap-1.5 text-xs font-medium text-amber-700 transition-colors hover:text-amber-800" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5 transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17V3m0 0L7 8m5-5 5 5"/><path d="M5 17v2a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-2"/></svg>
+          Upload images
+        <% end %>
+      </div>
+
+      <%= render "galleries/image_picker", selected_ids: selected_ids %>
+
+      <% if @images.empty? %>
+        <p class="mt-4 rounded-xl border border-dashed border-stone-300 bg-stone-50/60 px-6 py-8 text-center text-sm text-stone-500">
+          Your photo library is empty. <span class="font-medium text-stone-700">Upload images</span> and they'll be added to this gallery automatically.
+        </p>
+      <% end %>
+    </div>
+  </div>
+</section>

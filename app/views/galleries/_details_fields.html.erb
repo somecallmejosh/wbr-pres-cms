@@ -1,0 +1,30 @@
+<%# Gallery title / description / published fields. Shared by new + edit forms.
+  locals:
+    form:  the form builder (required)
+    intro: helper sentence under the heading (required)
+%>
+<section>
+  <h2 class="font-marcellus text-xl text-stone-900">Gallery details</h2>
+  <p class="mt-1 text-sm text-stone-500"><%= intro %></p>
+
+  <div class="mt-5 grid grid-cols-1 gap-5">
+    <div>
+      <%= form.label :title, class: "field-label" %>
+      <%= form.text_field :title, required: true, class: "field-input" %>
+    </div>
+
+    <div>
+      <%= form.label :description, class: "field-label" %>
+      <%= form.text_area :description, rows: 4, class: "field-input resize-y" %>
+    </div>
+
+    <%# Published toggle as a clear, labeled control %>
+    <label class="flex cursor-pointer items-start gap-3 rounded-2xl border border-stone-200 bg-stone-50 p-4 transition-colors has-[:checked]:border-amber-300 has-[:checked]:bg-amber-50/60">
+      <%= form.check_box :published, class: "mt-0.5 size-5 rounded border-stone-300 text-amber-700 focus:ring-amber-400" %>
+      <span>
+        <span class="block font-medium text-stone-800">Published</span>
+        <span class="block text-sm text-stone-500">When on, this gallery is visible to the public. Leave off to keep it as a draft.</span>
+      </span>
+    </label>
+  </div>
+</section>

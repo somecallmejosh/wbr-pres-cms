@@ -1,46 +1,13 @@
+<%# Gallery details form (title / description / published).
+  Image membership is managed separately by the two-pane photo editor, so this
+  form only persists the gallery's own attributes. %>
 <%= form_with model: gallery do |form| %>
   <%= render "shared/form_errors", record: gallery %>
 
   <div class="admin-shell">
     <div class="admin-core p-6 sm:p-8">
-
-      <section>
-        <h2 class="font-marcellus text-xl text-stone-900">Gallery details</h2>
-        <p class="mt-1 text-sm text-stone-500">Give the album a title, then pick the photos below.</p>
-
-        <div class="mt-5 grid grid-cols-1 gap-5">
-          <div>
-            <%= form.label :title, class: "field-label" %>
-            <%= form.text_field :title, required: true, class: "field-input" %>
-          </div>
-
-          <div>
-            <%= form.label :description, class: "field-label" %>
-            <%= form.text_area :description, rows: 4, class: "field-input resize-y" %>
-          </div>
-
-          <%# Published toggle as a clear, labeled control %>
-          <label class="flex cursor-pointer items-start gap-3 rounded-2xl border border-stone-200 bg-stone-50 p-4 transition-colors has-[:checked]:border-amber-300 has-[:checked]:bg-amber-50/60">
-            <%= form.check_box :published, class: "mt-0.5 size-5 rounded border-stone-300 text-amber-700 focus:ring-amber-400" %>
-            <span>
-              <span class="block font-medium text-stone-800">Published</span>
-              <span class="block text-sm text-stone-500">When on, this gallery is visible to the public. Leave off to keep it as a draft.</span>
-            </span>
-          </label>
-        </div>
-      </section>
-
-      <% if @images.present? %>
-        <hr class="my-8 border-stone-200">
-        <section>
-          <h2 class="font-marcellus text-xl text-stone-900">Choose photos</h2>
-          <p class="mt-1 text-sm text-stone-500">Tap any photo to add or remove it from this gallery.</p>
-          <%= render "galleries/image_picker", selected_ids: gallery.images.pluck(:id) %>
-        </section>
-      <% end %>
-
+      <%= render "galleries/details_fields", form: form, intro: "Update the album's title, description, and visibility." %>
       <%= render "shared/admin_action_bar", form: form, label: "Save gallery", cancel_path: galleries_path %>
-
     </div>
   </div>
 <% end %>

@@ -1,0 +1,36 @@
+<%#
+  One selectable photo in the gallery "Choose photos" library.
+  locals:
+    image:    the Image
+    selected: whether it's already in this gallery (default false)
+
+  The checkbox has no name — it's a UI toggle. Membership submits via the
+  staged rows' image_ids[] (new) or persists live via add_image (edit). The
+  same markup is streamed in after a modal upload, so it carries every data
+  attribute the gallery-editor controller needs.
+%>
+<% selected = local_assigns.fetch(:selected, false) %>
+<label class="group relative cursor-pointer">
+  <input type="checkbox"
+         value="<%= image.id %>"
+         class="sr-only peer"
+         <%= "checked" if selected %>
+         data-gallery-editor-target="checkbox"
+         data-action="change->gallery-editor#toggle"
+         data-image-id="<%= image.id %>"
+         data-image-thumb="<%= image.thumbnail_url(width: 80, height: 80) %>"
+         data-image-title="<%= image.title.presence || image.cloudinary_public_id %>"
+         aria-label="<%= image.title.presence || image.cloudinary_public_id %>">
+  <div class="aspect-square overflow-hidden rounded-xl border-2 border-stone-200 transition-all hover:border-stone-300 peer-checked:border-amber-500 peer-checked:ring-2 peer-checked:ring-amber-400/60 peer-focus-visible:ring-2 peer-focus-visible:ring-amber-400 peer-focus-visible:ring-offset-2">
+    <img src="<%= image.thumbnail_url(width: 200, height: 200) %>"
+         alt=""
+         aria-hidden="true"
+         class="h-full w-full object-cover">
+  </div>
+  <div class="absolute right-1.5 top-1.5 hidden size-7 items-center justify-center rounded-full bg-amber-600 text-white shadow-sm peer-checked:flex" aria-hidden="true">
+    <svg viewBox="0 0 20 20" fill="currentColor" class="size-4"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" /></svg>
+  </div>
+  <% if image.title.present? %>
+    <p class="mt-1 truncate text-xs text-stone-600"><%= image.title %></p>
+  <% end %>
+</label>

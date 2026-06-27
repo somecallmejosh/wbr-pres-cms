@@ -1,0 +1,35 @@
+<%# Photos uploaded from a picker modal: close it, drop the new tiles into the
+    right picker (newest first), then auto-select them so the upload "counts"
+    immediately. The picker param decides which form we're feeding. %>
+<%= turbo_stream.update "upload_modal", "" %>
+
+<% if params[:picker] == "gallery" %>
+  <% @uploaded_images.reverse_each do |image| %>
+    <%= turbo_stream.prepend "gallery-image-options" do %>
+      <%= render "galleries/picker_tile", image: image, selected: false %>
+    <% end %>
+  <% end %>
+
+  <%# One marker per photo — the gallery-editor controller adds each to the
+      gallery (staged on new, persisted on edit). %>
+  <% @uploaded_images.each do |image| %>
+    <%= turbo_stream.append "gallery-image-options" do %>
+      <input type="hidden" data-gallery-editor-target="autoselect" value="<%= image.id %>">
+    <% end %>
+  <% end %>
+<% else %>
+  <% @uploaded_images.reverse_each do |image| %>
+    <%= turbo_stream.prepend "event-image-options" do %>
+      <%= render "events/picker_tile", image: image, checked: false %>
+    <% end %>
+  <% end %>
+
+  <%# Auto-feature the first uploaded photo via the event-image controller. %>
+  <%= turbo_stream.append "event-image-options" do %>
+    <input type="hidden" data-event-image-target="autoselect" value="<%= @uploaded_images.first.id %>">
+  <% end %>
+<% end %>
+
+<%= turbo_stream.update "flash" do %>
+  <%= render "layouts/flash" %>
+<% end %>

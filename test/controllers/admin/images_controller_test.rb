@@ -85,6 +85,65 @@ class Admin::ImagesControllerTest < ActionDispatch::IntegrationTest
     temp_file&.unlink
   end
 
+  test "new renders the upload modal inside the upload_modal frame" do
+    get new_admin_image_url, headers: { "Turbo-Frame" => "upload_modal" }
+
+    assert_response :success
+    assert_select "turbo-frame#upload_modal dialog[data-controller='modal']"
+  end
+
+  test "modal upload streams tiles into the picker instead of redirecting" do
+    temp_file = Tempfile.new([ "test_image", ".jpg" ])
+    temp_file.write("fake image data")
+    temp_file.rewind
+
+    assert_difference("Image.count", 1) do
+      post admin_images_url,
+        params: { files: [ Rack::Test::UploadedFile.new(temp_file.path, "image/jpeg") ] },
+        headers: { "Turbo-Frame" => "upload_modal" },
+        as: :turbo_stream
+    end
+
+    assert_response :success
+    assert_equal "text/vnd.turbo-stream.html", response.media_type
+    # Closes the dialog by emptying its frame...
+    assert_match %r{<turbo-stream action="update" target="upload_modal">}, response.body
+    # ...drops a real, selectable tile into the picker grid...
+    assert_match %r{<turbo-stream action="prepend" target="event-image-options">}, response.body
+    assert_match 'name="event[image_id]"', response.body
+    assert_match "wbr-pres-cms/uploaded_photo", response.body
+    # ...and appends a marker so the new photo is auto-featured.
+    assert_match %r{<turbo-stream action="append" target="event-image-options">}, response.body
+    assert_match %r{data-event-image-target="autoselect" value="#{Image.last.id}"}, response.body
+  ensure
+    temp_file&.close
+    temp_file&.unlink
+  end
+
+  test "modal upload for the gallery picker streams checkbox tiles and add markers" do
+    temp_file = Tempfile.new([ "test_image", ".jpg" ])
+    temp_file.write("fake image data")
+    temp_file.rewind
+
+    assert_difference("Image.count", 1) do
+      post admin_images_url,
+        params: { picker: "gallery", files: [ Rack::Test::UploadedFile.new(temp_file.path, "image/jpeg") ] },
+        headers: { "Turbo-Frame" => "upload_modal" },
+        as: :turbo_stream
+    end
+
+    assert_response :success
+    # Feeds the gallery picker, not the event one.
+    assert_match %r{<turbo-stream action="prepend" target="gallery-image-options">}, response.body
+    assert_no_match %r{target="event-image-options"}, response.body
+    assert_match 'data-gallery-editor-target="checkbox"', response.body
+    # Marker auto-adds the new photo to the gallery.
+    assert_match %r{data-gallery-editor-target="autoselect" value="#{Image.last.id}"}, response.body
+  ensure
+    temp_file&.close
+    temp_file&.unlink
+  end
+
   test "should create multiple images in one upload" do
     responses = [
       { status: 200, body: CLOUDINARY_UPLOAD_RESPONSE.merge("public_id" => "wbr-pres-cms/photo_1").to_json, headers: { "Content-Type" => "application/json" } },

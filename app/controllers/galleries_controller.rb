@@ -1,9 +1,21 @@
 class GalleriesController < ApplicationController
   allow_unauthenticated_access only: %i[index show]
-  before_action :set_gallery, only: %i[show edit update destroy reorder]
+  before_action :set_gallery, only: %i[show edit update destroy reorder add_image remove_image]
 
   def index
-    @galleries = Gallery.ordered
+    # Admins can filter by status; the public only ever sees published galleries,
+    # so the filter param is ignored for unauthenticated visitors.
+    @filter = params[:filter].presence_in(%w[published drafts])
+    @galleries =
+      if authenticated?
+        case @filter
+        when "published" then Gallery.published.ordered
+        when "drafts"    then Gallery.drafts.ordered
+        else                  Gallery.ordered
+        end
+      else
+        Gallery.published.ordered
+      end
   end
 
   def show
@@ -33,8 +45,9 @@ class GalleriesController < ApplicationController
   end
 
   def update
+    # Image membership is managed live via add_image/remove_image, so update
+    # only touches the gallery's own attributes.
     if @gallery.update(gallery_params)
-      sync_images(@gallery, params[:image_ids] || [])
       redirect_to @gallery, notice: "Gallery was successfully updated."
     else
       @images = Image.order(created_at: :desc)
@@ -56,6 +69,29 @@ class GalleriesController < ApplicationController
       end
     end
     head :ok
+  end
+
+  # Adds an image to the gallery (idempotent) and streams a new row into the
+  # "Photos in this gallery" list. Driven live by the picker checkboxes.
+  def add_image
+    @image = Image.find(params[:image_id])
+    @gallery_image = @gallery.gallery_images.find_or_create_by!(image: @image)
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to edit_gallery_path(@gallery) }
+    end
+  end
+
+  # Removes an image from this gallery (the Image itself stays in the library).
+  def remove_image
+    @gallery.gallery_images.where(image_id: params[:image_id]).destroy_all
+
+    respond_to do |format|
+      # 204 lets the client (gallery_editor) own the fade-out animation.
+      format.turbo_stream { head :no_content }
+      format.html { redirect_to edit_gallery_path(@gallery), notice: "Image removed from gallery." }
+    end
   end
 
   private

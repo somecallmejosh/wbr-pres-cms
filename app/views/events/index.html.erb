@@ -1,31 +1,147 @@
 <% content_for :title, "Events — West Baton Rouge Presbyterian Church" %>
 
-<%= render "shared/page_header",
-      eyebrow: "Gather With Us",
-      title: "Events",
-      subtitle: "Worship, study, fellowship, and service — there's always something happening in our church family.",
-      action: (authenticated? ? link_to("New Event", new_event_path, class: "inline-flex items-center rounded-full bg-stone-800 px-5 py-2.5 font-medium text-white transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-stone-700 active:scale-[0.98]") : nil) %>
-
-<div class="container mx-auto px-4 py-14 md:py-16">
-  <div class="mb-10 flex flex-wrap gap-2" role="group" aria-label="Filter events by category">
-    <%= link_to "All", events_path, class: "rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] #{params[:category].blank? ? 'bg-stone-800 text-white shadow-sm' : 'bg-white text-stone-600 ring-1 ring-stone-900/5 hover:bg-stone-100'}", aria: { current: params[:category].blank? ? "true" : false } %>
-    <% Event::CATEGORY_LABELS.each do |value, label| %>
-      <%= link_to label, events_path(category: value), class: "rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] #{params[:category] == value ? 'bg-stone-800 text-white shadow-sm' : 'bg-white text-stone-600 ring-1 ring-stone-900/5 hover:bg-stone-100'}", aria: { current: params[:category] == value ? "true" : false } %>
+<%# ===== Page Hero ===== %>
+<section class="relative flex min-h-[360px] w-full items-center justify-center overflow-hidden bg-stone-900">
+  <div class="absolute inset-0 opacity-20" style="background-image: url('/theme/church-front%20(1).png'); background-size: cover; background-position: center;"></div>
+  <div class="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/85 to-stone-900/60"></div>
+  <div class="pointer-events-none absolute -top-24 left-1/2 h-72 w-[40rem] -translate-x-1/2 rounded-full bg-amber-500/15 blur-3xl"></div>
+  <div class="relative z-10 px-4 py-20 text-center" data-controller="reveal">
+    <span class="inline-block rounded-full bg-amber-500/15 px-4 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-300">Gather With Us</span>
+    <h1 class="font-marcellus mt-6 text-4xl leading-[1.05] text-white md:text-5xl lg:text-6xl text-balance">Events &amp; gatherings</h1>
+    <div class="mx-auto mt-6 h-px w-20 bg-amber-500/60"></div>
+    <p class="mx-auto mt-5 max-w-xl text-lg text-stone-300">Worship, study, fellowship, and service &mdash; there&rsquo;s always something happening in our church family.</p>
+    <% if authenticated? %>
+      <%= link_to new_event_path, class: "group mt-8 inline-flex items-center gap-3 rounded-full bg-white py-2 pl-6 pr-2 font-medium text-stone-900 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-amber-50 active:scale-[0.98]" do %>
+        <span>New Event</span>
+        <span class="flex h-9 w-9 items-center justify-center rounded-full bg-amber-700 text-white transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5 group-hover:-translate-y-px">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </span>
+      <% end %>
     <% end %>
+  </div>
+</section>
+
+<div class="container mx-auto px-4 py-16 md:py-20">
+  <%# Category filtering swaps just this frame (no full reload); turbo_action
+      "advance" keeps the URL in sync so links stay shareable and Back works. %>
+  <%= turbo_frame_tag "events_list", data: { turbo_action: "advance" } do %>
+
+  <%# ===== Filter toolbar ===== %>
+  <div class="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between" data-controller="reveal">
+    <p class="text-sm text-stone-500">
+      <% if @events.any? %>
+        Showing <span class="font-semibold text-stone-700"><%= pluralize(@events.size, "upcoming gathering") %></span>
+      <% else %>
+        Nothing on the calendar right now
+      <% end %>
+    </p>
+    <div class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:justify-end sm:overflow-visible sm:px-0 sm:pb-0" role="group" aria-label="Filter events by category">
+      <%= link_to "All", events_path, class: "shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] #{params[:category].blank? ? 'bg-stone-900 text-white shadow-sm' : 'bg-white text-stone-600 ring-1 ring-stone-900/5 hover:bg-stone-100'}", aria: { current: params[:category].blank? ? "true" : false } %>
+      <% Event::CATEGORY_LABELS.each do |value, label| %>
+        <% is_active = params[:category] == value %>
+        <%= link_to events_path(category: value), class: "group inline-flex shrink-0 items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] #{is_active ? 'bg-stone-900 text-white shadow-sm' : 'bg-white text-stone-600 ring-1 ring-stone-900/5 hover:bg-stone-100'}", aria: { current: is_active ? "true" : false } do %>
+          <span class="size-1.5 shrink-0 rounded-full <%= category_dot_class(value) %>"></span>
+          <%= label %>
+        <% end %>
+      <% end %>
+    </div>
   </div>
 
   <% if @events.any? %>
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      <% @events.each_with_index do |event, i| %>
-        <div data-controller="reveal" data-reveal-delay-value="<%= (i % 3) * 90 %>">
-          <%= render "events/event_row", event: event %>
+    <% featured = @events.first %>
+    <% rest = @events.drop(1) %>
+
+    <%# ===== Featured "Next Up" spotlight — editorial split, double-bezel ===== %>
+    <section class="mt-10 md:mt-12" data-controller="reveal">
+      <div class="group relative rounded-[2rem] bg-stone-50/60 p-2 ring-1 ring-stone-900/5 shadow-[0_40px_90px_-46px_rgba(68,64,60,0.55)] transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-1">
+        <div class="grid grid-cols-1 overflow-hidden rounded-[calc(2rem-0.5rem)] bg-white shadow-[inset_0_1px_1px_rgba(255,255,255,0.7)] lg:grid-cols-2">
+          <%# Visual %>
+          <div class="relative overflow-hidden lg:order-last">
+            <% if featured.image.present? %>
+              <img src="<%= featured.image.cover_url(width: 1100, height: 850) %>" alt="" aria-hidden="true"
+                   class="h-full min-h-[240px] w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-[1.03]" loading="lazy">
+            <% else %>
+              <div class="relative flex h-full min-h-[240px] w-full items-center justify-center overflow-hidden bg-stone-900" aria-hidden="true">
+                <div class="absolute inset-0 opacity-25" style="background-image: url('/theme/stainedglass2.webp'); background-size: cover; background-position: center;"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-stone-900 to-stone-900/40"></div>
+              </div>
+            <% end %>
+            <span class="absolute left-5 top-5 inline-flex items-center gap-1.5 rounded-full bg-stone-900/85 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.2em] text-amber-300 backdrop-blur">
+              <span class="size-1.5 rounded-full bg-amber-400"></span> Next Up
+            </span>
+          </div>
+
+          <%# Detail %>
+          <div class="flex flex-col justify-center gap-4 p-8 md:p-10 lg:p-12">
+            <div class="flex items-center gap-2 text-sm font-semibold uppercase tracking-widest text-amber-700">
+              <%= calendar_icon %><span><%= full_date_ordinal(featured.event_date) %></span>
+            </div>
+            <h2 class="font-marcellus text-3xl leading-tight text-stone-900 transition-colors duration-500 group-hover:text-amber-700 md:text-4xl">
+              <%= featured.title %>
+            </h2>
+            <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-stone-500">
+              <span class="inline-flex items-center gap-1.5"><%= clock_icon %><%= event_time_range(featured) %></span>
+              <% if featured.location.present? %>
+                <span class="inline-flex items-center gap-1.5"><%= pin_icon %><%= featured.location %></span>
+              <% end %>
+            </div>
+            <% if featured.description.present? %>
+              <p class="line-clamp-3 leading-relaxed text-stone-600"><%= featured.description %></p>
+            <% end %>
+            <div class="mt-2 flex items-center gap-4">
+              <%= render "shared/category_badge", category: featured.category %>
+              <span class="inline-flex items-center gap-2 text-sm font-medium text-stone-900">
+                View details
+                <span class="flex h-7 w-7 items-center justify-center rounded-full bg-stone-900 text-white transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5 group-hover:-translate-y-px">
+                  <%= arrow_up_right_icon css: "h-3.5 w-3.5" %>
+                </span>
+              </span>
+            </div>
+          </div>
         </div>
-      <% end %>
-    </div>
+        <%= link_to event_path(featured), data: { turbo_frame: "_top" }, class: "absolute inset-0 block rounded-[2rem] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2" do %>
+          <span class="sr-only"><%= featured.title %></span>
+        <% end %>
+      </div>
+    </section>
+
+    <%# ===== The rest ===== %>
+    <% if rest.any? %>
+      <div class="mt-12 flex items-center gap-4" data-controller="reveal">
+        <h2 class="font-marcellus text-xl text-stone-900 md:text-2xl">More upcoming</h2>
+        <div class="h-px flex-1 bg-stone-900/10"></div>
+      </div>
+      <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <% rest.each_with_index do |event, i| %>
+          <div data-controller="reveal" data-reveal-delay-value="<%= (i % 3) * 90 %>">
+            <%= render "events/event_row", event: event %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
   <% else %>
-    <div class="mx-auto max-w-md rounded-[2rem] bg-white p-10 text-center shadow-[0_24px_60px_-30px_rgba(68,64,60,0.35)] ring-1 ring-stone-900/5">
-      <p class="font-marcellus text-xl text-stone-800">No upcoming events</p>
-      <p class="mt-2 text-stone-500">There's nothing on the calendar just yet — but you're always welcome to join us Sunday at 11:00 AM.</p>
+    <% active_label = Event::CATEGORY_LABELS[params[:category]] %>
+    <div class="mx-auto mt-10 max-w-md rounded-[2rem] bg-stone-50/60 p-1.5 ring-1 ring-stone-900/5 shadow-[0_30px_70px_-34px_rgba(68,64,60,0.4)]" data-controller="reveal">
+      <div class="rounded-[calc(2rem-0.375rem)] bg-white p-10 text-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.7)]">
+        <span class="mx-auto flex size-14 items-center justify-center rounded-2xl bg-amber-700/10 text-amber-700">
+          <%= calendar_icon css: "h-7 w-7" %>
+        </span>
+        <% if active_label %>
+          <p class="font-marcellus mt-5 text-xl text-stone-800">No upcoming <%= active_label %> events</p>
+          <p class="mt-2 text-stone-500">There&rsquo;s nothing scheduled under <span class="font-medium text-stone-700"><%= active_label %></span> right now. Other categories may still have events coming up.</p>
+          <%= link_to events_path, class: "group mt-6 inline-flex items-center gap-3 rounded-full bg-stone-900 py-2 pl-6 pr-2 font-medium text-white transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-stone-800 active:scale-[0.98]" do %>
+            <span>View all events</span>
+            <span class="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5">
+              <%= arrow_up_right_icon %>
+            </span>
+          <% end %>
+        <% else %>
+          <p class="font-marcellus mt-5 text-xl text-stone-800">No upcoming events</p>
+          <p class="mt-2 text-stone-500">There&rsquo;s nothing on the calendar just yet &mdash; but you&rsquo;re always welcome to join us Sunday at 11:00 AM.</p>
+        <% end %>
+      </div>
     </div>
+  <% end %>
   <% end %>
 </div>

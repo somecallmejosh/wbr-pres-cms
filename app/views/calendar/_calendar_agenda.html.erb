@@ -1,0 +1,64 @@
+<%
+  agenda_days = (@date.beginning_of_month..@date.end_of_month).select { |d| (@events_by_date[d] || []).any? }
+%>
+<% if agenda_days.any? %>
+  <div class="rounded-[2rem] bg-stone-900/[0.035] p-2 ring-1 ring-stone-900/5">
+    <div class="divide-y divide-stone-900/[0.06] rounded-[1.5rem] bg-white px-4 py-2 ring-1 ring-stone-900/5">
+      <% agenda_days.each do |day| %>
+        <% is_today = day == Date.current %>
+        <div class="flex gap-4 py-5" <%= "aria-current=date".html_safe if is_today %>>
+          <%# Date stamp %>
+          <div class="flex w-14 shrink-0 flex-col items-center gap-1.5">
+            <div class="flex w-full flex-col items-center rounded-2xl py-2 text-center <%= is_today ? "bg-amber-50 ring-1 ring-inset ring-amber-500/30" : "" %>">
+              <span class="text-[10px] font-semibold uppercase tracking-widest <%= is_today ? "text-amber-700" : "text-stone-400" %>"><%= day.strftime("%a") %></span>
+              <span class="text-2xl font-semibold leading-none <%= is_today ? "text-amber-700" : "text-stone-800" %>"><%= day.day %></span>
+            </div>
+            <% if authenticated? %>
+              <%= link_to new_event_path(date: day.iso8601, month: @date.month, year: @date.year, category: @category),
+                  data: { turbo_frame: "modal" },
+                  aria: { label: "Add an event on #{full_date_ordinal(day)}" },
+                  class: "flex h-7 w-7 items-center justify-center rounded-full text-stone-400 ring-1 ring-stone-900/5 transition-colors duration-300 hover:bg-amber-600 hover:text-white hover:ring-amber-600 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500" do %>
+                <%= line_icon(%(<path d="M12 5v14"/><path d="M5 12h14"/>), css: "h-4 w-4") %>
+              <% end %>
+            <% end %>
+          </div>
+
+          <%# Events for the day %>
+          <div class="flex min-w-0 flex-1 flex-col gap-2">
+            <% (@events_by_date[day] || []).each do |event| %>
+              <%= link_to event_path(event),
+                  data: { turbo_frame: "_top" },
+                  class: "group relative block overflow-hidden rounded-xl p-3 pl-4 ring-1 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 #{category_chip_class(event.category)}" do %>
+                <span class="absolute inset-y-0 left-0 w-1 <%= category_accent_class(event.category) %>" aria-hidden="true"></span>
+                <div class="flex items-center gap-2 text-[11px] font-medium uppercase tracking-wide opacity-70">
+                  <%= event_time_range(event) %>
+                </div>
+                <h3 class="font-marcellus mt-1 text-base leading-snug transition-colors">
+                  <%= event.title %>
+                </h3>
+                <% if event.location.present? %>
+                  <p class="mt-0.5 flex items-center gap-1 text-sm text-stone-500">
+                    <%= pin_icon(css: "h-3.5 w-3.5 shrink-0") %>
+                    <span class="truncate"><%= event.location %></span>
+                  </p>
+                <% end %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% else %>
+  <div class="rounded-[2rem] bg-stone-900/[0.035] p-2 ring-1 ring-stone-900/5">
+    <div class="flex flex-col items-center gap-3 rounded-[1.5rem] bg-white px-6 py-16 text-center ring-1 ring-stone-900/5">
+      <span class="flex h-12 w-12 items-center justify-center rounded-full bg-amber-700/10 text-amber-800">
+        <%= calendar_icon(css: "h-6 w-6") %>
+      </span>
+      <p class="font-marcellus text-lg text-stone-800">No gatherings this month</p>
+      <p class="max-w-xs text-sm text-stone-500">
+        Use the arrows above to browse another month and find your place among us.
+      </p>
+    </div>
+  </div>
+<% end %>

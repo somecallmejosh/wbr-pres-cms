@@ -1,33 +1,79 @@
-<article class="group flex h-full flex-col overflow-hidden rounded-2xl bg-white ring-1 ring-stone-900/5 shadow-[0_12px_30px_-18px_rgba(68,64,60,0.45)] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-1 hover:shadow-[0_28px_60px_-28px_rgba(68,64,60,0.55)]">
-  <div class="relative overflow-hidden">
-    <% if gallery.cover_image %>
-      <%= link_to gallery_path(gallery), aria: { label: gallery.title }, class: "block" do %>
-        <img src="<%= gallery.cover_image.thumbnail_url(width: 800, height: 450) %>"
-             alt=""
-             aria-hidden="true"
-             class="aspect-[16/9] w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-[1.04]">
+<%#
+  Image-forward gallery tile. The photo *is* the card: an overlaid serif title,
+  a glass photo-count badge, and fluid hover choreography. Sizes itself to fill
+  its grid cell (works for both the large featured hero and regular tiles).
+  locals:
+    gallery:  Gallery record
+    featured: when true, render larger type + description (default false)
+%>
+<% featured = local_assigns.fetch(:featured, false) %>
+<article class="group relative h-full overflow-hidden rounded-[1.75rem] bg-stone-900 ring-1 ring-stone-900/10 shadow-[0_18px_50px_-26px_rgba(68,64,60,0.5)] transition-[transform,box-shadow] duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-1.5 hover:shadow-[0_36px_72px_-30px_rgba(68,64,60,0.65)]">
+  <%# --- Cover image (absolute fill, gentle Ken Burns on hover) --- %>
+  <% if gallery.cover_image %>
+    <img src="<%= gallery.cover_image.thumbnail_url(width: featured ? 1200 : 800, height: featured ? 900 : 600) %>"
+         alt=""
+         aria-hidden="true"
+         loading="lazy"
+         class="absolute inset-0 h-full w-full scale-[1.01] object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-[1.07]">
+  <% else %>
+    <div class="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-stone-200 to-stone-300" aria-hidden="true">
+      <svg class="h-10 w-10 text-stone-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+        <rect x="3" y="3" width="18" height="18" rx="2.5"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>
+      </svg>
+    </div>
+  <% end %>
+
+  <%# --- Scrims: bottom for legibility, warm amber wash on hover --- %>
+  <div class="absolute inset-0 bg-gradient-to-t from-stone-950/85 via-stone-950/25 to-stone-950/5" aria-hidden="true"></div>
+  <div class="absolute inset-0 bg-gradient-to-tr from-amber-700/25 via-transparent to-transparent opacity-0 transition-opacity duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:opacity-100" aria-hidden="true"></div>
+  <%# Hairline inner highlight — the "machined glass" edge. %>
+  <div class="pointer-events-none absolute inset-0 rounded-[1.75rem] ring-1 ring-inset ring-white/10" aria-hidden="true"></div>
+
+  <%# --- Glass photo-count badge with a stacked-layers glyph --- %>
+  <span class="absolute right-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white ring-1 ring-white/25 backdrop-blur-md">
+    <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="m12 2 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/>
+    </svg>
+    <%= gallery.images.size %>
+  </span>
+
+  <%# --- Title + (featured) description + reveal-on-hover arrow --- %>
+  <div class="absolute inset-x-0 bottom-0 p-5 <%= "lg:p-7" if featured %>">
+    <div class="mb-2 flex flex-wrap items-center gap-2">
+      <span class="inline-block rounded-full bg-white/10 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-[0.2em] text-amber-100/90 ring-1 ring-white/15 backdrop-blur-sm">
+        Gallery
+      </span>
+      <% unless gallery.published? %>
+        <span class="inline-block rounded-full bg-amber-400/90 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-900 ring-1 ring-amber-300/50">
+          Draft
+        </span>
       <% end %>
-    <% else %>
-      <div class="flex aspect-[16/9] w-full items-center justify-center bg-stone-100 text-sm text-stone-400" aria-hidden="true">
-        No images
-      </div>
+    </div>
+    <h2 class="font-marcellus leading-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)] <%= featured ? "text-2xl md:text-3xl lg:text-[2.5rem]" : "text-xl" %>">
+      <%= gallery.title %>
+    </h2>
+    <% if featured && gallery.description.present? %>
+      <p class="mt-2.5 max-w-lg text-sm leading-relaxed text-white/75 line-clamp-2"><%= gallery.description %></p>
     <% end %>
-    <span class="absolute right-3 top-3 rounded-full bg-stone-900/70 px-3 py-1 text-xs font-medium text-white backdrop-blur">
-      <%= pluralize(gallery.images.size, "photo") %>
-    </span>
+    <div class="mt-3 flex items-center gap-2 text-sm font-medium text-amber-100 opacity-0 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-y-0 group-hover:opacity-100 translate-y-1">
+      <span>View gallery</span>
+      <span class="flex h-6 w-6 items-center justify-center rounded-full bg-white/15 ring-1 ring-white/25 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5">
+        <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6"/>
+        </svg>
+      </span>
+    </div>
   </div>
 
-  <div class="flex flex-1 flex-col p-5">
-    <h2 class="font-marcellus text-lg text-stone-900">
-      <%= link_to gallery.title, gallery_path(gallery), class: "transition-colors hover:text-amber-700" %>
-    </h2>
-    <% if gallery.description.present? %>
-      <p class="mt-2 line-clamp-2 text-sm text-stone-600"><%= gallery.description %></p>
-    <% end %>
-    <% if authenticated? %>
-      <div class="mt-4 border-t border-stone-100 pt-3">
-        <%= link_to "Edit", edit_gallery_path(gallery), class: "text-sm font-medium text-amber-700 transition-colors hover:text-amber-800" %>
-      </div>
-    <% end %>
-  </div>
+  <%# Whole-card link sits above the decorative layers but below admin controls.
+      turbo_frame "_top" so it escapes the galleries-list frame on the index and
+      performs a full navigation to the gallery. %>
+  <%= link_to gallery_path(gallery), data: { turbo_frame: "_top" }, class: "absolute inset-0 z-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-amber-300 rounded-[1.75rem]" do %>
+    <span class="sr-only"><%= gallery.title %></span>
+  <% end %>
+
+  <% if authenticated? %>
+    <%= link_to "Edit", edit_gallery_path(gallery), data: { turbo_frame: "_top" },
+          class: "absolute left-4 top-4 z-20 inline-flex items-center rounded-full bg-white/90 px-3 py-1 text-xs font-medium text-stone-700 ring-1 ring-stone-900/5 backdrop-blur-md transition-colors hover:bg-white hover:text-amber-700" %>
+  <% end %>
 </article>

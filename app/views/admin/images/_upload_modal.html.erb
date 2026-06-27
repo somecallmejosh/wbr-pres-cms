@@ -1,0 +1,42 @@
+<%#
+  Quick-upload modal, loaded into the event form's "upload_modal" Turbo Frame.
+  On success, create.turbo_stream.erb empties this frame (closing the dialog)
+  and streams the new photos straight into the picker grid.
+%>
+<dialog data-controller="modal"
+        aria-labelledby="upload-modal-title"
+        class="m-auto w-full max-w-lg bg-transparent p-0 backdrop:bg-stone-900/40 backdrop:backdrop-blur-sm">
+  <div class="relative max-h-[90vh] overflow-y-auto rounded-[1.75rem] bg-white shadow-[0_40px_90px_-30px_rgba(68,64,60,0.6)] ring-1 ring-stone-900/10 transition-opacity duration-300 ease-fluid opacity-100 starting:opacity-0">
+
+    <div class="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-stone-100 bg-white/95 px-6 py-5 backdrop-blur sm:px-8">
+      <div>
+        <span class="eyebrow">Media</span>
+        <h2 id="upload-modal-title" class="font-marcellus mt-3 text-2xl text-stone-900"><%= params[:picker] == "gallery" ? "Upload photos" : "Upload a photo" %></h2>
+        <p class="mt-1 text-sm text-stone-500"><%= params[:picker] == "gallery" ? "New photos are added to this gallery automatically." : "New photos are featured on this event automatically." %></p>
+      </div>
+      <button type="button" data-action="modal#close" aria-label="Close"
+              class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-stone-400 ring-1 ring-stone-900/5 transition-colors duration-300 hover:bg-stone-100 hover:text-stone-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500">
+        <%= line_icon(%(<path d="M6 6l12 12"/><path d="M18 6 6 18"/>), css: "h-5 w-5") %>
+      </button>
+    </div>
+
+    <div class="px-6 py-6 sm:px-8">
+      <% if flash[:alert] %>
+        <div class="mb-5 flex gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700" role="alert">
+          <svg class="mt-0.5 size-5 shrink-0 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span><%= flash[:alert] %></span>
+        </div>
+      <% end %>
+
+      <%= form_with url: admin_images_path, method: :post, multipart: true, data: { turbo_frame: "upload_modal" }, class: "space-y-6" do |f| %>
+        <%= hidden_field_tag :picker, params[:picker] %>
+        <%= render "admin/images/dropzone" %>
+
+        <div class="flex flex-col-reverse gap-3 border-t border-stone-200 pt-6 sm:flex-row sm:items-center sm:justify-end">
+          <%= button_tag "Cancel", type: "button", data: { action: "modal#close" }, class: "btn-ghost w-full sm:w-auto" %>
+          <%= f.submit "Upload photos", class: "btn-primary w-full sm:w-auto" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</dialog>

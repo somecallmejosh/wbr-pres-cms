@@ -1,6 +1,6 @@
 <% content_for :title, "Edit Gallery — Admin" %>
 
-<div class="container mx-auto max-w-3xl px-4 py-10 md:py-14">
+<div class="container mx-auto max-w-6xl px-4 py-10 md:py-14">
   <%= link_to gallery_path(@gallery), class: "group inline-flex items-center gap-1.5 text-sm font-medium text-stone-500 transition-colors hover:text-amber-700" do %>
     <svg class="size-4 transition-transform group-hover:-translate-x-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
     Back to gallery
@@ -11,27 +11,52 @@
     <h1 class="font-marcellus mt-4 text-4xl text-stone-900">Edit <%= @gallery.title %></h1>
   </header>
 
-  <% if @gallery_images.any? %>
-    <section class="mb-8" aria-labelledby="reorder-heading" data-controller="reveal">
-      <div class="admin-shell">
-        <div class="admin-core p-6 sm:p-8">
-          <h2 id="reorder-heading" class="font-marcellus text-xl text-stone-900">
-            Photo order
-          </h2>
-          <p class="mt-1 text-sm text-stone-500">Drag a photo to reorder it, or tab to a photo and use the arrow keys.</p>
-          <div class="mt-5 flex flex-col gap-2"
-               data-controller="sortable"
-               data-sortable-url-value="<%= reorder_gallery_path(@gallery) %>"
-               role="list"
-               aria-label="Gallery images, drag or use arrow keys to reorder">
-            <% @gallery_images.each do |gallery_image| %>
-              <%= render "galleries/sortable_image", gallery_image: gallery_image %>
-            <% end %>
+  <div data-controller="gallery-editor"
+       data-gallery-editor-images-url-value="<%= gallery_path(@gallery) %>/images">
+
+    <%= render "galleries/form", gallery: @gallery %>
+
+    <%# Two-pane photo manager: selected photos (left) sit beside the library (right) on large screens. %>
+    <div class="mt-8 grid grid-cols-1 items-start gap-6 lg:grid-cols-2">
+
+      <%= render "galleries/choose_photos", selected_ids: @gallery.images.pluck(:id) %>
+
+      <section aria-labelledby="order-heading" data-controller="reveal">
+        <div class="admin-shell">
+          <div class="admin-core p-6 sm:p-8">
+            <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+              <h2 id="order-heading" class="font-marcellus text-xl text-stone-900">
+                Photos in this gallery
+              </h2>
+              <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-800 ring-1 ring-amber-200">
+                <span data-gallery-editor-target="count"><%= @gallery_images.size %></span> selected
+              </span>
+            </div>
+            <p class="mt-1 text-sm text-stone-500">Drag a photo to reorder it, or tab to a photo and use the arrow keys. Use <span class="font-medium text-stone-700">Remove</span> to take a photo out of this gallery — it stays in your image library.</p>
+
+            <div id="gallery-photo-order"
+                 class="mt-5 flex flex-col gap-2 <%= "hidden" if @gallery_images.empty? %>"
+                 data-controller="sortable"
+                 data-gallery-editor-target="list"
+                 data-sortable-url-value="<%= reorder_gallery_path(@gallery) %>"
+                 role="list"
+                 aria-label="Gallery images, drag or use arrow keys to reorder">
+              <% @gallery_images.each do |gallery_image| %>
+                <%= render "galleries/sortable_image", gallery_image: gallery_image %>
+              <% end %>
+            </div>
+
+            <div data-gallery-editor-target="empty"
+                 class="mt-5 rounded-xl border border-dashed border-stone-300 bg-stone-50/60 px-6 py-10 text-center <%= "hidden" unless @gallery_images.empty? %>">
+              <p class="text-sm text-stone-500">No photos in this gallery yet. Tap an image in <span class="font-medium text-stone-700">Choose photos</span> to add it.</p>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
-  <% end %>
+      </section>
 
-  <%= render "galleries/form", gallery: @gallery %>
+    </div>
+
+    <%# Outside any form so the upload modal's own form isn't nested. %>
+    <%= turbo_frame_tag "upload_modal" %>
+  </div>
 </div>

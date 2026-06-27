@@ -1,116 +1,224 @@
 <% content_for :title, "About Us — West Baton Rouge Presbyterian Church" %>
+<% years_of_faith = Date.current.year - 1939 %>
 
 <%# ===== Page Hero ===== %>
-<section class="relative flex min-h-[340px] w-full items-center justify-center overflow-hidden bg-stone-900">
-  <div class="absolute inset-0 opacity-25" style="background-image: url('https://res.cloudinary.com/dwjulenau/image/upload/v1/wbr-pres-cms/image012?_a=BACJ3SDL'); background-size: cover; background-position: center;"></div>
-  <div class="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/80 to-stone-900/60"></div>
-  <div class="relative z-10 px-4 py-16 text-center" data-controller="reveal">
+<section class="relative flex min-h-[420px] w-full items-center justify-center overflow-hidden bg-stone-900">
+  <div class="absolute inset-0 opacity-25" style="background-image: url('<%= cloudinary_image("wbr-pres-cms/image012", crop: :limit, width: 1600) %>'); background-size: cover; background-position: center;"></div>
+  <div class="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/80 to-stone-900/55"></div>
+  <%# Stained-glass corner accents, decorative %>
+  <img src="/theme/God%20(1).png" alt="" aria-hidden="true" class="pointer-events-none absolute -left-10 top-6 hidden w-44 -rotate-6 rounded-[1.5rem] opacity-20 blur-[1px] md:block">
+  <img src="/theme/Mary%20(1).png" alt="" aria-hidden="true" class="pointer-events-none absolute -right-10 bottom-6 hidden w-44 rotate-6 rounded-[1.5rem] opacity-20 blur-[1px] md:block">
+  <div class="relative z-10 px-4 py-20 text-center" data-controller="reveal">
     <span class="inline-block rounded-full bg-amber-500/15 px-4 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-300">Our Church</span>
-    <h1 class="font-marcellus mt-6 text-4xl text-white md:text-5xl lg:text-6xl">About Our Church</h1>
-    <div class="mx-auto mt-5 h-px w-20 bg-amber-500/60"></div>
-    <p class="mt-5 text-lg text-stone-300">A community of faith in West Baton Rouge since 1939</p>
+    <h1 class="font-marcellus mt-6 text-4xl leading-[1.05] text-white md:text-5xl lg:text-6xl text-balance">A community of faith<br class="hidden sm:block"> on the west bank</h1>
+    <div class="mx-auto mt-6 h-px w-20 bg-amber-500/60"></div>
+    <p class="mx-auto mt-5 max-w-xl text-lg text-stone-300">Worshiping, growing, and serving West Baton Rouge since 1939.</p>
   </div>
 </section>
 
-<div class="container mx-auto max-w-4xl px-4 py-20 md:py-24">
+<%# ===== Bridging stat strip (overlaps hero, Z-axis lift) ===== %>
+<div class="container relative z-20 mx-auto -mt-14 px-4 md:-mt-16">
+  <div class="mx-auto max-w-4xl rounded-[2rem] bg-stone-50/80 p-1.5 ring-1 ring-stone-900/5 shadow-[0_30px_70px_-32px_rgba(68,64,60,0.55)] backdrop-blur-xl" data-controller="reveal">
+    <dl class="grid grid-cols-3 divide-x divide-stone-900/5 rounded-[calc(2rem-0.375rem)] bg-white shadow-[inset_0_1px_1px_rgba(255,255,255,0.6)]">
+      <% [
+        ["Est.", "1939", "Founded in faith"],
+        ["~#{years_of_faith}", "Years", "Of worship & service"],
+        ["One", "Family", "Young & old, all welcome"],
+      ].each do |top, big, label| %>
+        <div class="px-4 py-7 text-center md:px-8 md:py-9">
+          <dt class="text-[11px] font-medium uppercase tracking-[0.2em] text-amber-700"><%= top %></dt>
+          <dd class="font-marcellus mt-1 text-3xl text-stone-900 md:text-4xl"><%= big %></dd>
+          <p class="mt-2 text-xs text-stone-500 md:text-sm"><%= label %></p>
+        </div>
+      <% end %>
+    </dl>
+  </div>
+</div>
 
-  <%# ===== Our History ===== %>
-  <section class="mb-20" data-controller="reveal">
-    <span class="inline-block rounded-full bg-amber-700/10 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-800">Our History</span>
-    <h2 class="font-marcellus mt-5 text-3xl text-stone-900 md:text-4xl">Nearly a century of faith</h2>
-    <div class="mt-5 h-px w-16 bg-amber-600"></div>
-    <div class="mt-6 space-y-5 text-lg leading-relaxed text-stone-600">
-      <p>
-        West Baton Rouge Presbyterian Church originated in 1939, sponsored by the First Presbyterian
-        Church in Louisiana and rooted in the conviction that the gospel of Jesus Christ transforms
-        lives and communities. From those earliest days, we have grown into one of the oldest churches
-        in West Baton Rouge, serving our neighbors as part of The Presbytery of South Louisiana.
-      </p>
-      <p>
-        Across nearly a century, our church family has weathered floods, wars, and seasons of great
-        change — always returning to the same source of strength: the Word of God and the fellowship
-        of believers. Our sanctuary, with its beloved stained glass windows, remains the heart of our
-        shared worship.
-      </p>
+<div class="container mx-auto px-4 py-20 md:py-28">
+
+  <%# ===== Our History — editorial split ===== %>
+  <section class="mx-auto max-w-6xl">
+    <div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
+      <div class="lg:col-span-6" data-controller="reveal">
+        <span class="inline-block rounded-full bg-amber-700/10 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-800">Our History</span>
+        <h2 class="font-marcellus mt-5 text-3xl leading-tight text-stone-900 md:text-4xl lg:text-[2.75rem]">Nearly a century of faith</h2>
+        <div class="mt-5 h-px w-16 bg-amber-600"></div>
+        <div class="mt-6 space-y-5 text-lg leading-relaxed text-stone-600">
+          <p>
+            West Baton Rouge Presbyterian Church originated in 1939, sponsored by the First Presbyterian
+            Church in Louisiana and rooted in the conviction that the gospel of Jesus Christ transforms
+            lives and communities. From those earliest days, we have grown into one of the oldest churches
+            in West Baton Rouge, serving our neighbors as part of The Presbytery of South Louisiana.
+          </p>
+          <p>
+            Across nearly a century, our church family has weathered floods, wars, and seasons of great
+            change &mdash; always returning to the same source of strength: the Word of God and the fellowship
+            of believers. Our sanctuary, with its beloved stained glass windows, remains the heart of our
+            shared worship.
+          </p>
+        </div>
+      </div>
+
+      <%# Double-bezel image with a stained-glass accent peeking behind %>
+      <div class="lg:col-span-6" data-controller="reveal" data-reveal-delay-value="120">
+        <div class="relative">
+          <img src="/theme/stainedglass%20(1).png" alt="" aria-hidden="true" class="absolute -right-5 -top-6 hidden w-28 rotate-6 rounded-2xl opacity-90 shadow-[0_18px_40px_-20px_rgba(68,64,60,0.6)] ring-1 ring-stone-900/5 md:block lg:-right-7 lg:w-32">
+          <div class="relative rounded-[2rem] bg-white p-2 ring-1 ring-stone-900/5 shadow-[0_28px_70px_-32px_rgba(68,64,60,0.5)]">
+            <img src="/theme/church-front%20(1).png" alt="West Baton Rouge Presbyterian Church building" class="aspect-[4/3] w-full rounded-[calc(2rem-0.5rem)] object-cover">
+            <%# Founding-year medallion %>
+            <div class="absolute -bottom-5 left-6 flex items-center gap-3 rounded-full bg-stone-900 py-2 pl-3 pr-5 shadow-[0_18px_40px_-18px_rgba(68,64,60,0.7)]">
+              <span class="flex size-8 items-center justify-center rounded-full bg-amber-600 text-[11px] font-bold text-white">★</span>
+              <span class="font-marcellus text-sm tracking-wide text-amber-50">Serving since <span class="text-amber-300">1939</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <%# ===== Our Mission ===== %>
-  <section class="mb-20" data-controller="reveal">
-    <span class="inline-block rounded-full bg-amber-700/10 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-800">Our Mission</span>
-    <h2 class="font-marcellus mt-5 text-3xl text-stone-900 md:text-4xl">Worship, grow, and serve</h2>
-    <div class="mt-5 h-px w-16 bg-amber-600"></div>
-    <p class="mt-6 text-lg leading-relaxed text-stone-600">
-      We exist to worship God, grow in faith together, and serve our neighbors in West Baton Rouge
-      with the love of Christ. We are a welcoming congregation — young and old, longtime members and
-      new friends — committed to living out the gospel in practical ways.
-    </p>
-    <ul class="mt-8 grid gap-4 sm:grid-cols-3">
+  <%# ===== Our Journey — vertical timeline ===== %>
+  <section class="mx-auto mt-24 max-w-3xl md:mt-32" data-controller="reveal">
+    <div class="text-center">
+      <span class="inline-block rounded-full bg-amber-700/10 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-800">Our Journey</span>
+      <h2 class="font-marcellus mt-5 text-3xl text-stone-900 md:text-4xl">Milestones along the way</h2>
+      <div class="mx-auto mt-5 h-px w-16 bg-amber-600"></div>
+    </div>
+
+    <ol class="relative mt-12 space-y-8 border-l border-dashed border-amber-600/30 pl-8 md:pl-10">
       <% [
-        ["Worship", "Gathering weekly to praise God through Scripture, prayer, and song."],
-        ["Grow", "Deepening our faith through Bible study, Sunday school, and fellowship."],
-        ["Serve", "Reaching out through service projects and care for our neighbors."],
-      ].each do |heading, body| %>
-        <li class="rounded-2xl bg-white p-6 ring-1 ring-stone-900/5 shadow-[0_12px_30px_-18px_rgba(68,64,60,0.4)]">
-          <span class="flex size-9 items-center justify-center rounded-full bg-amber-700 text-sm font-bold text-white">✓</span>
-          <h3 class="font-marcellus mt-4 text-xl text-stone-900"><%= heading %></h3>
-          <p class="mt-2 text-stone-600"><%= body %></p>
+        ["1939", "A congregation is born", "Sponsored by the First Presbyterian Church in Louisiana, our church is founded on the west bank."],
+        ["Our Sanctuary", "A home for worship", "The sanctuary and its beloved stained glass windows become the heart of our shared worship."],
+        ["A Wider Family", "Part of the Presbytery", "We join The Presbytery of South Louisiana, connected to a broader fellowship of believers."],
+        ["2024", "A new chapter", "Rev. Monya Crowell answers the call to shepherd our congregation forward."],
+        ["Today", "Still going strong", "One of the oldest churches in West Baton Rouge — welcoming young and old, longtime members and new friends."],
+      ].each_with_index do |(marker, heading, body), i| %>
+        <li class="group relative" data-controller="reveal" data-reveal-delay-value="<%= i * 90 %>">
+          <span class="absolute -left-[2.6rem] top-1 flex size-5 items-center justify-center rounded-full bg-amber-600 ring-4 ring-stone-50 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-125 md:-left-[3.1rem]">
+            <span class="size-1.5 rounded-full bg-white"></span>
+          </span>
+          <div class="rounded-2xl bg-white p-5 ring-1 ring-stone-900/5 shadow-[0_14px_36px_-26px_rgba(68,64,60,0.5)] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:-translate-y-0.5 group-hover:shadow-[0_20px_44px_-26px_rgba(68,64,60,0.6)] md:p-6">
+            <span class="text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-700"><%= marker %></span>
+            <h3 class="font-marcellus mt-1 text-xl text-stone-900"><%= heading %></h3>
+            <p class="mt-2 leading-relaxed text-stone-600"><%= body %></p>
+          </div>
+        </li>
+      <% end %>
+    </ol>
+  </section>
+
+  <%# ===== Our Mission — numbered bento cards ===== %>
+  <section class="mx-auto mt-24 max-w-6xl md:mt-32">
+    <div class="mx-auto max-w-2xl text-center" data-controller="reveal">
+      <span class="inline-block rounded-full bg-amber-700/10 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-800">Our Mission</span>
+      <h2 class="font-marcellus mt-5 text-3xl text-stone-900 md:text-4xl">Worship, grow, and serve</h2>
+      <div class="mx-auto mt-5 h-px w-16 bg-amber-600"></div>
+      <p class="mt-6 text-lg leading-relaxed text-stone-600">
+        We exist to worship God, grow in faith together, and serve our neighbors in West Baton Rouge
+        with the love of Christ &mdash; a welcoming congregation committed to living out the gospel in practical ways.
+      </p>
+    </div>
+
+    <ul class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <% [
+        ["01", "Worship", "Gathering weekly to praise God through Scripture, prayer, and song.",
+          %(<path d="M12 3v18M5 8h14M7 21h10"/>)],
+        ["02", "Grow", "Deepening our faith through Bible study, Sunday school, and fellowship.",
+          %(<path d="M12 20V8a4 4 0 0 0-4-4H4v12h4a4 4 0 0 1 4 4Zm0 0V8a4 4 0 0 1 4-4h4v12h-4a4 4 0 0 0-4 4Z"/>)],
+        ["03", "Serve", "Reaching out through service projects and care for our neighbors.",
+          %(<path d="M12 21s-7-4.35-9.5-8.5C1 9 2.5 5.5 6 5.5c2 0 3.5 1.5 6 4 2.5-2.5 4-4 6-4 3.5 0 5 3.5 3.5 7C19 16.65 12 21 12 21Z"/>)],
+      ].each_with_index do |(num, heading, body, icon), i| %>
+        <li class="group rounded-[2rem] bg-stone-50/60 p-1.5 ring-1 ring-stone-900/5 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-1" data-controller="reveal" data-reveal-delay-value="<%= i * 110 %>">
+          <div class="relative h-full overflow-hidden rounded-[calc(2rem-0.375rem)] bg-white p-7 shadow-[inset_0_1px_1px_rgba(255,255,255,0.7),0_18px_44px_-30px_rgba(68,64,60,0.45)] transition-shadow duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.7),0_28px_60px_-30px_rgba(68,64,60,0.55)]">
+            <span class="font-marcellus pointer-events-none absolute -right-2 -top-3 select-none text-7xl text-amber-700/[0.06] transition-colors duration-500 group-hover:text-amber-700/[0.1]"><%= num %></span>
+            <span class="relative flex size-12 items-center justify-center rounded-2xl bg-amber-700 text-white shadow-[0_10px_24px_-12px_rgba(180,83,9,0.8)] transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:-translate-y-0.5 group-hover:rotate-3">
+              <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><%= raw icon %></svg>
+            </span>
+            <h3 class="font-marcellus relative mt-5 text-xl text-stone-900"><%= heading %></h3>
+            <p class="relative mt-2 leading-relaxed text-stone-600"><%= body %></p>
+          </div>
         </li>
       <% end %>
     </ul>
   </section>
 
-  <%# ===== Our Pastor ===== %>
-  <section class="mb-20" data-controller="reveal">
-    <span class="inline-block rounded-full bg-amber-700/10 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-800">Our Pastor</span>
-    <h2 class="font-marcellus mt-5 text-3xl text-stone-900 md:text-4xl">Leadership rooted in Scripture</h2>
-    <div class="mt-5 h-px w-16 bg-amber-600"></div>
-    <div class="mt-8 flex flex-col items-start gap-6 rounded-[2rem] bg-white p-8 ring-1 ring-stone-900/5 shadow-[0_24px_60px_-30px_rgba(68,64,60,0.4)] sm:flex-row">
-      <div class="size-28 shrink-0 overflow-hidden rounded-full ring-4 ring-amber-700/10">
-        <img src="https://res.cloudinary.com/dwjulenau/image/upload/c_fill,dpr_auto,f_auto,g_face,h_200,q_auto,w_200/v1/wbr-pres-cms/IMG_1841?_a=BACJ3SDL" alt="Rev. Monya Crowell" class="h-full w-full object-cover">
+  <%# ===== Our Pastor — editorial split with pull quote ===== %>
+  <section class="mx-auto mt-24 max-w-6xl md:mt-32">
+    <div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
+      <%# Portrait %>
+      <div class="lg:col-span-5" data-controller="reveal">
+        <div class="relative mx-auto max-w-sm">
+          <img src="/theme/stainedglass2.webp" alt="" aria-hidden="true" class="absolute -bottom-6 -left-6 hidden w-28 -rotate-6 rounded-2xl opacity-90 shadow-[0_18px_40px_-20px_rgba(68,64,60,0.6)] ring-1 ring-stone-900/5 md:block">
+          <div class="relative rounded-[2rem] bg-white p-2 ring-1 ring-stone-900/5 shadow-[0_28px_70px_-32px_rgba(68,64,60,0.5)]">
+            <img src="<%= cloudinary_image("wbr-pres-cms/IMG_1841", crop: :fill, gravity: "auto:faces", width: 640, height: 720) %>" alt="Rev. Monya Crowell" class="aspect-[4/5] w-full rounded-[calc(2rem-0.5rem)] object-cover">
+            <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-stone-900 px-5 py-2 text-center shadow-[0_18px_40px_-18px_rgba(68,64,60,0.7)]">
+              <p class="font-marcellus text-sm text-white">Rev. Monya Crowell</p>
+              <p class="text-[11px] uppercase tracking-[0.2em] text-amber-300/90">Senior Pastor</p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div>
-        <h3 class="font-marcellus text-xl text-stone-900">Rev. Monya Crowell</h3>
-        <p class="mb-3 text-sm text-amber-700">Senior Pastor</p>
-        <p class="leading-relaxed text-stone-600">
-          Rev. Monya Crowell has served West Baton Rouge Presbyterian Church since 2024. She brings a deep love for Scripture and a shepherd's heart to every
-          aspect of ministry. She is grateful to call West Baton Rouge home.
+
+      <%# Copy + pull quote %>
+      <div class="lg:col-span-7 lg:pt-4" data-controller="reveal" data-reveal-delay-value="120">
+        <span class="inline-block rounded-full bg-amber-700/10 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-800">Our Pastor</span>
+        <h2 class="font-marcellus mt-5 text-3xl leading-tight text-stone-900 md:text-4xl">Leadership rooted in Scripture</h2>
+        <div class="mt-5 h-px w-16 bg-amber-600"></div>
+        <figure class="mt-7">
+          <span class="font-marcellus block text-5xl leading-none text-amber-600/30">&ldquo;</span>
+          <blockquote class="font-marcellus -mt-3 text-2xl leading-snug text-stone-800 md:text-[1.7rem]">
+            She brings a deep love for Scripture and a shepherd&rsquo;s heart to every aspect of ministry.
+          </blockquote>
+        </figure>
+        <p class="mt-6 text-lg leading-relaxed text-stone-600">
+          Rev. Monya Crowell has served West Baton Rouge Presbyterian Church since 2024. She is grateful
+          to call West Baton Rouge home, and welcomes you to worship and grow alongside our church family.
         </p>
       </div>
     </div>
   </section>
-
-  <%# ===== Worship Times ===== %>
-  <section class="relative overflow-hidden rounded-[2rem] bg-stone-900 p-10 text-white md:p-12" data-controller="reveal">
-    <div class="pointer-events-none absolute -bottom-24 -right-20 h-64 w-64 rounded-full bg-amber-500/20 blur-3xl"></div>
-    <div class="relative">
-      <span class="inline-block rounded-full bg-amber-500/15 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-300">Join Us</span>
-      <h2 class="font-marcellus mt-5 text-2xl text-white md:text-3xl">Join Us for Worship</h2>
-      <div class="mt-5 h-px w-16 bg-amber-500/60"></div>
-      <div class="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2">
-        <div class="space-y-3">
-          <div>
-            <p class="text-xs font-semibold uppercase tracking-widest text-amber-300/80">Sunday Morning</p>
-            <p class="text-stone-100">Worship Service — 11:00 AM</p>
-          </div>
-          <div>
-            <p class="text-xs font-semibold uppercase tracking-widest text-amber-300/80">Wednesday Morning</p>
-            <p class="text-stone-100">Bible Study — 10:00 AM</p>
-          </div>
-        </div>
-        <div>
-          <p class="text-xs font-semibold uppercase tracking-widest text-amber-300/80">Location</p>
-          <p class="text-stone-100">640 Florida Ave</p>
-          <p class="text-stone-100">Port Allen, LA 70767</p>
-        </div>
-      </div>
-      <%= link_to pages_contact_path, class: "group mt-9 inline-flex items-center gap-3 rounded-full bg-amber-600 py-2 pl-6 pr-2 font-medium text-white transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-amber-500 active:scale-[0.98]" do %>
-        <span>Get in Touch</span>
-        <span class="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5">
-          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </span>
-      <% end %>
-    </div>
-  </section>
-
 </div>
+
+<%# ===== Worship Times — dark CTA band ===== %>
+<section class="relative overflow-hidden bg-stone-900">
+  <div class="absolute inset-0 opacity-15" style="background-image: url('/theme/stainedglass2.webp'); background-size: cover; background-position: center;"></div>
+  <div class="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/90 to-stone-900/80"></div>
+  <div class="pointer-events-none absolute -bottom-24 -right-20 h-72 w-72 rounded-full bg-amber-500/20 blur-3xl"></div>
+  <div class="container relative mx-auto max-w-5xl px-4 py-20 md:py-28">
+    <div class="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center" data-controller="reveal">
+      <div>
+        <span class="inline-block rounded-full bg-amber-500/15 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-300">Join Us</span>
+        <h2 class="font-marcellus mt-5 text-3xl leading-tight text-white md:text-4xl">There is a place for you here</h2>
+        <div class="mt-5 h-px w-16 bg-amber-500/60"></div>
+        <p class="mt-6 text-lg leading-relaxed text-stone-300">
+          Wherever you are on your journey of faith, we&rsquo;d love to welcome you this week.
+        </p>
+        <%= link_to pages_contact_path, class: "group mt-9 inline-flex items-center gap-3 rounded-full bg-amber-600 py-2 pl-6 pr-2 font-medium text-white transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-amber-500 active:scale-[0.98]" do %>
+          <span>Get in Touch</span>
+          <span class="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5 group-hover:-translate-y-px">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        <% end %>
+      </div>
+
+      <%# Service details — nested glass card %>
+      <div class="rounded-[2rem] bg-white/5 p-1.5 ring-1 ring-white/10 backdrop-blur-xl">
+        <dl class="divide-y divide-white/10 rounded-[calc(2rem-0.375rem)] bg-white/[0.03] p-7 md:p-8">
+          <% [
+            ["Sunday Morning", "Worship Service", "11:00 AM"],
+            ["Wednesday Morning", "Bible Study", "10:00 AM"],
+            ["Where to Find Us", "640 Florida Ave", "Port Allen, LA 70767"],
+          ].each_with_index do |(label, line1, line2), i| %>
+            <div class="flex items-center justify-between gap-4 <%= i.zero? ? "pb-5" : "py-5" %> <%= "last:pb-0" %>">
+              <div>
+                <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-300/80"><%= label %></p>
+                <p class="mt-1 text-stone-100"><%= line1 %></p>
+              </div>
+              <p class="font-marcellus shrink-0 text-right text-lg text-white"><%= line2 %></p>
+            </div>
+          <% end %>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>

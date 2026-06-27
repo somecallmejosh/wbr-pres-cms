@@ -21,24 +21,23 @@ export default class extends Controller {
       onEnd: () => this.#save()
     })
 
-    this.element.querySelectorAll("[data-sortable-id]").forEach(item => {
-      item.addEventListener("keydown", this.#onKeydown)
-    })
+    // Delegated so rows added later (e.g. via Turbo) are reorderable too.
+    this.element.addEventListener("keydown", this.#onKeydown)
   }
 
   disconnect() {
     this.sortable?.destroy()
-    this.element.querySelectorAll("[data-sortable-id]").forEach(item => {
-      item.removeEventListener("keydown", this.#onKeydown)
-    })
+    this.element.removeEventListener("keydown", this.#onKeydown)
   }
 
   // Arrow-key reordering — bound as a property so removeEventListener works
   #onKeydown = (event) => {
     if (event.key !== "ArrowUp" && event.key !== "ArrowDown") return
+
+    const item = event.target.closest("[data-sortable-id]")
+    if (!item) return
     event.preventDefault()
 
-    const item = event.currentTarget
     const items = [...this.element.querySelectorAll("[data-sortable-id]")]
     const index = items.indexOf(item)
 
@@ -56,6 +55,10 @@ export default class extends Controller {
   }
 
   #save() {
+    // New (unsaved) galleries have no reorder endpoint — order rides along on
+    // the form's hidden image_ids[] inputs, which the drag already reordered.
+    if (!this.hasUrlValue) return
+
     const ids = [...this.element.querySelectorAll("[data-sortable-id]")]
       .map(item => item.dataset.sortableId)
 

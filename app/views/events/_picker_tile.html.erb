@@ -1,0 +1,26 @@
+<%#
+  One selectable photo in the event picker.
+  locals:
+    image:   the Image
+    checked: whether this tile is the current selection (default false)
+
+  Uses radio_button_tag (not the form builder) so the same markup can be
+  streamed into the grid after a modal upload, where no builder is in scope.
+  The name matches the builder's (event[image_id]) so it stays in the form.
+%>
+<% checked = local_assigns.fetch(:checked, false) %>
+<label class="group relative cursor-pointer" data-event-image-url="<%= image.display_url(width: 1200) %>" data-event-image-title="<%= image.title %>">
+  <%= radio_button_tag "event[image_id]", image.id, checked, class: "sr-only peer", data: { action: "event-image#select" } %>
+  <div class="overflow-hidden rounded-xl border-2 border-stone-200 bg-stone-100 transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:border-stone-300 peer-checked:border-amber-500 peer-checked:ring-2 peer-checked:ring-amber-400/60 peer-focus-visible:ring-2 peer-focus-visible:ring-amber-400">
+    <img src="<%= image.thumbnail_url(width: 600, height: 600) %>"
+         alt="<%= image.alt_text.presence || image.title.presence || "" %>"
+         class="aspect-square w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-105"
+         loading="lazy">
+  </div>
+  <div class="absolute right-2 top-2 hidden size-7 items-center justify-center rounded-full bg-amber-600 text-white shadow-sm peer-checked:flex" aria-hidden="true">
+    <svg viewBox="0 0 20 20" fill="currentColor" class="size-4"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" /></svg>
+  </div>
+  <% if image.title.present? %>
+    <p class="mt-1 truncate text-xs text-stone-600"><%= image.title %></p>
+  <% end %>
+</label>

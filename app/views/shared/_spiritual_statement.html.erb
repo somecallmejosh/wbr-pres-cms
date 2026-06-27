@@ -1,0 +1,18 @@
+<%# Closing scripture band shown at the foot of public content pages.
+    Driven by ApplicationHelper#closing_verse — each page gets a verse echoing
+    its theme. Excluded from CRUD/admin, auth, and error pages; the home page
+    carries its own scripture band.
+    locals: label (eyebrow), quote (verse text), reference (citation) %>
+<section class="relative overflow-hidden bg-stone-900">
+  <div class="absolute inset-0 opacity-20" style="background-image: url('/theme/stainedglass2.webp'); background-size: cover; background-position: center;"></div>
+  <div class="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/85 to-stone-900/70"></div>
+  <div class="container relative mx-auto px-4 py-20 md:py-24">
+    <div class="mx-auto max-w-3xl text-center" data-controller="reveal">
+      <span class="inline-block rounded-full bg-amber-500/15 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-300"><%= label %></span>
+      <blockquote class="font-marcellus mt-8 text-2xl leading-snug text-white md:text-3xl lg:text-4xl text-balance">
+        &ldquo;<%= quote %>&rdquo;
+      </blockquote>
+      <p class="mt-6 text-sm uppercase tracking-[0.3em] text-amber-300/80"><%= reference %></p>
+    </div>
+  </div>
+</section>

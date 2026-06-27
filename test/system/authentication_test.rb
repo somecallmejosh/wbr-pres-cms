@@ -37,12 +37,13 @@ class AuthenticationTest < ApplicationSystemTestCase
   test "admin navigation links appear after sign in" do
     sign_in_as_admin
     visit root_url
-    assert_text "Members"
-    assert_text "Image Library"
+    # Admin pages (Members, Image Library, etc.) are reached via the Dashboard,
+    # which only appears in the nav once authenticated.
+    assert_text "Dashboard"
   end
 
   test "admin navigation links hidden when signed out" do
     visit root_url
-    assert_no_text "Image Library"
+    assert_no_text "Dashboard"
   end
 end

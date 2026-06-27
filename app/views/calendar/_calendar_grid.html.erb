@@ -1,43 +1,67 @@
 <%= turbo_frame_tag "calendar_frame" do %>
-  <%# Month navigation %>
-  <div class="flex items-center justify-between mb-4">
+  <%# ── Month navigation ─────────────────────────────────────────────── %>
+  <div class="mb-6 flex items-center justify-between gap-4">
     <%= link_to calendar_path(month: @date.prev_month.month, year: @date.prev_month.year, category: @category),
         data: { turbo_frame: "calendar_frame" },
         aria: { label: "Previous month, #{@date.prev_month.strftime("%B %Y")}" },
-        class: "rounded-md px-4 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 text-sm font-medium transition-colors" do %>
-      <span aria-hidden="true">&larr;</span> Previous
+        class: "group flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-stone-600 ring-1 ring-stone-900/5 shadow-[0_8px_20px_-14px_rgba(68,64,60,0.5)] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:text-amber-700 hover:ring-amber-600/20 active:scale-95" do %>
+      <%= chevron_left_icon(css: "h-5 w-5 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:-translate-x-0.5") %>
     <% end %>
-    <span class="font-marcellus text-xl text-stone-900" aria-live="polite" aria-atomic="true"><%= @date.strftime("%B %Y") %></span>
+
+    <div class="flex flex-col items-center text-center">
+      <span class="font-marcellus text-2xl leading-tight text-stone-900 md:text-3xl" aria-live="polite" aria-atomic="true">
+        <%= @date.strftime("%B %Y") %>
+      </span>
+      <% unless @date.month == Date.current.month && @date.year == Date.current.year %>
+        <%= link_to "Jump to today",
+            calendar_path(month: Date.current.month, year: Date.current.year, category: @category),
+            data: { turbo_frame: "calendar_frame" },
+            class: "mt-1 text-[11px] font-medium uppercase tracking-[0.18em] text-amber-700 transition-colors hover:text-amber-800" %>
+      <% end %>
+    </div>
+
     <%= link_to calendar_path(month: @date.next_month.month, year: @date.next_month.year, category: @category),
         data: { turbo_frame: "calendar_frame" },
         aria: { label: "Next month, #{@date.next_month.strftime("%B %Y")}" },
-        class: "rounded-md px-4 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 text-sm font-medium transition-colors" do %>
-      Next <span aria-hidden="true">&rarr;</span>
+        class: "group flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-stone-600 ring-1 ring-stone-900/5 shadow-[0_8px_20px_-14px_rgba(68,64,60,0.5)] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:text-amber-700 hover:ring-amber-600/20 active:scale-95" do %>
+      <%= chevron_right_icon(css: "h-5 w-5 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5") %>
     <% end %>
   </div>
 
-  <%# Day-of-week headers %>
-  <div class="grid grid-cols-7 bg-stone-800 rounded-t-lg mb-1">
-    <% %w[Sun Mon Tue Wed Thu Fri Sat].each do |day_name| %>
-      <div class="font-semibold text-center p-2 text-sm text-stone-200"><%= day_name %></div>
-    <% end %>
+  <%# ── Desktop month grid (Double-Bezel shell) ──────────────────────── %>
+  <div class="relative hidden rounded-[2rem] bg-stone-900/[0.035] p-2 ring-1 ring-stone-900/5 md:block">
+    <%# Warm ambient glow so the grid sits in light rather than on a flat plane. %>
+    <div class="pointer-events-none absolute -top-10 right-8 h-56 w-56 rounded-full bg-amber-400/15 blur-3xl" aria-hidden="true"></div>
+    <div class="pointer-events-none absolute -bottom-12 left-10 h-56 w-56 rounded-full bg-rose-300/10 blur-3xl" aria-hidden="true"></div>
+    <div class="relative rounded-[1.5rem] bg-white p-4 shadow-[inset_0_1px_1px_rgba(255,255,255,0.6)] ring-1 ring-stone-900/5 lg:p-5">
+      <%# Day-of-week headers %>
+      <div class="mb-2 grid grid-cols-7">
+        <% %w[Sun Mon Tue Wed Thu Fri Sat].each_with_index do |day_name, i| %>
+          <div class="px-2 pb-1 text-center text-[11px] font-semibold uppercase tracking-[0.16em] <%= i.zero? || i == 6 ? "text-amber-700/70" : "text-stone-400" %>">
+            <%= day_name %>
+          </div>
+        <% end %>
+      </div>
+
+      <%# Day cells %>
+      <div class="grid grid-cols-7 gap-1.5">
+        <% @date.beginning_of_month.wday.times do %>
+          <div class="min-h-[6rem]" aria-hidden="true"></div>
+        <% end %>
+
+        <% (@date.beginning_of_month..@date.end_of_month).each do |day| %>
+          <%= render "calendar/calendar_day", day: day, events: @events_by_date[day] || [] %>
+        <% end %>
+
+        <% (6 - @date.end_of_month.wday).times do %>
+          <div class="min-h-[6rem]" aria-hidden="true"></div>
+        <% end %>
+      </div>
+    </div>
   </div>
 
-  <%# Calendar grid %>
-  <div class="grid grid-cols-7 border border-stone-200 rounded-b-lg overflow-hidden">
-    <%# Leading empty cells %>
-    <% @date.beginning_of_month.wday.times do %>
-      <div class="border-r border-b border-stone-100 p-2 bg-stone-50 min-h-24"></div>
-    <% end %>
-
-    <%# Day cells %>
-    <% (@date.beginning_of_month..@date.end_of_month).each do |day| %>
-      <%= render "calendar/calendar_day", day: day, events: @events_by_date[day] || [] %>
-    <% end %>
-
-    <%# Trailing empty cells %>
-    <% (6 - @date.end_of_month.wday).times do %>
-      <div class="border-r border-b border-stone-100 p-2 bg-stone-50 min-h-24"></div>
-    <% end %>
+  <%# ── Mobile agenda ────────────────────────────────────────────────── %>
+  <div class="md:hidden">
+    <%= render "calendar/calendar_agenda" %>
   </div>
 <% end %>

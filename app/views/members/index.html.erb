@@ -10,27 +10,53 @@
 
 <div class="container mx-auto px-4 py-10 md:py-14">
   <% if @members.any? %>
-    <div class="admin-shell" data-controller="reveal">
-      <div class="admin-core overflow-hidden">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left">
-            <thead>
-              <tr class="border-b border-stone-200 bg-stone-50/80">
-                <th class="px-6 py-4 text-xs font-semibold uppercase tracking-[0.12em] text-stone-500">Name</th>
-                <th class="hidden px-6 py-4 text-xs font-semibold uppercase tracking-[0.12em] text-stone-500 sm:table-cell">Email</th>
-                <th class="hidden px-6 py-4 text-xs font-semibold uppercase tracking-[0.12em] text-stone-500 md:table-cell">Phone</th>
-                <th class="hidden px-6 py-4 text-xs font-semibold uppercase tracking-[0.12em] text-stone-500 lg:table-cell">Birthday</th>
-                <th class="px-6 py-4 text-right text-xs font-semibold uppercase tracking-[0.12em] text-stone-500">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @members.each do |member| %>
-                <%= render "members/member_row", member: member %>
-              <% end %>
-            </tbody>
-          </table>
+    <div data-controller="bulk-select">
+      <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <span class="text-sm text-stone-500" data-bulk-select-target="count">None selected</span>
+        <div class="flex items-center gap-2">
+          <%= button_to "Delete all members", destroy_all_members_path, method: :delete,
+                class: "btn-danger",
+                form: { class: "hidden", data: { bulk_select_target: "deleteAll" } },
+                data: { turbo_confirm: "Delete ALL #{pluralize(@members.size, 'member')}? This cannot be undone." } %>
+          <button type="submit" form="members_bulk_delete"
+                  class="btn-danger hidden"
+                  data-bulk-select-target="submit"
+                  data-turbo-confirm="Delete the selected members? This cannot be undone.">
+            Delete selected
+          </button>
         </div>
       </div>
+
+      <%= form_with url: bulk_destroy_members_path, method: :delete, id: "members_bulk_delete" do %>
+        <div class="admin-shell" data-controller="reveal">
+          <div class="admin-core overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left">
+                <thead>
+                  <tr class="border-b border-stone-200 bg-stone-50/80">
+                    <th class="w-px px-6 py-4">
+                      <%= check_box_tag "select_all", "1", false,
+                            class: "size-4 cursor-pointer rounded border-stone-300 text-amber-600 focus:ring-amber-500",
+                            aria: { label: "Select all members" },
+                            data: { bulk_select_target: "selectAll", action: "change->bulk-select#toggleAll" } %>
+                    </th>
+                    <th class="px-6 py-4 text-xs font-semibold uppercase tracking-[0.12em] text-stone-500">Name</th>
+                    <th class="hidden px-6 py-4 text-xs font-semibold uppercase tracking-[0.12em] text-stone-500 sm:table-cell">Email</th>
+                    <th class="hidden px-6 py-4 text-xs font-semibold uppercase tracking-[0.12em] text-stone-500 md:table-cell">Phone</th>
+                    <th class="hidden px-6 py-4 text-xs font-semibold uppercase tracking-[0.12em] text-stone-500 lg:table-cell">Birthday</th>
+                    <th class="px-6 py-4 text-right text-xs font-semibold uppercase tracking-[0.12em] text-stone-500">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @members.each do |member| %>
+                    <%= render "members/member_row", member: member %>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      <% end %>
     </div>
   <% else %>
     <div class="admin-shell mx-auto max-w-xl" data-controller="reveal">

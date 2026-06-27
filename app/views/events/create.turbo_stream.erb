@@ -1,0 +1,8 @@
+<%# Event created from the calendar modal: close it, refresh the grid, flash. %>
+<%= turbo_stream.update "modal", "" %>
+<%= turbo_stream.replace "calendar_frame" do %>
+  <%= render "calendar/calendar_grid" %>
+<% end %>
+<%= turbo_stream.update "flash" do %>
+  <%= render "layouts/flash" %>
+<% end %>

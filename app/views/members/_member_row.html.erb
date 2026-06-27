@@ -1,5 +1,12 @@
 <tr class="border-b border-stone-100 transition-colors last:border-0 hover:bg-amber-50/60">
   <td class="px-6 py-4">
+    <%= check_box_tag "member_ids[]", member.id, false,
+          id: dom_id(member, :select),
+          class: "size-4 cursor-pointer rounded border-stone-300 text-amber-600 focus:ring-amber-500",
+          aria: { label: "Select #{member.full_name}" },
+          data: { bulk_select_target: "item", action: "change->bulk-select#update" } %>
+  </td>
+  <td class="px-6 py-4">
     <%= link_to member.full_name, member_path(member), class: "font-medium text-stone-900 transition-colors hover:text-amber-700" %>
     <div class="mt-0.5 text-sm text-stone-500 sm:hidden"><%= member.email %></div>
   </td>

@@ -6,6 +6,7 @@ class Gallery < ApplicationRecord
   validates :description, length: { maximum: 2000 }, allow_blank: true
 
   scope :published, -> { where(published: true) }
+  scope :drafts, -> { where(published: false) }
   scope :ordered, -> { order(created_at: :desc) }
 
   def cover_image

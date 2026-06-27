@@ -59,7 +59,7 @@ class EventsTest < ApplicationSystemTestCase
     event = events(:this_week_education)
     visit edit_event_url(event)
     fill_in "Title", with: "Updated Event Title"
-    click_button "Update Event"
+    click_button "Save event"
     assert_text "Updated Event Title"
   end
 

@@ -20,7 +20,7 @@ class Admin::ImagesController < ApplicationController
       return
     end
 
-    uploaded = 0
+    @uploaded_images = []
     failed = []
 
     files.each do |file|
@@ -40,15 +40,24 @@ class Admin::ImagesController < ApplicationController
         bytes: result["bytes"]
       )
 
-      image.save ? uploaded += 1 : failed << file.original_filename
+      image.save ? @uploaded_images << image : failed << file.original_filename
     rescue Cloudinary::Api::Error => e
       failed << "#{file.original_filename}: #{e.message}"
     end
 
-    if uploaded > 0
+    if @uploaded_images.any?
+      uploaded = @uploaded_images.size
       notice = "#{uploaded} #{uploaded == 1 ? "image" : "images"} uploaded successfully."
       notice += " #{failed.size} #{failed.size == 1 ? "file" : "files"} failed." if failed.any?
-      redirect_to admin_images_path, notice: notice
+
+      if from_upload_modal?
+        # Modal upload from the event form: stream the new tiles into the
+        # picker and close the dialog instead of leaving the page.
+        flash.now[:notice] = notice
+        render :create
+      else
+        redirect_to admin_images_path, notice: notice
+      end
     else
       flash.now[:alert] = "Upload failed: #{failed.join("; ")}"
       render :new, status: :unprocessable_entity
@@ -97,6 +106,12 @@ class Admin::ImagesController < ApplicationController
   end
 
   private
+
+  # True when the request came from the event form's "Upload a new photo"
+  # modal (loaded into the "upload_modal" Turbo Frame).
+  def from_upload_modal?
+    turbo_frame_request_id == "upload_modal"
+  end
 
   def set_image
     @image = Image.find(params[:id])

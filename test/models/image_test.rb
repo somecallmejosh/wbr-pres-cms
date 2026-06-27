@@ -87,6 +87,23 @@ class ImageTest < ActiveSupport::TestCase
     assert_includes url, "h_100"
   end
 
+  test "thumbnail_url crops face-aware with full optimization" do
+    url = images(:sanctuary).thumbnail_url
+    assert_includes url, "c_fill"
+    assert_includes url, "g_auto:faces"
+    assert_includes url, "q_auto"
+    assert_includes url, "f_auto"
+    assert_includes url, "dpr_auto"
+  end
+
+  test "cover_url crops to an exact aspect ratio, face-aware" do
+    url = images(:sanctuary).cover_url(width: 800, height: 450)
+    assert_includes url, "w_800"
+    assert_includes url, "h_450"
+    assert_includes url, "c_fill"
+    assert_includes url, "g_auto:faces"
+  end
+
   test "display_url returns a Cloudinary URL with the public_id" do
     image = images(:sanctuary)
     url = image.display_url
@@ -97,6 +114,12 @@ class ImageTest < ActiveSupport::TestCase
     image = images(:sanctuary)
     url = image.display_url(width: 400)
     assert_includes url, "w_400"
+  end
+
+  test "display_url never crops so faces are preserved" do
+    url = images(:sanctuary).display_url
+    assert_includes url, "c_limit"
+    assert_includes url, "dpr_auto"
   end
 
   # Associations

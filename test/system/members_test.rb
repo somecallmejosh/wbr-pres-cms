@@ -33,7 +33,7 @@ class MembersTest < ApplicationSystemTestCase
     visit new_member_url
     fill_in "First name", with: "Test"
     fill_in "Last name", with: "Person"
-    click_button "Create Member"
+    click_button "Save member"
     assert_text "Test Person"
   end
 
@@ -42,7 +42,7 @@ class MembersTest < ApplicationSystemTestCase
     member = members(:alice)
     visit edit_member_url(member)
     fill_in "First name", with: "Alicia"
-    click_button "Update Member"
+    click_button "Save member"
     assert_text "Alicia"
   end
 

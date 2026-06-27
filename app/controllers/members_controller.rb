@@ -38,6 +38,23 @@ class MembersController < ApplicationController
     redirect_to members_path, notice: "Member was successfully deleted.", status: :see_other
   end
 
+  def destroy_all
+    count = Member.count
+    Member.destroy_all
+    redirect_to members_path, notice: "Deleted #{helpers.pluralize(count, 'member')}.", status: :see_other
+  end
+
+  def bulk_destroy
+    ids = Array(params[:member_ids]).reject(&:blank?)
+    count = Member.where(id: ids).destroy_all.size
+
+    if count.zero?
+      redirect_to members_path, alert: "No members were selected.", status: :see_other
+    else
+      redirect_to members_path, notice: "Deleted #{helpers.pluralize(count, 'member')}.", status: :see_other
+    end
+  end
+
   private
 
   def set_member

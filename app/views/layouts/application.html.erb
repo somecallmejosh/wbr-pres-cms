@@ -50,10 +50,13 @@
   >
     <%= render "/layouts/navbar" %>
     <%= render "/layouts/mobile_nav" %>
-    <%= render "/layouts/flash" %>
+    <div id="flash"><%= render "/layouts/flash" %></div>
     <main class="flex-1 flex flex-col relative z-10" id="main-content">
       <%= yield %>
     </main>
+    <% if (verse = closing_verse) %>
+      <%= render "shared/spiritual_statement", label: verse[:label], quote: verse[:quote], reference: verse[:reference] %>
+    <% end %>
     <%= render "/layouts/footer" %>
   </body>
 </html>

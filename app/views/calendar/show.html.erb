@@ -3,17 +3,23 @@
 <%= render "shared/page_header",
       eyebrow: "What's Ahead",
       title: "Church Calendar",
-      subtitle: "Browse the month and find your place among our gatherings." %>
+      subtitle: "Browse the month and find your place among our gatherings.",
+      action: (authenticated? ? link_to("New Event", new_event_path(month: @date.month, year: @date.year, category: @category), data: { turbo_frame: "modal" }, class: "inline-flex items-center rounded-full bg-stone-800 px-5 py-2.5 font-medium text-white transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-stone-700 active:scale-[0.98]") : nil) %>
 
 <div class="container mx-auto px-4 py-14 md:py-16">
-  <div class="mb-8 flex flex-wrap gap-2" role="group" aria-label="Filter calendar by category">
+  <div class="mb-8 flex flex-wrap items-center gap-2" role="group" aria-label="Filter calendar by category">
+    <span class="mr-1 hidden text-[11px] font-medium uppercase tracking-[0.2em] text-stone-400 sm:inline">Browse</span>
     <%= link_to "All", calendar_path(month: @date.month, year: @date.year),
         class: "rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] #{@category.blank? ? 'bg-stone-800 text-white shadow-sm' : 'bg-white text-stone-600 ring-1 ring-stone-900/5 hover:bg-stone-100'}",
         aria: { current: @category.blank? ? "true" : false } %>
     <% Event::CATEGORY_LABELS.each do |value, label| %>
-      <%= link_to label, calendar_path(month: @date.month, year: @date.year, category: value),
-          class: "rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] #{@category == value ? 'bg-stone-800 text-white shadow-sm' : 'bg-white text-stone-600 ring-1 ring-stone-900/5 hover:bg-stone-100'}",
-          aria: { current: @category == value ? "true" : false } %>
+      <% active = @category == value %>
+      <%= link_to calendar_path(month: @date.month, year: @date.year, category: value),
+          class: "group inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.97] #{active ? category_filter_active_class(value) : 'bg-white text-stone-600 ring-1 ring-stone-900/5 hover:bg-stone-100'}",
+          aria: { current: active ? "true" : false } do %>
+        <span class="h-2 w-2 shrink-0 rounded-full transition-transform duration-300 group-hover:scale-125 <%= active ? 'bg-white/80' : category_dot_class(value) %>" aria-hidden="true"></span>
+        <%= label %>
+      <% end %>
     <% end %>
   </div>
 
@@ -21,3 +27,6 @@
     <%= render "calendar/calendar_grid" %>
   </div>
 </div>
+
+<%# Admin "new event" modal renders into this frame (see calendar "+" links). %>
+<%= turbo_frame_tag "modal" %>

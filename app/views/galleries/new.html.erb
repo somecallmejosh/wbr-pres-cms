@@ -1,6 +1,6 @@
 <% content_for :title, "New Gallery — Admin" %>
 
-<div class="container mx-auto max-w-3xl px-4 py-10 md:py-14">
+<div class="container mx-auto max-w-6xl px-4 py-10 md:py-14">
   <%= link_to galleries_path, class: "group inline-flex items-center gap-1.5 text-sm font-medium text-stone-500 transition-colors hover:text-amber-700" do %>
     <svg class="size-4 transition-transform group-hover:-translate-x-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
     Back to Galleries
@@ -11,5 +11,86 @@
     <h1 class="font-marcellus mt-4 text-4xl text-stone-900">Create a new gallery</h1>
   </header>
 
-  <%= render "galleries/form", gallery: @gallery %>
+  <%# Staged photo manager: no images-url means the gallery-editor controller
+      stages selections client-side; they persist on Save via image_ids[]. %>
+  <div data-controller="gallery-editor">
+    <%= form_with model: @gallery do |form| %>
+      <%= render "shared/form_errors", record: @gallery %>
+
+      <div class="admin-shell">
+        <div class="admin-core p-6 sm:p-8">
+          <%= render "galleries/details_fields", form: form, intro: "Give the album a title, then choose its photos below." %>
+        </div>
+      </div>
+
+      <%# Two-pane photo manager mirrors the edit page: library (left) beside the
+          selected photos (right) on large screens. %>
+      <div class="mt-8 grid grid-cols-1 items-start gap-6 lg:grid-cols-2">
+
+        <%= render "galleries/choose_photos", selected_ids: Array(params[:image_ids]).map(&:to_i) %>
+
+        <section aria-labelledby="order-heading" data-controller="reveal">
+          <div class="admin-shell">
+            <div class="admin-core p-6 sm:p-8">
+              <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+                <h2 id="order-heading" class="font-marcellus text-xl text-stone-900">
+                  Photos in this gallery
+                </h2>
+                <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-800 ring-1 ring-amber-200">
+                  <span data-gallery-editor-target="count">0</span> selected
+                </span>
+              </div>
+              <p class="mt-1 text-sm text-stone-500">These photos go into the gallery when you save it. Use <span class="font-medium text-stone-700">Remove</span> to take one back out — you can reorder them after saving.</p>
+
+              <div data-gallery-editor-target="list"
+                   class="mt-5 hidden flex flex-col gap-2"
+                   data-controller="sortable"
+                   role="list"
+                   aria-label="Photos selected for this gallery, drag or use arrow keys to reorder"></div>
+
+              <div data-gallery-editor-target="empty"
+                   class="mt-5 rounded-xl border border-dashed border-stone-300 bg-stone-50/60 px-6 py-10 text-center">
+                <p class="text-sm text-stone-500">No photos in this gallery yet. Tap an image in <span class="font-medium text-stone-700">Choose photos</span> to add it.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <%# Cloned by the gallery-editor controller for each staged photo. Mirrors
+          galleries/_sortable_image so drag + keyboard reordering work identically;
+          the hidden image_ids[] input is what submits (in drag order) on save. %>
+      <template data-gallery-editor-target="rowTemplate">
+        <div class="flex items-center gap-3 rounded-xl border border-stone-200 bg-white p-2.5 shadow-sm transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+             data-image-id=""
+             data-sortable-id=""
+             tabindex="0"
+             role="listitem">
+          <input type="hidden" name="image_ids[]" value="">
+          <span class="shrink-0 cursor-grab text-stone-400 transition-colors hover:text-stone-600" aria-hidden="true" data-sortable-handle>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm0 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm7-7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm0 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"/>
+            </svg>
+          </span>
+          <img src="" alt="" aria-hidden="true" class="size-12 shrink-0 rounded-lg object-cover">
+          <span class="flex-1 truncate text-sm text-stone-700" data-row-title></span>
+          <button type="button"
+                  class="shrink-0 inline-flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-xs font-medium text-stone-500 transition-colors hover:bg-red-50 hover:text-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
+                  title="Remove from this gallery"
+                  data-action="gallery-editor#remove">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>
+            </svg>
+            <span class="hidden sm:inline">Remove</span>
+          </button>
+        </div>
+      </template>
+
+      <%= render "shared/admin_action_bar", form: form, label: "Save gallery", cancel_path: galleries_path %>
+    <% end %>
+
+    <%# Outside the gallery form so the upload modal's own form isn't nested. %>
+    <%= turbo_frame_tag "upload_modal" %>
+  </div>
 </div>

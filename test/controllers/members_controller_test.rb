@@ -51,6 +51,22 @@ class MembersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_session_path
   end
 
+  test "destroy_all requires authentication" do
+    sign_out
+    assert_no_difference("Member.count") do
+      delete destroy_all_members_url
+    end
+    assert_redirected_to new_session_path
+  end
+
+  test "bulk_destroy requires authentication" do
+    sign_out
+    assert_no_difference("Member.count") do
+      delete bulk_destroy_members_url, params: { member_ids: [ @member.id ] }
+    end
+    assert_redirected_to new_session_path
+  end
+
   # CRUD tests
 
   test "should get index" do
@@ -104,6 +120,44 @@ class MembersControllerTest < ActionDispatch::IntegrationTest
   test "should destroy member" do
     assert_difference("Member.count", -1) do
       delete member_url(@member)
+    end
+
+    assert_redirected_to members_url
+  end
+
+  test "should destroy all members" do
+    assert_operator Member.count, :>, 0
+
+    delete destroy_all_members_url
+
+    assert_equal 0, Member.count
+    assert_redirected_to members_url
+  end
+
+  test "should bulk destroy selected members" do
+    ids = [ members(:alice).id, members(:bob).id ]
+
+    assert_difference("Member.count", -2) do
+      delete bulk_destroy_members_url, params: { member_ids: ids }
+    end
+
+    assert_redirected_to members_url
+    assert_not Member.exists?(members(:alice).id)
+    assert_not Member.exists?(members(:bob).id)
+    assert Member.exists?(members(:charlie).id)
+  end
+
+  test "bulk destroy with no selection deletes nothing" do
+    assert_no_difference("Member.count") do
+      delete bulk_destroy_members_url, params: { member_ids: [ "" ] }
+    end
+
+    assert_redirected_to members_url
+  end
+
+  test "bulk destroy with missing param deletes nothing" do
+    assert_no_difference("Member.count") do
+      delete bulk_destroy_members_url
     end
 
     assert_redirected_to members_url

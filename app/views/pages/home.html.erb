@@ -1,7 +1,7 @@
 <% content_for :title, "West Baton Rouge Presbyterian Church" %>
 
 <%# ===== Hero: signature stained glass, then a light welcome ===== %>
-<img src="https://res.cloudinary.com/dwjulenau/image/upload/c_limit,f_auto,q_auto,w_1600/v1/wbr-pres-cms/image012?_a=BACJ3SDL" alt="Photo of the church sanctuary" class="w-full h-auto md:hidden">
+<img src="<%= cloudinary_image("wbr-pres-cms/image012", crop: :limit, width: 1600) %>" alt="Photo of the church sanctuary" class="w-full h-auto md:hidden">
 <div class="hidden md:grid md:grid-cols-4 gap-0.5">
   <img src="/theme/God%20(1).png"           alt="Stained glass depicting God"  class="block w-full aspect-square object-cover">
   <img src="/theme/stainedglass%20(1).png"  alt="Church stained glass window"  class="block w-full aspect-square object-cover">
@@ -102,6 +102,51 @@
   </div>
 </section>
 
+<%# ===== Latest from the gallery ===== %>
+<% if @featured_gallery && @featured_images.any? %>
+  <section class="relative overflow-hidden border-y border-stone-200 bg-white py-20 md:py-28">
+    <div class="pointer-events-none absolute -left-24 top-24 h-80 w-80 rounded-full bg-amber-500/10 blur-3xl" aria-hidden="true"></div>
+
+    <div class="container relative mx-auto px-4">
+      <div class="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end" data-controller="reveal">
+        <div class="max-w-xl">
+          <span class="inline-block rounded-full bg-amber-700/10 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-800">From the Gallery</span>
+          <h2 class="font-marcellus mt-5 text-3xl text-stone-900 md:text-4xl leading-tight"><%= @featured_gallery.title %></h2>
+          <div class="mt-5 h-px w-16 bg-amber-600"></div>
+          <% if @featured_gallery.description.present? %>
+            <p class="mt-6 text-lg leading-relaxed text-stone-600"><%= truncate(@featured_gallery.description, length: 160) %></p>
+          <% end %>
+        </div>
+        <%= link_to gallery_path(@featured_gallery), class: "group inline-flex shrink-0 items-center gap-3 rounded-full bg-stone-900 py-2 pl-6 pr-2 font-medium text-white shadow-sm transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-stone-800 active:scale-[0.98]" do %>
+          <span>View this gallery</span>
+          <span class="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5 group-hover:-translate-y-px">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        <% end %>
+      </div>
+
+      <%# Horizontal scroll-snap rail. Tiles snap to the start of the track; the
+          edge padding lets the first/last tile rest clear of the viewport edge. %>
+      <div class="mt-12 -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-4 scroll-px-4 [scrollbar-width:thin] md:gap-4 md:scroll-px-0 md:px-0"
+           data-controller="reveal"
+           role="list"
+           aria-label="<%= "Photos from #{@featured_gallery.title}" %>">
+        <% @featured_images.each_with_index do |image, i| %>
+          <%= link_to gallery_path(@featured_gallery),
+                role: "listitem",
+                class: "group relative block w-64 shrink-0 snap-start overflow-hidden rounded-2xl ring-1 ring-stone-900/5 transition-[transform,box-shadow] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-1 hover:shadow-[0_28px_55px_-26px_rgba(68,64,60,0.6)] focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 sm:w-72" do %>
+            <img src="<%= image.thumbnail_url(width: 600, height: 750) %>"
+                 alt="<%= image.alt_text.presence || image.title.presence || "Photo from #{@featured_gallery.title}" %>"
+                 loading="lazy"
+                 class="aspect-[4/5] h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-[1.07]">
+            <div class="absolute inset-0 bg-gradient-to-t from-stone-950/40 via-transparent to-transparent opacity-0 transition-opacity duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:opacity-100" aria-hidden="true"></div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </section>
+<% end %>
+
 <%# ===== Birthdays + Worship invitation ===== %>
 <section class="bg-stone-50 py-20 md:py-28">
   <div class="container mx-auto px-4">
@@ -109,21 +154,58 @@
 
       <%# Birthdays %>
       <div class="lg:col-span-3" data-controller="reveal">
-        <div class="h-full rounded-[2rem] bg-white p-8 shadow-[0_24px_60px_-30px_rgba(68,64,60,0.35)] ring-1 ring-stone-900/5 md:p-10">
-          <span class="inline-block rounded-full bg-amber-700/10 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-800">Celebrating</span>
-          <h2 class="font-marcellus mt-5 text-2xl text-stone-900 md:text-3xl"><%= Date.current.strftime("%B") %> Birthdays</h2>
-          <div class="mt-5 h-px w-16 bg-amber-600"></div>
+        <div class="relative h-full overflow-hidden rounded-[2rem] bg-white p-8 shadow-[0_24px_60px_-30px_rgba(68,64,60,0.35)] ring-1 ring-stone-900/5 md:p-10">
+          <%# Festive amber glow + confetti flecks, decorative only %>
+          <div class="pointer-events-none absolute -right-16 -top-16 h-52 w-52 rounded-full bg-amber-500/10 blur-3xl" aria-hidden="true"></div>
+          <div class="pointer-events-none absolute right-8 top-10 hidden sm:block" aria-hidden="true">
+            <span class="absolute h-1.5 w-1.5 -rotate-12 rounded-[1px] bg-amber-500/70"></span>
+            <span class="absolute left-5 top-3 h-2 w-2 rotate-12 rounded-[1px] bg-rose-400/60"></span>
+            <span class="absolute left-9 -top-1 h-1.5 w-1.5 rounded-full bg-amber-600/50"></span>
+            <span class="absolute left-2 top-7 h-1.5 w-1.5 rounded-full bg-emerald-500/40"></span>
+          </div>
+
+          <div class="relative flex items-start justify-between gap-4">
+            <div>
+              <span class="inline-block rounded-full bg-amber-700/10 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-800">Celebrating</span>
+              <h2 class="font-marcellus mt-5 flex items-center gap-2.5 text-2xl text-stone-900 md:text-3xl">
+                <svg class="h-6 w-6 shrink-0 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19h16M5 19v-7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7M9 10V8M12 10V8M15 10V8M12 8V4M10.5 5.5 12 4l1.5 1.5"/></svg>
+                <span><%= Date.current.strftime("%B") %> Birthdays</span>
+              </h2>
+            </div>
+            <% if @birthdays.any? %>
+              <span class="mt-1 shrink-0 rounded-full bg-amber-700/10 px-3 py-1 text-sm font-semibold text-amber-800"><%= pluralize(@birthdays.size, "birthday") %></span>
+            <% end %>
+          </div>
+          <div class="relative mt-5 h-px w-16 bg-amber-600"></div>
+
           <% if @birthdays.any? %>
-            <ul class="mt-6 divide-y divide-stone-100">
+            <ul class="relative mt-7 grid grid-cols-1 gap-3 sm:grid-cols-2">
               <% @birthdays.each do |member| %>
-                <li class="flex items-center justify-between py-3.5">
-                  <span class="font-medium text-stone-800"><%= member.full_name %></span>
-                  <span class="text-sm text-stone-500"><%= member.birthday_display %></span>
+                <% is_today = member.date_of_birth && member.date_of_birth.day == Date.current.day %>
+                <% bday_this_year = begin
+                     Date.new(Date.current.year, member.date_of_birth.month, member.date_of_birth.day)
+                   rescue ArgumentError
+                     Date.new(Date.current.year, 2, 28)
+                   end %>
+                <li class="group flex items-center gap-4 rounded-2xl p-3.5 ring-1 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-0.5 <%= is_today ? "bg-gradient-to-br from-amber-50 to-amber-100/40 ring-amber-300/70 shadow-[0_12px_30px_-18px_rgba(180,83,9,0.6)]" : "bg-stone-50 ring-stone-900/5 hover:bg-white hover:shadow-[0_14px_30px_-22px_rgba(68,64,60,0.5)]" %>">
+                  <%# Tear-off calendar page %>
+                  <div class="flex w-12 shrink-0 flex-col items-center overflow-hidden rounded-xl bg-white ring-1 ring-stone-900/10 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:-rotate-3">
+                    <span class="w-full py-0.5 text-center text-[9px] font-semibold uppercase tracking-[0.15em] text-white <%= is_today ? "bg-amber-600" : "bg-amber-700" %>"><%= member.date_of_birth.strftime("%b") %></span>
+                    <span class="font-marcellus py-1 text-xl leading-none text-stone-900"><%= member.date_of_birth.day %></span>
+                  </div>
+                  <div class="min-w-0">
+                    <p class="truncate font-medium text-stone-800"><%= member.full_name %></p>
+                    <% if is_today %>
+                      <span class="mt-1 inline-flex items-center gap-1 rounded-full bg-amber-600 px-2 py-0.5 text-[11px] font-semibold text-white">🎉 Today</span>
+                    <% else %>
+                      <p class="mt-0.5 text-sm text-stone-500"><%= bday_this_year.strftime("%A, %B %-d") %></p>
+                    <% end %>
+                  </div>
                 </li>
               <% end %>
             </ul>
           <% else %>
-            <p class="mt-6 text-stone-500">No birthdays this month.</p>
+            <p class="relative mt-6 text-stone-500">No birthdays this month.</p>
           <% end %>
         </div>
       </div>

@@ -1,8 +1,53 @@
-<div class="border-r border-b border-stone-100 p-2 min-h-24 <%= day == Date.current ? 'bg-amber-50' : 'bg-white' %> hover:bg-stone-50 transition-colors" <%= "aria-current='date'" if day == Date.current %>>
-  <span class="font-semibold text-sm <%= day == Date.current ? 'text-amber-700' : 'text-stone-700' %>"><%= day.day %></span>
-  <% events.each do |event| %>
-    <%= link_to event.title, event_path(event),
-        class: "block text-xs truncate text-amber-700 hover:text-amber-800 transition-colors mt-0.5",
-        data: { turbo_frame: "_top" } %>
+<%
+  is_today    = day == Date.current
+  is_weekend  = day.saturday? || day.sunday?
+  has_events  = events.any?
+  shown       = events.first(3)
+  overflow    = events.length - shown.length
+
+  cell_tone =
+    if is_today
+      "bg-amber-50 ring-1 ring-inset ring-amber-500/30"
+    elsif has_events
+      "bg-gradient-to-br from-stone-50 to-stone-100/40 hover:from-amber-50/60 hover:to-stone-50"
+    elsif is_weekend
+      "bg-stone-50/60 hover:bg-stone-50"
+    else
+      "hover:bg-stone-50"
+    end
+%>
+<div class="group flex min-h-[6rem] flex-col gap-1 rounded-xl p-2 transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] <%= cell_tone %>"
+     <%= "aria-current=date".html_safe if is_today %>>
+  <div class="flex items-center justify-between">
+    <span class="flex h-6 w-6 items-center justify-center rounded-full text-sm font-medium <%= is_today ? "bg-amber-600 text-white shadow-[0_4px_10px_-4px_rgba(180,83,9,0.7)]" : (has_events ? "text-stone-700" : "text-stone-400") %>">
+      <%= day.day %>
+    </span>
+    <% if authenticated? %>
+      <%= link_to new_event_path(date: day.iso8601, month: @date.month, year: @date.year, category: @category),
+          data: { turbo_frame: "modal" },
+          aria: { label: "Add an event on #{full_date_ordinal(day)}" },
+          class: "flex h-6 w-6 items-center justify-center rounded-full text-stone-400 opacity-0 ring-1 ring-stone-900/5 transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-amber-600 hover:text-white hover:ring-amber-600 focus:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 group-hover:opacity-100" do %>
+        <%= line_icon(%(<path d="M12 5v14"/><path d="M5 12h14"/>), css: "h-4 w-4") %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <% if shown.any? %>
+    <div class="flex flex-col gap-1">
+      <% shown.each do |event| %>
+        <%= link_to event_path(event),
+            data: { turbo_frame: "_top" },
+            title: "#{event_time_range(event)} · #{event.title}",
+            class: "flex items-center gap-1.5 rounded-md px-1.5 py-1 text-left text-[11px] leading-tight ring-1 transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-px focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 #{category_chip_class(event.category)}" do %>
+          <span class="h-1.5 w-1.5 shrink-0 rounded-full <%= category_dot_class(event.category) %>" aria-hidden="true"></span>
+          <span class="truncate font-medium"><%= event.title %></span>
+        <% end %>
+      <% end %>
+      <% if overflow.positive? %>
+        <span class="px-1.5 text-[10px] font-medium uppercase tracking-wide text-stone-400">
+          +<%= overflow %> more
+        </span>
+      <% end %>
+    </div>
   <% end %>
 </div>

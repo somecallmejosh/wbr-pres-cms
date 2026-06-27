@@ -49,3 +49,15 @@
     transition: none !important;
   }
 }
+
+/* ---------------------------------------------------------------------------
+ * Turbo Frame loading state
+ * While a frame navigation is in flight, Turbo sets aria-busy="true" on the
+ * <turbo-frame>. Gently dim its contents so the swap reads as intentional
+ * (e.g. filtering the events list). Opacity-only — GPU-safe.
+ * ------------------------------------------------------------------------- */
+turbo-frame[aria-busy="true"] {
+  opacity: 0.55;
+  transition: opacity 0.25s var(--ease-fluid);
+  cursor: progress;
+}

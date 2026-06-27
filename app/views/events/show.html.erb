@@ -1,58 +1,167 @@
 <% content_for :title, "#{@event.title} — West Baton Rouge Presbyterian Church" %>
-<div class="container mx-auto px-4 py-12 md:py-16">
-  <div class="mb-8">
-    <%= link_to events_path, class: "group inline-flex items-center gap-2 text-sm font-medium text-amber-700 transition-colors hover:text-amber-800" do %>
-      <span class="transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:-translate-x-1">&larr;</span>
-      <span>Back to Events</span>
-    <% end %>
-  </div>
 
-  <div class="max-w-3xl" data-controller="reveal">
+<%#
+  Cinematic event detail page.
+  - A full-bleed hero (uploaded image, or the church sketch as a graceful
+    fallback) with a warm scrim and the title set in serif over it.
+  - A floating "double-bezel" details rail that overlaps the hero like a
+    machined glass plate, carrying date / time / location plus the genuinely
+    useful "Add to calendar" and "Get directions" actions.
+  - An editorial description column and a closing band of other gatherings.
+  The site's stained-glass scripture band auto-renders beneath via the layout.
+%>
 
-    <div class="mb-6 flex items-start justify-between">
-      <div>
-        <%= render "shared/category_badge", category: @event.category %>
-        <h1 class="font-marcellus mt-3 text-4xl text-stone-900 md:text-5xl leading-tight"><%= @event.title %></h1>
-      </div>
-      <% if authenticated? %>
-        <div class="ml-4 flex shrink-0 gap-2">
-          <%= link_to "Edit", edit_event_path(@event), class: "rounded-full px-4 py-2 bg-stone-700 hover:bg-stone-600 text-white text-sm font-medium transition-colors" %>
-          <%= button_to "Delete", event_path(@event), method: :delete,
-                class: "rounded-full px-4 py-2 bg-red-700 hover:bg-red-600 text-white text-sm font-medium cursor-pointer transition-colors",
-                data: { turbo_confirm: "Are you sure you want to delete this event?" } %>
-        </div>
-      <% end %>
-    </div>
-
+<article class="relative isolate" data-controller="reveal">
+  <%# ---------------------------------------------------------------- Hero %>
+  <header class="relative isolate flex min-h-[60vh] flex-col overflow-hidden bg-stone-900 md:min-h-[68vh]">
     <% if @event.image.present? %>
-      <div class="overflow-hidden rounded-[2rem] ring-1 ring-stone-900/5 shadow-[0_24px_60px_-30px_rgba(68,64,60,0.45)]">
-        <img src="<%= @event.image.display_url(width: 800) %>"
-             alt="Event image"
-             class="aspect-[16/9] w-full object-cover">
-      </div>
+      <img src="<%= @event.image.cover_url(width: 1600, height: 900) %>"
+           alt=""
+           aria-hidden="true"
+           class="absolute inset-0 -z-10 h-full w-full object-cover">
+    <% else %>
+      <img src="/theme/church-sketch.jpg"
+           alt=""
+           aria-hidden="true"
+           class="absolute inset-0 -z-10 h-full w-full object-cover opacity-40">
     <% end %>
 
-    <dl class="mt-8 divide-y divide-stone-200">
-      <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
-        <dt class="font-semibold text-stone-700">Date</dt>
-        <dd class="text-stone-800 sm:col-span-2"><%= full_date_ordinal_with_year(@event.event_date) %></dd>
+    <%# Layered scrims: lift the bottom for the title, soften the left for meta %>
+    <div class="absolute inset-0 -z-10 bg-gradient-to-t from-stone-950 via-stone-900/70 to-stone-900/45" aria-hidden="true"></div>
+    <div class="absolute inset-0 -z-10 bg-gradient-to-r from-stone-950/70 via-transparent to-transparent" aria-hidden="true"></div>
+    <div class="pointer-events-none absolute -top-24 -right-16 -z-10 h-80 w-80 rounded-full bg-amber-500/20 blur-3xl" aria-hidden="true"></div>
+
+    <%# Toolbar + title share one flow column: toolbar pinned top, title pushed
+        to the bottom with mt-auto, so they can never overlap. %>
+    <div class="container relative z-10 mx-auto flex flex-1 flex-col px-4 py-6">
+      <div class="flex items-center justify-between gap-3">
+        <%= link_to events_path, class: "group inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-medium text-white ring-1 ring-white/15 backdrop-blur-md transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-white/20 active:scale-[0.98]" do %>
+          <span class="transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:-translate-x-1">&larr;</span>
+          <span>All Events</span>
+        <% end %>
+        <% if authenticated? %>
+          <div class="flex shrink-0 gap-2">
+            <%= link_to "Edit", edit_event_path(@event), class: "rounded-full bg-white/10 px-4 py-2 text-sm font-medium text-white ring-1 ring-white/15 backdrop-blur-md transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-white/20 active:scale-[0.98]" %>
+            <%= button_to "Delete", event_path(@event), method: :delete,
+                  class: "cursor-pointer rounded-full bg-red-500/20 px-4 py-2 text-sm font-medium text-red-50 ring-1 ring-red-300/30 backdrop-blur-md transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-red-500/30 active:scale-[0.98]",
+                  data: { turbo_confirm: "Are you sure you want to delete this event?" } %>
+          </div>
+        <% end %>
       </div>
-      <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
-        <dt class="font-semibold text-stone-700">Time</dt>
-        <dd class="text-stone-800 sm:col-span-2"><%= event_time_range(@event) %></dd>
+
+      <div class="mt-auto max-w-3xl pb-12 pt-24 md:pb-16">
+        <span class="inline-flex rounded-full bg-amber-500/20 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-100 ring-1 ring-amber-300/30 backdrop-blur-sm">
+          <%= category_label(@event.category) %>
+        </span>
+        <h1 class="font-marcellus mt-5 text-4xl leading-[1.05] text-white text-balance drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)] md:text-6xl">
+          <%= @event.title %>
+        </h1>
+        <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-stone-100/90">
+          <span class="inline-flex items-center gap-2">
+            <%= calendar_icon %>
+            <%= full_date_ordinal(@event.event_date) %>
+          </span>
+          <span class="h-1 w-1 rounded-full bg-amber-300/60" aria-hidden="true"></span>
+          <span class="inline-flex items-center gap-2">
+            <%= clock_icon %>
+            <%= event_time_range(@event) %>
+          </span>
+        </div>
       </div>
-      <% if @event.location.present? %>
-        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
-          <dt class="font-semibold text-stone-700">Location</dt>
-          <dd class="text-stone-800 sm:col-span-2"><%= @event.location %></dd>
+    </div>
+  </header>
+
+  <%# --------------------------------------------------------------- Body %>
+  <div class="container relative z-20 mx-auto px-4 pb-20 md:pb-28">
+    <div class="grid gap-8 pt-12 lg:grid-cols-12 lg:items-start lg:gap-12">
+
+      <%# Details rail — floats over the hero like a machined glass plate %>
+      <aside class="lg:order-2 lg:col-span-5 lg:sticky lg:top-24 lg:-mt-32">
+        <div class="rounded-[2rem] bg-stone-900/[0.04] p-2 ring-1 ring-stone-900/10 shadow-[0_40px_90px_-40px_rgba(68,64,60,0.55)] backdrop-blur-sm">
+          <div class="rounded-[calc(2rem-0.5rem)] bg-white p-7 shadow-[inset_0_1px_1px_rgba(255,255,255,0.6)] md:p-8">
+            <p class="text-[11px] font-medium uppercase tracking-[0.25em] text-amber-700">Details</p>
+
+            <dl class="mt-6 space-y-6">
+              <div class="flex gap-4">
+                <span class="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-700/10 text-amber-800"><%= calendar_icon %></span>
+                <div>
+                  <dt class="text-xs font-medium uppercase tracking-[0.18em] text-stone-400">Date</dt>
+                  <dd class="mt-1 text-stone-800"><%= full_date_ordinal_with_year(@event.event_date) %></dd>
+                </div>
+              </div>
+
+              <div class="flex gap-4">
+                <span class="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-700/10 text-amber-800"><%= clock_icon %></span>
+                <div>
+                  <dt class="text-xs font-medium uppercase tracking-[0.18em] text-stone-400">Time</dt>
+                  <dd class="mt-1 text-stone-800"><%= event_time_range(@event) %></dd>
+                </div>
+              </div>
+
+              <% if @event.location.present? %>
+                <div class="flex gap-4">
+                  <span class="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-700/10 text-amber-800"><%= pin_icon %></span>
+                  <div>
+                    <dt class="text-xs font-medium uppercase tracking-[0.18em] text-stone-400">Location</dt>
+                    <dd class="mt-1 text-stone-800"><%= @event.location %></dd>
+                    <%= link_to event_directions_url(@event), target: "_blank", rel: "noopener", class: "group mt-1.5 inline-flex items-center gap-1 text-sm font-medium text-amber-700 transition-colors hover:text-amber-800" do %>
+                      <span>Get directions</span>
+                      <span class="transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5"><%= arrow_up_right_icon %></span>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            </dl>
+
+            <%# Primary CTA — button-in-button trailing icon %>
+            <%= link_to google_calendar_url(@event), target: "_blank", rel: "noopener",
+                  class: "group mt-8 flex w-full items-center justify-between gap-3 rounded-full bg-stone-900 py-2 pl-6 pr-2 text-white transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-stone-800 active:scale-[0.98]" do %>
+              <span class="font-medium">Add to calendar</span>
+              <span class="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5 group-hover:-translate-y-px group-hover:scale-105">
+                <%= arrow_up_right_icon %>
+              </span>
+            <% end %>
+          </div>
         </div>
-      <% end %>
-      <% if @event.description.present? %>
-        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4">
-          <dt class="font-semibold text-stone-700">Description</dt>
-          <dd class="text-stone-700 sm:col-span-2"><%= simple_format(@event.description) %></dd>
-        </div>
-      <% end %>
-    </dl>
+      </aside>
+
+      <%# Editorial description %>
+      <div class="lg:order-1 lg:col-span-7 lg:pt-4">
+        <span class="inline-block rounded-full bg-amber-700/10 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-800">
+          About This Gathering
+        </span>
+        <div class="mt-6 h-px w-16 bg-amber-600"></div>
+        <% if @event.description.present? %>
+          <div class="mt-7 space-y-5 text-lg leading-relaxed text-stone-600 [&_p]:mb-5 [&_p:last-child]:mb-0">
+            <%= simple_format(@event.description) %>
+          </div>
+        <% else %>
+          <p class="mt-7 text-lg leading-relaxed text-stone-500">
+            We'd love to see you there. For more about this gathering, reach out and we'll be glad to share the details.
+          </p>
+        <% end %>
+      </div>
+    </div>
   </div>
-</div>
+
+  <%# ------------------------------------------------------- More gatherings %>
+  <% if @related_events.any? %>
+    <section class="border-t border-stone-200 bg-gradient-to-b from-stone-100/60 to-stone-50">
+      <div class="container mx-auto px-4 py-16 md:py-24">
+        <div class="mb-10 max-w-2xl" data-controller="reveal">
+          <span class="inline-block rounded-full bg-amber-700/10 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-800">
+            What's Next
+          </span>
+          <h2 class="font-marcellus mt-5 text-3xl text-stone-900 md:text-4xl">More Gatherings</h2>
+        </div>
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <% @related_events.each_with_index do |event, i| %>
+            <div data-controller="reveal" data-reveal-delay-value="<%= (i % 3) * 90 %>">
+              <%= render "events/event_row", event: event %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </section>
+  <% end %>
+</article>

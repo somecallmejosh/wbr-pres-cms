@@ -3,6 +3,8 @@ class PagesController < ApplicationController
   def home
     @weekly_events = Event.this_week.limit(2)
     @birthdays = Member.birthdays_this_month
+    @featured_gallery = Gallery.published.ordered.includes(:images).first
+    @featured_images = @featured_gallery ? @featured_gallery.images.first(10) : []
   end
 
   def contact

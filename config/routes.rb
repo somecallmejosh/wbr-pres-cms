@@ -22,13 +22,23 @@ Rails.application.routes.draw do
   # Galleries (public index/show, admin CRUD + reorder)
   resources :galleries do
     patch :reorder, on: :member
+    post "images/:image_id", to: "galleries#add_image", on: :member, as: :add_image
+    delete "images/:image_id", to: "galleries#remove_image", on: :member, as: :remove_image
   end
 
   # Events (public index/show, admin CRUD)
-  resources :events
+  resources :events do
+    # Live "featured photo" picker — persists just the image immediately.
+    patch :image, on: :member, to: "events#update_image"
+  end
 
   # Members (admin only)
-  resources :members
+  resources :members do
+    collection do
+      delete :destroy_all
+      delete :bulk_destroy
+    end
+  end
 
   # Image management (admin only)
   namespace :admin do

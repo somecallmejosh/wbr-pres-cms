@@ -1,68 +1,191 @@
 <% content_for :title, "West Baton Rouge Presbyterian Church" %>
+
+<%# ===== Hero: signature stained glass, then a light welcome ===== %>
 <img src="https://res.cloudinary.com/dwjulenau/image/upload/c_limit,f_auto,q_auto,w_1600/v1/wbr-pres-cms/image012?_a=BACJ3SDL" alt="Photo of the church sanctuary" class="w-full h-auto md:hidden">
 <div class="hidden md:grid md:grid-cols-4 gap-0.5">
-  <img src="/theme/God%20(1).png"           alt="Stained glass depicting God"  class="block w-full aspect-square object-cover shadow-sm">
-  <img src="/theme/stainedglass%20(1).png"  alt="Church stained glass window"  class="block w-full aspect-square object-cover shadow-sm">
-  <img src="/theme/stainedglass2.webp"      alt="Church stained glass window"  class="block w-full aspect-square object-cover shadow-sm">
-  <img src="/theme/Mary%20(1).png"          alt="Stained glass depicting Mary" class="block w-full aspect-square object-cover shadow-sm">
+  <img src="/theme/God%20(1).png"           alt="Stained glass depicting God"  class="block w-full aspect-square object-cover">
+  <img src="/theme/stainedglass%20(1).png"  alt="Church stained glass window"  class="block w-full aspect-square object-cover">
+  <img src="/theme/stainedglass2.webp"      alt="Church stained glass window"  class="block w-full aspect-square object-cover">
+  <img src="/theme/Mary%20(1).png"          alt="Stained glass depicting Mary" class="block w-full aspect-square object-cover">
 </div>
 
-<section class="bg-stone-100 border-b border-stone-200 py-16">
-
-  <div class="container mx-auto px-4 space-y-12">
-    <div class="grid grid-cols-1 xl:grid-cols-2 gap-12 xl:gap-16 2xl:gap-24 items-center">
-      <div>
-        <h1 class="font-marcellus text-4xl md:text-5xl lg:text-6xl leading-tight text-balance mb-6">
-          Welcome to West Baton Rouge Presbyterian Church
-        </h1>
-        <h2 class="font-marcellus text-3xl text-stone-900 mb-3">Our Story</h2>
-        <div class="w-14 h-1 bg-amber-600 mb-6"></div>
-        <p class="text-stone-700 leading-relaxed text-lg">
-          Originating in 1939, and being sponsored by the First Presbyterian Church in Louisiana, we have made a name for ourselves as one of the oldest churches in West Baton Rouge. We are a part of The Presbytery of South Louisiana with nearly a century of worship and we're still going strong!
-        </p>
-        <%= link_to "Learn More About Us \u2192", pages_about_path, class: "mt-6 inline-block text-amber-700 hover:text-amber-800 font-medium transition-colors mb-12" %>
+<section class="relative overflow-hidden bg-gradient-to-b from-stone-100 to-stone-50 border-b border-stone-200">
+  <div class="pointer-events-none absolute -top-32 left-1/2 h-80 w-[42rem] -translate-x-1/2 rounded-full bg-amber-500/10 blur-3xl"></div>
+  <div class="container relative mx-auto px-4 py-20 md:py-28">
+    <div class="mx-auto max-w-3xl text-center" data-controller="reveal">
+      <span class="inline-block rounded-full bg-amber-700/10 px-4 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-800">
+        Est. 1939 &middot; Port Allen, Louisiana
+      </span>
+      <h1 class="font-marcellus mt-6 text-4xl leading-[1.1] text-stone-900 md:text-5xl lg:text-6xl text-balance">
+        Welcome to West Baton Rouge Presbyterian Church
+      </h1>
+      <div class="mx-auto mt-6 h-px w-20 bg-amber-600"></div>
+      <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-stone-600">
+        A welcoming family of faith with nearly a century of worship, fellowship,
+        and service on the west bank of the river. Wherever you are on your journey,
+        there is a place for you here.
+      </p>
+      <div class="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        <%= link_to pages_about_path, class: "group inline-flex items-center gap-3 rounded-full bg-amber-700 py-2 pl-6 pr-2 font-medium text-white shadow-sm transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-amber-800 active:scale-[0.98]" do %>
+          <span>Plan Your Visit</span>
+          <span class="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        <% end %>
+        <%= link_to events_path, class: "group inline-flex items-center gap-2 rounded-full border border-stone-300 px-6 py-3 font-medium text-stone-700 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-stone-400 hover:bg-white active:scale-[0.98]" do %>
+          <span>Upcoming Events</span>
+          <span class="transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5">&rarr;</span>
+        <% end %>
       </div>
-      <div>
-        <section class="mb-12">
-          <div class="flex items-end gap-4 mb-6">
-            <h2 class="font-marcellus text-2xl text-stone-900 border-b-2 border-amber-500 pb-1">This Week's Events</h2>
+    </div>
+  </div>
+</section>
+
+<%# ===== Our Story ===== %>
+<section class="bg-stone-50 py-20 md:py-28">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-20">
+      <div data-controller="reveal">
+        <span class="inline-block rounded-full bg-amber-700/10 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-800">Our Story</span>
+        <h2 class="font-marcellus mt-5 text-3xl text-stone-900 md:text-4xl leading-tight">Nearly a century of faith on the west bank</h2>
+        <div class="mt-5 h-px w-16 bg-amber-600"></div>
+        <p class="mt-6 text-lg leading-relaxed text-stone-600">
+          Originating in 1939, and sponsored by the First Presbyterian Church in Louisiana,
+          we have grown into one of the oldest churches in West Baton Rouge. As part of
+          The Presbytery of South Louisiana, we carry nearly a century of worship forward &mdash;
+          and we're still going strong.
+        </p>
+        <%= link_to pages_about_path, class: "group mt-8 inline-flex items-center gap-2 font-medium text-amber-700 transition-colors hover:text-amber-800" do %>
+          <span>Learn more about us</span>
+          <span class="transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-1">&rarr;</span>
+        <% end %>
+      </div>
+      <div data-controller="reveal" data-reveal-delay-value="120">
+        <div class="rounded-[2rem] bg-white p-2 shadow-[0_24px_60px_-30px_rgba(68,64,60,0.4)] ring-1 ring-stone-900/5">
+          <img src="/theme/church-front%20(1).png" alt="West Baton Rouge Presbyterian Church building" class="aspect-[4/3] w-full rounded-[1.6rem] object-cover">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%# ===== This Week's Events ===== %>
+<section class="border-y border-stone-200 bg-stone-100 py-20 md:py-28">
+  <div class="container mx-auto px-4">
+    <div class="mx-auto mb-12 max-w-2xl text-center" data-controller="reveal">
+      <span class="inline-block rounded-full bg-amber-700/10 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-800">Gather With Us</span>
+      <h2 class="font-marcellus mt-5 text-3xl text-stone-900 md:text-4xl">This Week's Events</h2>
+      <div class="mx-auto mt-5 h-px w-16 bg-amber-600"></div>
+    </div>
+
+    <% if @weekly_events.any? %>
+      <div class="mx-auto grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">
+        <% @weekly_events.each_with_index do |event, i| %>
+          <div data-controller="reveal" data-reveal-delay-value="<%= i * 100 %>">
+            <%= render "events/event_card", event: event %>
           </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="mx-auto max-w-md rounded-[2rem] bg-white p-10 text-center shadow-[0_24px_60px_-30px_rgba(68,64,60,0.35)] ring-1 ring-stone-900/5" data-controller="reveal">
+        <p class="font-marcellus text-xl text-stone-800">No events scheduled this week</p>
+        <p class="mt-2 text-stone-500">Check the calendar for what's ahead, and join us Sunday at 11:00 AM.</p>
+      </div>
+    <% end %>
 
-          <% if @weekly_events.any? %>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <% @weekly_events.each do |event| %>
-                <%= render "events/event_card", event: event %>
-              <% end %>
-            </div>
-          <% else %>
-            <p class="text-stone-600">No events scheduled this week.</p>
-          <% end %>
+    <div class="mt-12 flex justify-center" data-controller="reveal">
+      <%= link_to events_path, class: "group inline-flex items-center gap-2 rounded-full border border-stone-300 bg-white px-6 py-3 font-medium text-stone-700 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-stone-400 active:scale-[0.98]" do %>
+        <span>View all events</span>
+        <span class="transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-1">&rarr;</span>
+      <% end %>
+    </div>
+  </div>
+</section>
 
-          <div class="mt-6">
-            <%= link_to "View All Events &rarr;".html_safe, events_path, class: "text-amber-700 hover:text-amber-800 font-medium transition-colors" %>
-          </div>
-        </section>
+<%# ===== Birthdays + Worship invitation ===== %>
+<section class="bg-stone-50 py-20 md:py-28">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-5 lg:gap-10">
 
-        <section>
-          <div class="flex items-end gap-4 mb-6">
-          <h2 class="font-marcellus text-2xl text-stone-900 border-b-2 border-amber-500 pb-1">
-            <%= Date.current.strftime("%B") %> Birthdays
-          </h2>
-          </div>
-
+      <%# Birthdays %>
+      <div class="lg:col-span-3" data-controller="reveal">
+        <div class="h-full rounded-[2rem] bg-white p-8 shadow-[0_24px_60px_-30px_rgba(68,64,60,0.35)] ring-1 ring-stone-900/5 md:p-10">
+          <span class="inline-block rounded-full bg-amber-700/10 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-800">Celebrating</span>
+          <h2 class="font-marcellus mt-5 text-2xl text-stone-900 md:text-3xl"><%= Date.current.strftime("%B") %> Birthdays</h2>
+          <div class="mt-5 h-px w-16 bg-amber-600"></div>
           <% if @birthdays.any? %>
-            <ul class="divide-y divide-stone-200 max-w-lg">
+            <ul class="mt-6 divide-y divide-stone-100">
               <% @birthdays.each do |member| %>
-                <li class="py-3 flex justify-between items-center">
+                <li class="flex items-center justify-between py-3.5">
                   <span class="font-medium text-stone-800"><%= member.full_name %></span>
-                  <span class="text-stone-600 text-sm"><%= member.birthday_display %></span>
+                  <span class="text-sm text-stone-500"><%= member.birthday_display %></span>
                 </li>
               <% end %>
             </ul>
           <% else %>
-            <p class="text-stone-600">No birthdays this month.</p>
+            <p class="mt-6 text-stone-500">No birthdays this month.</p>
           <% end %>
-        </section>
+        </div>
+      </div>
+
+      <%# Worship invitation %>
+      <div class="lg:col-span-2" data-controller="reveal" data-reveal-delay-value="120">
+        <div class="relative h-full overflow-hidden rounded-[2rem] bg-stone-900 p-8 text-stone-200 shadow-[0_24px_60px_-30px_rgba(68,64,60,0.6)] md:p-10">
+          <div class="pointer-events-none absolute -bottom-20 -right-16 h-56 w-56 rounded-full bg-amber-500/20 blur-3xl"></div>
+          <div class="relative">
+            <span class="inline-block rounded-full bg-amber-500/15 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-300">Join Us</span>
+            <h2 class="font-marcellus mt-5 text-2xl text-white md:text-3xl">Worship This Week</h2>
+            <div class="mt-5 h-px w-16 bg-amber-500/60"></div>
+            <dl class="mt-6 space-y-4">
+              <div>
+                <dt class="text-xs font-semibold uppercase tracking-widest text-amber-300/80">Sunday</dt>
+                <dd class="text-stone-100">Worship Service &middot; 11:00 AM</dd>
+              </div>
+              <div>
+                <dt class="text-xs font-semibold uppercase tracking-widest text-amber-300/80">Wednesday</dt>
+                <dd class="text-stone-100">Bible Study &middot; 10:00 AM</dd>
+              </div>
+              <div>
+                <dt class="text-xs font-semibold uppercase tracking-widest text-amber-300/80">Where</dt>
+                <dd class="text-stone-100">640 Florida Ave, Port Allen, LA</dd>
+              </div>
+            </dl>
+            <%= link_to pages_contact_path, class: "group mt-8 inline-flex items-center gap-3 rounded-full bg-amber-600 py-2 pl-6 pr-2 font-medium text-white transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-amber-500 active:scale-[0.98]" do %>
+              <span>Get in touch</span>
+              <span class="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5">
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </span>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<%# ===== Scripture closing ===== %>
+<section class="relative overflow-hidden bg-stone-900">
+  <div class="absolute inset-0 opacity-20" style="background-image: url('/theme/stainedglass2.webp'); background-size: cover; background-position: center;"></div>
+  <div class="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/85 to-stone-900/70"></div>
+  <div class="container relative mx-auto px-4 py-24 md:py-32">
+    <div class="mx-auto max-w-3xl text-center" data-controller="reveal">
+      <span class="inline-block rounded-full bg-amber-500/15 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-300">A Word of Welcome</span>
+      <blockquote class="font-marcellus mt-8 text-3xl leading-snug text-white md:text-4xl lg:text-5xl text-balance">
+        &ldquo;I was glad when they said unto me, Let us go into the house of the&nbsp;Lord.&rdquo;
+      </blockquote>
+      <p class="mt-6 text-sm uppercase tracking-[0.3em] text-amber-300/80">Psalm 122:1</p>
+      <p class="mx-auto mt-8 max-w-xl text-lg leading-relaxed text-stone-300">
+        Come worship with us this Sunday. You'll find a warm welcome, a shared table,
+        and a community ready to walk alongside you.
+      </p>
+      <div class="mt-10">
+        <%= link_to pages_about_path, class: "group inline-flex items-center gap-3 rounded-full bg-white py-2 pl-6 pr-2 font-medium text-stone-900 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-amber-50 active:scale-[0.98]" do %>
+          <span>Plan Your Visit</span>
+          <span class="flex h-9 w-9 items-center justify-center rounded-full bg-amber-700 text-white transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        <% end %>
       </div>
     </div>
   </div>

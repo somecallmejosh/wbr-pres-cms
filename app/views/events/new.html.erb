@@ -1,9 +1,15 @@
-<div class="container mx-auto px-4 py-8">
-  <div class="mb-6">
-    <%= link_to "&larr; Back to Events".html_safe, events_path, class: "text-amber-700 hover:text-amber-800 transition-colors font-medium" %>
-  </div>
+<% content_for :title, "New Event — Admin" %>
 
-  <h1 class="font-marcellus text-4xl text-stone-900 mb-6">New Event</h1>
+<div class="container mx-auto max-w-3xl px-4 py-10 md:py-14">
+  <%= link_to events_path, class: "group inline-flex items-center gap-1.5 text-sm font-medium text-stone-500 transition-colors hover:text-amber-700" do %>
+    <svg class="size-4 transition-transform group-hover:-translate-x-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    Back to Events
+  <% end %>
+
+  <header class="mt-6 mb-8" data-controller="reveal">
+    <span class="eyebrow">Calendar</span>
+    <h1 class="font-marcellus mt-4 text-4xl text-stone-900">Add a new event</h1>
+  </header>
 
   <%= render "form", event: @event %>
 </div>

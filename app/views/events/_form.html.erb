@@ -1,90 +1,96 @@
-<%= form_with model: event, class: "" do |form| %>
-  <% if event.errors.any? %>
-    <div class="bg-red-50 border border-red-200 rounded-md p-4 mb-6">
-      <h2 class="font-semibold text-red-800"><%= pluralize(event.errors.count, "error") %> prevented this event from being saved:</h2>
-      <ul class="list-disc list-inside mt-2 text-red-700">
-        <% event.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+<%= form_with model: event do |form| %>
+  <%= render "shared/form_errors", record: event %>
 
-  <div class="grid grid-cols-1 gap-5 max-w-2xl">
-    <div>
-      <%= form.label :title, class: "block font-medium text-stone-700 mb-1" %>
-      <%= form.text_field :title, required: true, class: "block shadow-sm rounded-md border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 px-3 py-2 w-full" %>
-    </div>
+  <div class="admin-shell">
+    <div class="admin-core p-6 sm:p-8">
 
-    <div>
-      <%= form.label :description, class: "block font-medium text-stone-700 mb-1" %>
-      <%= form.text_area :description, rows: 4, class: "block shadow-sm rounded-md border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 px-3 py-2 w-full resize-y" %>
-    </div>
+      <section>
+        <h2 class="font-marcellus text-xl text-stone-900">Event details</h2>
+        <p class="mt-1 text-sm text-stone-500">Title, date, and category are required.</p>
 
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      <div>
-        <%= form.label :event_date, "Date", class: "block font-medium text-stone-700 mb-1" %>
-        <%= form.date_field :event_date, required: true, class: "block shadow-sm rounded-md border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 px-3 py-2 w-full" %>
-      </div>
-
-      <div>
-        <%= form.label :start_time, "Start Time", class: "block font-medium text-stone-700 mb-1" %>
-        <%= form.time_field :start_time, required: true, class: "block shadow-sm rounded-md border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 px-3 py-2 w-full" %>
-      </div>
-
-      <div>
-        <%= form.label :end_time, "End Time", class: "block font-medium text-stone-700 mb-1" %>
-        <%= form.time_field :end_time, class: "block shadow-sm rounded-md border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 px-3 py-2 w-full" %>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div>
-        <%= form.label :location, class: "block font-medium text-stone-700 mb-1" %>
-        <%= form.text_field :location, class: "block shadow-sm rounded-md border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 px-3 py-2 w-full" %>
-      </div>
-
-      <div>
-        <%= form.label :category, class: "block font-medium text-stone-700 mb-1" %>
-        <%= form.select :category, Event::CATEGORY_LABELS.map { |value, label| [label, value] }, { include_blank: "Select a category" }, required: true, class: "block shadow-sm rounded-md border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 px-3 py-2 w-full" %>
-      </div>
-    </div>
-  </div>
-
-  <% if @images.present? %>
-    <h2 class="font-marcellus text-xl text-stone-900 my-4">Select an Image For This Event</h2>
-    <div class="mt-5 max-w-5xl bg-stone-100 p-4 rounded-md max-h-[400px] overflow-auto">
-      <%= form.label :image_id, "Event Image", class: "block font-medium text-stone-700 mb-2" %>
-      <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
-        <label class="relative cursor-pointer">
-          <%= form.radio_button :image_id, "", class: "sr-only peer" %>
-          <div class="flex items-center justify-center h-full rounded-md border-2 border-stone-200 bg-stone-50 text-stone-400 text-xs text-center peer-checked:border-amber-500 peer-checked:bg-amber-50 hover:border-stone-300 transition-colors">
-            No image
+        <div class="mt-5 grid grid-cols-1 gap-5">
+          <div>
+            <%= form.label :title, class: "field-label" %>
+            <%= form.text_field :title, required: true, class: "field-input" %>
           </div>
-        </label>
-        <% @images.each do |image| %>
-          <label class="relative cursor-pointer">
-            <%= form.radio_button :image_id, image.id, class: "sr-only peer" %>
-            <div class="rounded-md border-2 border-stone-200 bg-stone-100 overflow-hidden peer-checked:border-red-500 peer-checked:border-4 hover:border-stone-300 transition-colors">
-              <img src="<%= image.thumbnail_url(width: 600, height: 600) %>"
-                   alt="<%= image.alt_text.presence || image.title.presence || "" %>"
-                   class="w-full h-full object-cover"
-                   loading="lazy">
+
+          <div>
+            <%= form.label :description, class: "field-label" %>
+            <%= form.text_area :description, rows: 4, class: "field-input resize-y" %>
+            <p class="field-hint">A short summary shown on the event page.</p>
+          </div>
+
+          <div class="grid grid-cols-1 gap-5 sm:grid-cols-3">
+            <div>
+              <%= form.label :event_date, "Date", class: "field-label" %>
+              <%= form.date_field :event_date, required: true, class: "field-input" %>
             </div>
 
-                    <div class="absolute top-2 right-2 size-8 rounded-full bg-red-600 text-white items-center justify-center hidden peer-checked:flex" aria-hidden="true">
-          <svg viewBox="0 0 20 20" fill="currentColor" class="size-5"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" /></svg>
-        </div>
-            <% if image.title.present? %>
-              <p class="mt-1 text-xs text-stone-600 truncate"><%= image.title %></p>
-            <% end %>
-          </label>
-        <% end %>
-      </div>
-    </div>
-  <% end %>
+            <div>
+              <%= form.label :start_time, "Start time", class: "field-label" %>
+              <%= form.time_field :start_time, required: true, class: "field-input" %>
+            </div>
 
-  <div class="mt-6">
-    <%= form.submit class: "rounded-md px-4 py-2.5 bg-stone-700 hover:bg-stone-600 text-white font-medium cursor-pointer transition-colors" %>
+            <div>
+              <%= form.label :end_time, "End time", class: "field-label" %>
+              <%= form.time_field :end_time, class: "field-input" %>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <div>
+              <%= form.label :location, class: "field-label" %>
+              <%= form.text_field :location, class: "field-input" %>
+            </div>
+
+            <div>
+              <%= form.label :category, class: "field-label" %>
+              <%= form.select :category, Event::CATEGORY_LABELS.map { |value, label| [label, value] }, { include_blank: "Select a category" }, required: true, class: "field-input" %>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <% if @images.present? %>
+        <hr class="my-8 border-stone-200">
+
+        <section>
+          <h2 class="font-marcellus text-xl text-stone-900">Event photo</h2>
+          <p class="mt-1 text-sm text-stone-500">Tap a photo to feature it on this event, or choose "No image".</p>
+
+          <%= form.label :image_id, "Event Image", class: "sr-only" %>
+          <div class="mt-5 max-h-[420px] overflow-auto rounded-2xl bg-stone-50 p-4 ring-1 ring-stone-900/5">
+            <div class="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5">
+              <label class="relative cursor-pointer">
+                <%= form.radio_button :image_id, "", class: "sr-only peer" %>
+                <div class="flex aspect-square items-center justify-center rounded-xl border-2 border-stone-200 bg-white text-center text-xs text-stone-400 transition-colors hover:border-stone-300 peer-checked:border-amber-500 peer-checked:bg-amber-50 peer-checked:text-amber-700 peer-focus-visible:ring-2 peer-focus-visible:ring-amber-400">
+                  No image
+                </div>
+              </label>
+              <% @images.each do |image| %>
+                <label class="relative cursor-pointer">
+                  <%= form.radio_button :image_id, image.id, class: "sr-only peer" %>
+                  <div class="overflow-hidden rounded-xl border-2 border-stone-200 bg-stone-100 transition-all hover:border-stone-300 peer-checked:border-amber-500 peer-checked:ring-2 peer-checked:ring-amber-400/60 peer-focus-visible:ring-2 peer-focus-visible:ring-amber-400">
+                    <img src="<%= image.thumbnail_url(width: 600, height: 600) %>"
+                         alt="<%= image.alt_text.presence || image.title.presence || "" %>"
+                         class="aspect-square w-full object-cover"
+                         loading="lazy">
+                  </div>
+                  <div class="absolute right-2 top-2 hidden size-7 items-center justify-center rounded-full bg-amber-600 text-white shadow-sm peer-checked:flex" aria-hidden="true">
+                    <svg viewBox="0 0 20 20" fill="currentColor" class="size-4"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" /></svg>
+                  </div>
+                  <% if image.title.present? %>
+                    <p class="mt-1 truncate text-xs text-stone-600"><%= image.title %></p>
+                  <% end %>
+                </label>
+              <% end %>
+            </div>
+          </div>
+        </section>
+      <% end %>
+
+      <%= render "shared/admin_action_bar", form: form, label: "Save event", cancel_path: events_path %>
+
+    </div>
   </div>
 <% end %>

@@ -1,0 +1,21 @@
+<%# Error summary shown at the top of admin forms.
+  locals:
+    record: an ActiveModel/ActiveRecord object that may have errors
+%>
+<% if record.errors.any? %>
+  <div class="mb-6 flex gap-3 rounded-2xl border border-red-200 bg-red-50 p-4" role="alert">
+    <svg class="mt-0.5 size-5 shrink-0 text-red-500" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+    <div>
+      <h2 class="font-semibold text-red-800">
+        Please fix <%= pluralize(record.errors.count, "thing") %> before saving:
+      </h2>
+      <ul class="mt-2 list-disc list-inside space-y-1 text-sm text-red-700">
+        <% record.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+<% end %>

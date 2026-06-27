@@ -1,75 +1,79 @@
-<%= form_with model: member, class: "max-w-2xl" do |form| %>
-  <% if member.errors.any? %>
-    <div class="bg-red-50 border border-red-200 rounded-md p-4 mb-6">
-      <h2 class="font-semibold text-red-800"><%= pluralize(member.errors.count, "error") %> prevented this member from being saved:</h2>
-      <ul class="list-disc list-inside mt-2 text-red-700">
-        <% member.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+<%= form_with model: member do |form| %>
+  <%= render "shared/form_errors", record: member %>
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-    <div>
-      <%= form.label :first_name, class: "block font-medium text-stone-700 mb-1" %>
-      <%= form.text_field :first_name, required: true, class: "block shadow-sm rounded-md border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 px-3 py-2 w-full" %>
-    </div>
+  <div class="admin-shell">
+    <div class="admin-core p-6 sm:p-8">
 
-    <div>
-      <%= form.label :last_name, class: "block font-medium text-stone-700 mb-1" %>
-      <%= form.text_field :last_name, required: true, class: "block shadow-sm rounded-md border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 px-3 py-2 w-full" %>
-    </div>
+      <section>
+        <h2 class="font-marcellus text-xl text-stone-900">Contact details</h2>
+        <p class="mt-1 text-sm text-stone-500">Name is required. Everything else is optional.</p>
 
-    <div>
-      <%= form.label :email, class: "block font-medium text-stone-700 mb-1" %>
-      <%= form.email_field :email, class: "block shadow-sm rounded-md border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 px-3 py-2 w-full" %>
-    </div>
+        <div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div>
+            <%= form.label :first_name, class: "field-label" %>
+            <%= form.text_field :first_name, required: true, class: "field-input" %>
+          </div>
 
-    <div>
-      <%= form.label :phone, class: "block font-medium text-stone-700 mb-1" %>
-      <%= form.telephone_field :phone, class: "block shadow-sm rounded-md border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 px-3 py-2 w-full" %>
-    </div>
+          <div>
+            <%= form.label :last_name, class: "field-label" %>
+            <%= form.text_field :last_name, required: true, class: "field-input" %>
+          </div>
 
-    <div>
-      <%= form.label :date_of_birth, class: "block font-medium text-stone-700 mb-1" %>
-      <%= form.date_field :date_of_birth, class: "block shadow-sm rounded-md border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 px-3 py-2 w-full" %>
-    </div>
-  </div>
+          <div>
+            <%= form.label :email, class: "field-label" %>
+            <%= form.email_field :email, class: "field-input" %>
+          </div>
 
-  <fieldset class="mt-6">
-    <legend class="font-medium text-stone-700 mb-3">Address</legend>
-    <div class="grid grid-cols-1 gap-4">
-      <div>
-        <%= form.label :address_line1, "Address Line 1", class: "block font-medium text-stone-700 mb-1" %>
-        <%= form.text_field :address_line1, class: "block shadow-sm rounded-md border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 px-3 py-2 w-full" %>
-      </div>
+          <div>
+            <%= form.label :phone, class: "field-label" %>
+            <%= form.telephone_field :phone, class: "field-input" %>
+          </div>
 
-      <div>
-        <%= form.label :address_line2, "Address Line 2", class: "block font-medium text-stone-700 mb-1" %>
-        <%= form.text_field :address_line2, class: "block shadow-sm rounded-md border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 px-3 py-2 w-full" %>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div>
-          <%= form.label :city, class: "block font-medium text-stone-700 mb-1" %>
-          <%= form.text_field :city, class: "block shadow-sm rounded-md border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 px-3 py-2 w-full" %>
+          <div>
+            <%= form.label :date_of_birth, "Date of birth", class: "field-label" %>
+            <%= form.date_field :date_of_birth, class: "field-input" %>
+          </div>
         </div>
+      </section>
 
-        <div>
-          <%= form.label :state, class: "block font-medium text-stone-700 mb-1" %>
-          <%= form.text_field :state, maxlength: 2, placeholder: "XX", class: "block shadow-sm rounded-md border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 px-3 py-2 w-full" %>
-        </div>
+      <hr class="my-8 border-stone-200">
 
-        <div>
-          <%= form.label :zip_code, "Zip Code", class: "block font-medium text-stone-700 mb-1" %>
-          <%= form.text_field :zip_code, placeholder: "12345", class: "block shadow-sm rounded-md border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 px-3 py-2 w-full" %>
+      <section>
+        <h2 class="font-marcellus text-xl text-stone-900">Address</h2>
+        <p class="mt-1 text-sm text-stone-500">Where this member lives. Leave blank if you don't have it.</p>
+
+        <div class="mt-5 grid grid-cols-1 gap-5">
+          <div>
+            <%= form.label :address_line1, "Address line 1", class: "field-label" %>
+            <%= form.text_field :address_line1, class: "field-input" %>
+          </div>
+
+          <div>
+            <%= form.label :address_line2, "Address line 2", class: "field-label" %>
+            <%= form.text_field :address_line2, class: "field-input" %>
+          </div>
+
+          <div class="grid grid-cols-1 gap-5 sm:grid-cols-3">
+            <div>
+              <%= form.label :city, class: "field-label" %>
+              <%= form.text_field :city, class: "field-input" %>
+            </div>
+
+            <div>
+              <%= form.label :state, class: "field-label" %>
+              <%= form.text_field :state, maxlength: 2, placeholder: "XX", class: "field-input uppercase" %>
+            </div>
+
+            <div>
+              <%= form.label :zip_code, "Zip code", class: "field-label" %>
+              <%= form.text_field :zip_code, placeholder: "12345", class: "field-input" %>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
+
+      <%= render "shared/admin_action_bar", form: form, label: "Save member", cancel_path: members_path %>
+
     </div>
-  </fieldset>
-
-  <div class="mt-6">
-    <%= form.submit class: "rounded-md px-4 py-2.5 bg-stone-700 hover:bg-stone-600 text-white font-medium cursor-pointer transition-colors" %>
   </div>
 <% end %>

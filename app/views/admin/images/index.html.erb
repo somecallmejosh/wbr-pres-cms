@@ -1,25 +1,37 @@
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-  <div class="flex items-center justify-between mb-6">
-    <h1 class="font-marcellus text-3xl text-stone-900">Image Library</h1>
-    <div class="flex items-center gap-3">
-      <%= button_to "Sync with Cloudinary", sync_admin_images_path,
-            method: :post,
-            class: "inline-flex items-center px-4 py-2 bg-white border border-stone-300 text-stone-700 text-sm font-medium rounded-md hover:bg-stone-50 cursor-pointer transition-colors",
-            title: "Fetch any images added directly to Cloudinary" %>
-      <%= link_to "Upload Images", new_admin_image_path, class: "inline-flex items-center px-4 py-2 bg-stone-700 text-white text-sm font-medium rounded-md hover:bg-stone-600 transition-colors" %>
-    </div>
-  </div>
+<% content_for :title, "Image Library — Admin" %>
 
+<%= render "shared/page_header",
+      eyebrow: "Media",
+      title: "Image Library",
+      subtitle: "Every photo available to use in events and galleries. #{pluralize(@images.size, 'photo')}.",
+      action: content_tag(:div, class: "flex flex-wrap gap-2") {
+        safe_join([
+          button_to("Sync with Cloudinary", sync_admin_images_path, method: :post, class: "btn-secondary", title: "Fetch any images added directly to Cloudinary"),
+          link_to(new_admin_image_path, class: "btn-primary") {
+            '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Upload Photos'.html_safe
+          }
+        ])
+      } %>
+
+<div class="container mx-auto px-4 py-10 md:py-14">
   <% if @images.any? %>
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+    <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5" data-controller="reveal">
       <% @images.each do |image| %>
         <%= render "admin/images/image_thumbnail", image: image %>
       <% end %>
     </div>
   <% else %>
-    <div class="text-center py-16 text-stone-600">
-      <p class="text-lg">No images yet.</p>
-      <p class="mt-1 text-sm">Upload images or sync from Cloudinary to get started.</p>
+    <div class="admin-shell mx-auto max-w-xl" data-controller="reveal">
+      <div class="admin-core flex flex-col items-center gap-4 px-6 py-16 text-center">
+        <div class="flex size-14 items-center justify-center rounded-2xl bg-amber-100 text-amber-700">
+          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        </div>
+        <div>
+          <p class="font-marcellus text-xl text-stone-900">No photos yet</p>
+          <p class="mt-1 text-sm text-stone-500">Upload photos, or sync the ones already in Cloudinary.</p>
+        </div>
+        <%= link_to "Upload your first photos", new_admin_image_path, class: "btn-primary mt-2" %>
+      </div>
     </div>
   <% end %>
 </div>

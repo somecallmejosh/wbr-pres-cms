@@ -1,0 +1,30 @@
+<%#
+  Editorial page header for inside pages.
+  locals:
+    eyebrow:  short kicker text (required)
+    title:    serif headline (required)
+    subtitle: optional supporting line
+    action:   optional html_safe markup pinned to the right (e.g. an admin button)
+%>
+<section class="relative overflow-hidden border-b border-stone-200 bg-gradient-to-b from-stone-100 to-stone-50">
+  <div class="pointer-events-none absolute -top-24 -right-16 h-72 w-72 rounded-full bg-amber-500/10 blur-3xl"></div>
+  <div class="container relative mx-auto px-4 py-16 md:py-20">
+    <div class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between" data-controller="reveal">
+      <div class="max-w-2xl">
+        <span class="inline-block rounded-full bg-amber-700/10 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-800">
+          <%= eyebrow %>
+        </span>
+        <h1 class="font-marcellus mt-5 text-4xl leading-[1.1] text-stone-900 md:text-5xl text-balance">
+          <%= title %>
+        </h1>
+        <div class="mt-5 h-px w-16 bg-amber-600"></div>
+        <% if local_assigns[:subtitle].present? %>
+          <p class="mt-5 text-lg leading-relaxed text-stone-600"><%= subtitle %></p>
+        <% end %>
+      </div>
+      <% if local_assigns[:action].present? %>
+        <div class="shrink-0"><%= action %></div>
+      <% end %>
+    </div>
+  </div>
+</section>

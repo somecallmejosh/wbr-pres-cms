@@ -1,37 +1,46 @@
-<%= form_with model: gallery, class: "max-w-2xl" do |form| %>
-  <% if gallery.errors.any? %>
-    <div class="bg-red-50 border border-red-200 rounded-md p-4 mb-6" role="alert">
-      <h2 class="font-semibold text-red-800"><%= pluralize(gallery.errors.count, "error") %> prevented this gallery from being saved:</h2>
-      <ul class="list-disc list-inside mt-2 text-red-700">
-        <% gallery.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+<%= form_with model: gallery do |form| %>
+  <%= render "shared/form_errors", record: gallery %>
 
-  <div class="grid grid-cols-1 gap-5">
-    <div>
-      <%= form.label :title, class: "block font-medium text-stone-700 mb-1" %>
-      <%= form.text_field :title, required: true, class: "block shadow-sm rounded-md border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 px-3 py-2 w-full" %>
-    </div>
+  <div class="admin-shell">
+    <div class="admin-core p-6 sm:p-8">
 
-    <div>
-      <%= form.label :description, class: "block font-medium text-stone-700 mb-1" %>
-      <%= form.text_area :description, rows: 4, class: "block shadow-sm rounded-md border border-stone-300 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 px-3 py-2 w-full resize-y" %>
-    </div>
+      <section>
+        <h2 class="font-marcellus text-xl text-stone-900">Gallery details</h2>
+        <p class="mt-1 text-sm text-stone-500">Give the album a title, then pick the photos below.</p>
 
-    <div class="flex items-center gap-3">
-      <%= form.check_box :published, class: "rounded border-stone-300 text-stone-800 focus:ring-amber-400 size-4" %>
-      <%= form.label :published, "Published (visible to the public)", class: "font-medium text-stone-700" %>
+        <div class="mt-5 grid grid-cols-1 gap-5">
+          <div>
+            <%= form.label :title, class: "field-label" %>
+            <%= form.text_field :title, required: true, class: "field-input" %>
+          </div>
+
+          <div>
+            <%= form.label :description, class: "field-label" %>
+            <%= form.text_area :description, rows: 4, class: "field-input resize-y" %>
+          </div>
+
+          <%# Published toggle as a clear, labeled control %>
+          <label class="flex cursor-pointer items-start gap-3 rounded-2xl border border-stone-200 bg-stone-50 p-4 transition-colors has-[:checked]:border-amber-300 has-[:checked]:bg-amber-50/60">
+            <%= form.check_box :published, class: "mt-0.5 size-5 rounded border-stone-300 text-amber-700 focus:ring-amber-400" %>
+            <span>
+              <span class="block font-medium text-stone-800">Published</span>
+              <span class="block text-sm text-stone-500">When on, this gallery is visible to the public. Leave off to keep it as a draft.</span>
+            </span>
+          </label>
+        </div>
+      </section>
+
+      <% if @images.present? %>
+        <hr class="my-8 border-stone-200">
+        <section>
+          <h2 class="font-marcellus text-xl text-stone-900">Choose photos</h2>
+          <p class="mt-1 text-sm text-stone-500">Tap any photo to add or remove it from this gallery.</p>
+          <%= render "galleries/image_picker", selected_ids: gallery.images.pluck(:id) %>
+        </section>
+      <% end %>
+
+      <%= render "shared/admin_action_bar", form: form, label: "Save gallery", cancel_path: galleries_path %>
+
     </div>
   </div>
-
-  <div class="mt-6">
-    <%= form.submit class: "rounded-md px-4 py-2.5 bg-stone-700 hover:bg-stone-600 text-white font-medium cursor-pointer transition-colors" %>
-  </div>
-
-  <% if @images.present? %>
-    <%= render "galleries/image_picker", selected_ids: gallery.images.pluck(:id) %>
-  <% end %>
 <% end %>

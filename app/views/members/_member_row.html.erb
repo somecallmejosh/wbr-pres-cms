@@ -1,11 +1,15 @@
-<tr class="border-b border-stone-200 hover:bg-amber-50 transition-colors">
-  <td class="py-3 px-4">
-    <%= link_to member.full_name, member_path(member), class: "text-amber-700 hover:text-amber-800 font-medium transition-colors" %>
+<tr class="border-b border-stone-100 transition-colors last:border-0 hover:bg-amber-50/60">
+  <td class="px-6 py-4">
+    <%= link_to member.full_name, member_path(member), class: "font-medium text-stone-900 transition-colors hover:text-amber-700" %>
+    <div class="mt-0.5 text-sm text-stone-500 sm:hidden"><%= member.email %></div>
   </td>
-  <td class="py-3 px-4 hidden sm:table-cell text-stone-700"><%= member.email %></td>
-  <td class="py-3 px-4 hidden md:table-cell text-stone-700"><%= member.phone %></td>
-  <td class="py-3 px-4 hidden lg:table-cell text-stone-700"><%= member.birthday_display %></td>
-  <td class="py-3 px-4">
-    <%= link_to "Edit", edit_member_path(member), class: "text-amber-700 hover:text-amber-800 font-medium transition-colors" %>
+  <td class="hidden px-6 py-4 text-stone-600 sm:table-cell"><%= member.email %></td>
+  <td class="hidden px-6 py-4 text-stone-600 md:table-cell"><%= member.phone %></td>
+  <td class="hidden px-6 py-4 text-stone-600 lg:table-cell"><%= member.birthday_display %></td>
+  <td class="px-6 py-4 text-right">
+    <%= link_to edit_member_path(member), class: "inline-flex items-center gap-1.5 rounded-full bg-stone-100 px-3.5 py-1.5 text-sm font-medium text-stone-700 transition-colors hover:bg-amber-100 hover:text-amber-800" do %>
+      <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Edit
+    <% end %>
   </td>
 </tr>

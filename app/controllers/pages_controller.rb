@@ -36,5 +36,9 @@ class PagesController < ApplicationController
   end
 
   def dashboard
+    @upcoming_events = Event.upcoming.count
+    @gallery_count = Gallery.count
+    @member_count = Member.count
+    @photo_count = Image.count
   end
 end

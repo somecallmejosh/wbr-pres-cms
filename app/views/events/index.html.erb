@@ -1,26 +1,31 @@
 <% content_for :title, "Events — West Baton Rouge Presbyterian Church" %>
-<div class="container mx-auto px-4 py-8">
-  <div class="flex items-center justify-between mb-6">
-    <h1 class="font-marcellus text-4xl text-stone-900">Events</h1>
-    <% if authenticated? %>
-      <%= link_to "New Event", new_event_path, class: "rounded-md px-4 py-2 bg-stone-700 hover:bg-stone-600 text-white font-medium transition-colors" %>
-    <% end %>
-  </div>
 
-  <div class="flex flex-wrap gap-2 mb-8" role="group" aria-label="Filter events by category">
-    <%= link_to "All", events_path, class: "rounded-full px-4 py-1.5 text-sm font-medium transition-colors #{params[:category].blank? ? 'bg-stone-800 text-white' : 'bg-stone-100 text-stone-700 hover:bg-stone-200'}", aria: { current: params[:category].blank? ? "true" : false } %>
+<%= render "shared/page_header",
+      eyebrow: "Gather With Us",
+      title: "Events",
+      subtitle: "Worship, study, fellowship, and service — there's always something happening in our church family.",
+      action: (authenticated? ? link_to("New Event", new_event_path, class: "inline-flex items-center rounded-full bg-stone-800 px-5 py-2.5 font-medium text-white transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-stone-700 active:scale-[0.98]") : nil) %>
+
+<div class="container mx-auto px-4 py-14 md:py-16">
+  <div class="mb-10 flex flex-wrap gap-2" role="group" aria-label="Filter events by category">
+    <%= link_to "All", events_path, class: "rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] #{params[:category].blank? ? 'bg-stone-800 text-white shadow-sm' : 'bg-white text-stone-600 ring-1 ring-stone-900/5 hover:bg-stone-100'}", aria: { current: params[:category].blank? ? "true" : false } %>
     <% Event::CATEGORY_LABELS.each do |value, label| %>
-      <%= link_to label, events_path(category: value), class: "rounded-full px-4 py-1.5 text-sm font-medium transition-colors #{params[:category] == value ? 'bg-stone-800 text-white' : 'bg-stone-100 text-stone-700 hover:bg-stone-200'}", aria: { current: params[:category] == value ? "true" : false } %>
+      <%= link_to label, events_path(category: value), class: "rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] #{params[:category] == value ? 'bg-stone-800 text-white shadow-sm' : 'bg-white text-stone-600 ring-1 ring-stone-900/5 hover:bg-stone-100'}", aria: { current: params[:category] == value ? "true" : false } %>
     <% end %>
   </div>
 
   <% if @events.any? %>
-    <div class="grid lg:grid-cols-3 gap-6">
-      <% @events.each do |event| %>
-        <%= render "events/event_row", event: event %>
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <% @events.each_with_index do |event, i| %>
+        <div data-controller="reveal" data-reveal-delay-value="<%= (i % 3) * 90 %>">
+          <%= render "events/event_row", event: event %>
+        </div>
       <% end %>
     </div>
   <% else %>
-    <p class="text-stone-600">No upcoming events.</p>
+    <div class="mx-auto max-w-md rounded-[2rem] bg-white p-10 text-center shadow-[0_24px_60px_-30px_rgba(68,64,60,0.35)] ring-1 ring-stone-900/5">
+      <p class="font-marcellus text-xl text-stone-800">No upcoming events</p>
+      <p class="mt-2 text-stone-500">There's nothing on the calendar just yet — but you're always welcome to join us Sunday at 11:00 AM.</p>
+    </div>
   <% end %>
 </div>

@@ -1,19 +1,24 @@
 <% content_for :title, "Photo Galleries — West Baton Rouge Presbyterian Church" %>
-<div class="container mx-auto px-4 py-8">
-  <div class="flex items-center justify-between mb-6">
-    <h1 class="font-marcellus text-4xl text-stone-900">Photo Galleries</h1>
-    <% if authenticated? %>
-      <%= link_to "New Gallery", new_gallery_path, class: "rounded-md px-4 py-2 bg-stone-700 hover:bg-stone-600 text-white font-medium transition-colors" %>
-    <% end %>
-  </div>
 
+<%= render "shared/page_header",
+      eyebrow: "Moments Together",
+      title: "Photo Galleries",
+      subtitle: "Glimpses of worship, fellowship, and the life we share as a congregation.",
+      action: (authenticated? ? link_to("New Gallery", new_gallery_path, class: "inline-flex items-center rounded-full bg-stone-800 px-5 py-2.5 font-medium text-white transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-stone-700 active:scale-[0.98]") : nil) %>
+
+<div class="container mx-auto px-4 py-14 md:py-16">
   <% if @galleries.any? %>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <% @galleries.each do |gallery| %>
-        <%= render "galleries/gallery_card", gallery: gallery %>
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <% @galleries.each_with_index do |gallery, i| %>
+        <div data-controller="reveal" data-reveal-delay-value="<%= (i % 3) * 90 %>">
+          <%= render "galleries/gallery_card", gallery: gallery %>
+        </div>
       <% end %>
     </div>
   <% else %>
-    <p class="text-stone-600">No galleries available.</p>
+    <div class="mx-auto max-w-md rounded-[2rem] bg-white p-10 text-center shadow-[0_24px_60px_-30px_rgba(68,64,60,0.35)] ring-1 ring-stone-900/5">
+      <p class="font-marcellus text-xl text-stone-800">No galleries yet</p>
+      <p class="mt-2 text-stone-500">Photos from our gatherings will appear here soon.</p>
+    </div>
   <% end %>
 </div>

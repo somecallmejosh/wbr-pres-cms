@@ -1,0 +1,10 @@
+<%# Consistent save / cancel footer for admin forms.
+  locals:
+    form:        the form builder (required)
+    label:       submit button text (required)
+    cancel_path: where the Cancel link goes (required)
+%>
+<div class="mt-8 flex flex-col-reverse gap-3 border-t border-stone-200 pt-6 sm:flex-row sm:items-center sm:justify-end">
+  <%= link_to "Cancel", cancel_path, class: "btn-ghost w-full sm:w-auto" %>
+  <%= form.submit label, class: "btn-primary w-full sm:w-auto" %>
+</div>

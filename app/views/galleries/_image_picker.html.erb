@@ -1,25 +1,25 @@
-<fieldset class="mt-6 max-h-[400px] overflow-auto bg-stone-50 p-4 rounded-md border border-stone-200">
-  <legend class="block font-semibold text-stone-700 mb-2">Gallery Images</legend>
-  <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3" role="group" aria-label="Select images for this gallery">
+<fieldset class="mt-5 max-h-[420px] overflow-auto rounded-2xl bg-stone-50 p-4 ring-1 ring-stone-900/5">
+  <legend class="sr-only">Gallery Images</legend>
+  <div class="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5" role="group" aria-label="Select images for this gallery">
     <% @images.each do |image| %>
-      <label class="relative cursor-pointer group">
+      <label class="group relative cursor-pointer">
         <input type="checkbox"
                name="image_ids[]"
                value="<%= image.id %>"
                class="sr-only peer"
                <%= "checked" if selected_ids.include?(image.id) %>
                aria-label="<%= image.title.presence || image.cloudinary_public_id %>">
-        <div class="h-24 rounded-md border-2 border-stone-200 overflow-hidden peer-checked:border-red-500 peer-checked:border-4 hover:border-stone-300 peer-focus-visible:ring-2 peer-focus-visible:ring-amber-500 peer-focus-visible:ring-offset-2 transition-colors">
+        <div class="aspect-square overflow-hidden rounded-xl border-2 border-stone-200 transition-all hover:border-stone-300 peer-checked:border-amber-500 peer-checked:ring-2 peer-checked:ring-amber-400/60 peer-focus-visible:ring-2 peer-focus-visible:ring-amber-400 peer-focus-visible:ring-offset-2">
           <img src="<%= image.thumbnail_url(width: 200, height: 200) %>"
                alt=""
                aria-hidden="true"
-               class="w-full h-full object-cover">
+               class="h-full w-full object-cover">
         </div>
-        <div class="absolute top-1 right-1 size-8 rounded-full bg-red-600 text-white items-center justify-center hidden peer-checked:flex" aria-hidden="true">
-          <svg viewBox="0 0 20 20" fill="currentColor" class="size-5"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" /></svg>
+        <div class="absolute right-1.5 top-1.5 hidden size-7 items-center justify-center rounded-full bg-amber-600 text-white shadow-sm peer-checked:flex" aria-hidden="true">
+          <svg viewBox="0 0 20 20" fill="currentColor" class="size-4"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" /></svg>
         </div>
         <% if image.title.present? %>
-          <p class="mt-1 text-xs text-stone-600 truncate"><%= image.title %></p>
+          <p class="mt-1 truncate text-xs text-stone-600"><%= image.title %></p>
         <% end %>
       </label>
     <% end %>

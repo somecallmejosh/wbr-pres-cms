@@ -4,4 +4,68 @@
 @theme {
   --font-sans: 'Noto Sans', ui-sans-serif, system-ui, sans-serif;
   --font-marcellus: 'Marcellus', ui-serif, Georgia, serif;
+  --ease-fluid: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* ---------------------------------------------------------------------------
+ * Admin design system
+ * Reusable component classes shared across the admin dashboard + CRUD pages.
+ * Warm light palette (stone/amber), soft diffused shadows, large friendly
+ * targets. Keeps view markup readable and every form visually identical.
+ * ------------------------------------------------------------------------- */
+@layer components {
+  /* Double-Bezel: a physical "glass plate in an aluminium tray" enclosure. */
+  .admin-shell {
+    @apply rounded-[1.75rem] bg-white p-1.5 ring-1 ring-stone-900/5
+           shadow-[0_18px_50px_-24px_rgba(68,64,60,0.35)];
+  }
+  .admin-core {
+    @apply rounded-[calc(1.75rem-0.375rem)] bg-white
+           shadow-[inset_0_1px_1px_rgba(255,255,255,0.6)];
+  }
+
+  /* Eyebrow kicker tag. */
+  .eyebrow {
+    @apply inline-block rounded-full bg-amber-700/10 px-3 py-1 text-[11px]
+           font-medium uppercase tracking-[0.25em] text-amber-800;
+  }
+
+  /* Form fields. */
+  .field-label {
+    @apply block text-sm font-medium text-stone-700 mb-1.5;
+  }
+  .field-input {
+    @apply block w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2.5
+           text-stone-900 shadow-sm transition placeholder:text-stone-400
+           focus:border-amber-400 focus:ring-2 focus:ring-amber-400/60 focus:outline-none;
+    transition-timing-function: var(--ease-fluid);
+  }
+  .field-hint {
+    @apply mt-1.5 text-xs text-stone-500;
+  }
+
+  /* Buttons — fully rounded "island" pills with a gentle press. */
+  .btn,
+  .btn-primary,
+  .btn-secondary,
+  .btn-danger,
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5
+           text-sm font-medium cursor-pointer transition
+           active:scale-[0.98] focus:outline-none focus-visible:ring-2
+           focus-visible:ring-offset-2 focus-visible:ring-amber-400;
+    transition-timing-function: var(--ease-fluid);
+  }
+  .btn-primary {
+    @apply bg-amber-700 text-white shadow-sm hover:bg-amber-800;
+  }
+  .btn-secondary {
+    @apply bg-white text-stone-700 ring-1 ring-stone-300 hover:ring-stone-400 hover:text-stone-900;
+  }
+  .btn-danger {
+    @apply bg-red-700 text-white hover:bg-red-800;
+  }
+  .btn-ghost {
+    @apply text-stone-600 hover:text-stone-900 hover:bg-stone-100;
+  }
 }

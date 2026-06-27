@@ -1,29 +1,28 @@
-<div class="bg-white flex flex-col relative group transition-all hover:shadow-lg duration-200">
-        <% if event.image.present? %>
-        <img src="<%= event.image.display_url(width: 800) %>"
-             alt=""
-             aria-hidden="true"
-             class="w-full aspect-[16/9] object-cover"
-             loading="lazy">
-        <% else %>
-        <div class="w-full aspect-[16/9] bg-stone-200 flex items-center justify-center text-stone-400 text-sm" aria-hidden="true">
-          No image
-        </div>
-      <% end %>
-  <div class="p-4 flex-1">
-    <div class="flex items-center justify-between mb-2">
-      <span class="text-sm text-stone-600"><%= full_date_ordinal(event.event_date) %></span>
-    </div>
-    <h3 class="font-marcellus text-lg text-stone-900 mb-1 group-hover:text-amber-700 transition-colors">
+<div class="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white ring-1 ring-stone-900/5 shadow-[0_12px_30px_-18px_rgba(68,64,60,0.45)] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-1 hover:shadow-[0_28px_60px_-28px_rgba(68,64,60,0.55)]">
+  <div class="overflow-hidden">
+    <% if event.image.present? %>
+      <img src="<%= event.image.display_url(width: 800) %>"
+           alt=""
+           aria-hidden="true"
+           class="aspect-[16/9] w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-[1.04]"
+           loading="lazy">
+    <% else %>
+      <div class="flex aspect-[16/9] w-full items-center justify-center bg-stone-100 text-sm text-stone-400" aria-hidden="true">
+        No image
+      </div>
+    <% end %>
+  </div>
+  <div class="flex flex-1 flex-col p-5">
+    <span class="text-xs font-semibold uppercase tracking-widest text-amber-700"><%= full_date_ordinal(event.event_date) %></span>
+    <h3 class="font-marcellus mt-1.5 text-lg text-stone-900 transition-colors group-hover:text-amber-700">
       <%= event.title %>
     </h3>
-    <p class="text-sm text-stone-600"><%= event_time_range(event) %></p>
+    <p class="mt-1 text-sm text-stone-500"><%= event_time_range(event) %></p>
     <% if event.location.present? %>
-      <p class="text-sm text-stone-600"><%= event.location %></p>
+      <p class="text-sm text-stone-500"><%= event.location %></p>
     <% end %>
-
   </div>
-  <%= link_to event_path(event), class: "absolute inset-0 block" do %>
+  <%= link_to event_path(event), class: "absolute inset-0 block focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 rounded-2xl" do %>
     <span class="sr-only"><%= event.title %></span>
   <% end %>
 </div>

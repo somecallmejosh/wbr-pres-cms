@@ -1,35 +1,54 @@
-<div class="max-w-lg mx-auto px-4 sm:px-6 lg:px-8 py-8">
-  <div class="mb-6">
-    <h1 class="font-marcellus text-3xl text-stone-900">Upload Images</h1>
-    <p class="mt-1 text-sm text-stone-600">Select up to 20 images at once. Accepted formats: JPG, JPEG, PNG, WebP, GIF</p>
-  </div>
+<% content_for :title, "Upload Photos — Admin" %>
+
+<div class="container mx-auto max-w-xl px-4 py-10 md:py-14">
+  <%= link_to admin_images_path, class: "group inline-flex items-center gap-1.5 text-sm font-medium text-stone-500 transition-colors hover:text-amber-700" do %>
+    <svg class="size-4 transition-transform group-hover:-translate-x-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    Back to Image Library
+  <% end %>
+
+  <header class="mt-6 mb-8" data-controller="reveal">
+    <span class="eyebrow">Media</span>
+    <h1 class="font-marcellus mt-4 text-4xl text-stone-900">Upload photos</h1>
+    <p class="mt-3 text-stone-500">Add up to 20 photos at once. Accepted formats: JPG, PNG, WebP, and GIF.</p>
+  </header>
 
   <% if flash[:alert] %>
-    <div class="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-md text-sm" role="alert">
-      <%= flash[:alert] %>
+    <div class="mb-6 flex gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700" role="alert">
+      <svg class="mt-0.5 size-5 shrink-0 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span><%= flash[:alert] %></span>
     </div>
   <% end %>
 
-  <%= form_with url: admin_images_path, method: :post, multipart: true, class: "space-y-5" do |f| %>
-    <div>
-      <label for="files" class="block text-sm font-medium text-stone-700 mb-1">
-        Image Files <span class="text-red-500" aria-hidden="true">*</span>
-        <span class="sr-only">(required)</span>
-      </label>
-      <input type="file"
-             name="files[]"
-             id="files"
-             accept="image/jpeg,image/png,image/webp,image/gif"
-             multiple
-             required
-             aria-describedby="files-hint"
-             class="block w-full text-sm text-stone-600 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-medium file:bg-stone-100 file:text-stone-800 hover:file:bg-stone-200 cursor-pointer">
-      <p id="files-hint" class="mt-1 text-xs text-stone-400">Hold Shift or Ctrl/Cmd to select multiple files (up to 20)</p>
-    </div>
+  <div class="admin-shell" data-controller="reveal" data-reveal-delay-value="80">
+    <div class="admin-core p-6 sm:p-8">
+      <%= form_with url: admin_images_path, method: :post, multipart: true, class: "space-y-6" do |f| %>
+        <div>
+          <label for="files" class="group flex cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-stone-300 bg-stone-50 px-6 py-12 text-center transition-colors hover:border-amber-400 hover:bg-amber-50/50">
+            <span class="flex size-12 items-center justify-center rounded-2xl bg-amber-100 text-amber-700 transition-colors group-hover:bg-amber-200">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+            </span>
+            <span class="font-medium text-stone-800">Choose photos to upload
+              <span class="text-red-500" aria-hidden="true">*</span>
+              <span class="sr-only">(required)</span>
+            </span>
+            <span class="text-sm text-stone-500">Click here, then select one or more photos from your device.</span>
+          </label>
+          <input type="file"
+                 name="files[]"
+                 id="files"
+                 accept="image/jpeg,image/png,image/webp,image/gif"
+                 multiple
+                 required
+                 aria-describedby="files-hint"
+                 class="mt-4 block w-full cursor-pointer text-sm text-stone-600 file:mr-4 file:rounded-full file:border-0 file:bg-stone-100 file:px-4 file:py-2 file:text-sm file:font-medium file:text-stone-800 hover:file:bg-stone-200">
+          <p id="files-hint" class="field-hint">Hold Shift or Ctrl/Cmd to select several photos at once (up to 20).</p>
+        </div>
 
-    <div class="flex items-center gap-3 pt-2">
-      <%= f.submit "Upload", class: "px-4 py-2 bg-stone-700 text-white text-sm font-medium rounded-md hover:bg-stone-600 cursor-pointer transition-colors" %>
-      <%= link_to "Cancel", admin_images_path, class: "px-4 py-2 text-sm font-medium text-stone-600 hover:text-stone-900 transition-colors" %>
+        <div class="flex flex-col-reverse gap-3 border-t border-stone-200 pt-6 sm:flex-row sm:items-center sm:justify-end">
+          <%= link_to "Cancel", admin_images_path, class: "btn-ghost w-full sm:w-auto" %>
+          <%= f.submit "Upload photos", class: "btn-primary w-full sm:w-auto" %>
+        </div>
+      <% end %>
     </div>
-  <% end %>
+  </div>
 </div>

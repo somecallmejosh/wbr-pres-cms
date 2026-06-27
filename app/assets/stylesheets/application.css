@@ -13,3 +13,39 @@
 [x-cloak] {
   display: none !important;
 }
+
+/* ---------------------------------------------------------------------------
+ * Motion tokens + scroll reveal
+ * A single fluid easing curve (mass + spring feel) used across the public site,
+ * and the progressive-enhancement classes applied by reveal_controller.js.
+ * ------------------------------------------------------------------------- */
+:root {
+  --ease-fluid: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.reveal-init {
+  opacity: 0;
+  transform: translateY(1.75rem);
+}
+
+.reveal-active {
+  transition:
+    opacity 0.9s var(--ease-fluid),
+    transform 0.9s var(--ease-fluid);
+  will-change: opacity, transform;
+}
+
+.reveal-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-init,
+  .reveal-active,
+  .reveal-in {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

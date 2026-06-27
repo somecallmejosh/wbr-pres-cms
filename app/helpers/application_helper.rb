@@ -51,6 +51,73 @@ module ApplicationHelper
     CLOSING_VERSES["#{controller_path}##{action_name}"]
   end
 
+  # ---------------------------------------------------------------------------
+  # Social sharing (Open Graph / Twitter) + JSON-LD structured data.
+  # ---------------------------------------------------------------------------
+
+  # The church's one-line elevator pitch — the default share description and the
+  # `description` in the baseline JSON-LD.
+  SITE_DESCRIPTION =
+    "West Baton Rouge Presbyterian Church in Port Allen, Louisiana — a welcoming family of " \
+    "faith. Join us for worship every Sunday at 11:00 AM.".freeze
+
+  # Fallback share image (the sanctuary). Used for the home page and any page
+  # without its own representative photo.
+  SITE_OG_IMAGE_ID = "wbr-pres-cms/image012".freeze
+
+  # Absolute, social-card-sized share image for a raw Cloudinary public_id:
+  # a 1200x630 face-aware crop (the Open Graph standard), delivered as JPEG over
+  # https for the widest scraper compatibility (some scrapers choke on AVIF/WebP).
+  def social_image_url(public_id)
+    Cloudinary::Utils.cloudinary_url(
+      public_id,
+      width: 1200, height: 630, crop: :fill, gravity: "auto:faces",
+      quality: :auto, format: "jpg", secure: true
+    )
+  end
+
+  # Share image for a page: the given Image record's photo, or the site image
+  # when none is present. Accepts nil so callers can pass an optional association.
+  def og_image_url(image = nil)
+    public_id = image.respond_to?(:cloudinary_public_id) ? image.cloudinary_public_id : nil
+    social_image_url(public_id.presence || SITE_OG_IMAGE_ID)
+  end
+
+  # Render a JSON-LD <script> from a Ruby Hash. JSON.generate already escapes
+  # the data; html_safe just stops ERB from re-escaping the quotes.
+  def json_ld_tag(data)
+    tag.script(JSON.generate(data).html_safe, type: "application/ld+json")
+  end
+
+  # Baseline structured data emitted on every page — identifies the church to
+  # search engines (name, address, contact, worship times). Page-specific blocks
+  # (Event, ImageGallery) are layered on top via `content_for :json_ld`.
+  def church_json_ld
+    {
+      "@context" => "https://schema.org",
+      "@type" => "Church",
+      "name" => "West Baton Rouge Presbyterian Church",
+      "url" => root_url,
+      "logo" => social_image_url(SITE_OG_IMAGE_ID),
+      "image" => social_image_url(SITE_OG_IMAGE_ID),
+      "description" => SITE_DESCRIPTION,
+      "telephone" => "+1-225-344-1486",
+      "email" => "office@wbrpres.org",
+      "address" => {
+        "@type" => "PostalAddress",
+        "streetAddress" => "640 Florida Ave",
+        "addressLocality" => "Port Allen",
+        "addressRegion" => "LA",
+        "postalCode" => "70767",
+        "addressCountry" => "US"
+      },
+      "openingHoursSpecification" => [
+        { "@type" => "OpeningHoursSpecification", "dayOfWeek" => "Sunday", "opens" => "11:00" },
+        { "@type" => "OpeningHoursSpecification", "dayOfWeek" => "Wednesday", "opens" => "10:00" }
+      ]
+    }
+  end
+
   # Optimized Cloudinary delivery URL for a raw public_id — assets that are not
   # backed by an Image record (the logo, hand-picked page imagery). Always
   # serves next-gen formats (f_auto), auto quality, and retina DPR. Pass

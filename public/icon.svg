@@ -1,3 +1,17 @@
-<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="256" cy="256" r="256" fill="red"/>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="West Baton Rouge Presbyterian Church">
+  <defs>
+    <linearGradient id="amber" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fbbf24"/>
+      <stop offset="1" stop-color="#d97706"/>
+    </linearGradient>
+  </defs>
+  <!-- Stone-900 squircle background -->
+  <rect x="0" y="0" width="512" height="512" rx="112" fill="#1c1917"/>
+  <!-- Hairline amber ring, echoing the site's amber-600/50 borders -->
+  <rect x="14" y="14" width="484" height="484" rx="100" fill="none" stroke="#d97706" stroke-opacity="0.45" stroke-width="6"/>
+  <!-- Latin cross -->
+  <g fill="url(#amber)">
+    <rect x="225" y="104" width="62" height="304" rx="16"/>
+    <rect x="156" y="172" width="200" height="62" rx="16"/>
+  </g>
 </svg>

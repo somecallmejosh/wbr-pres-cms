@@ -1,4 +1,8 @@
 <% content_for :title, "#{@gallery.title} — West Baton Rouge Presbyterian Church" %>
+<% content_for :og_image, og_image_url(@gallery.cover_image) %>
+<% content_for :og_description, @gallery.description.present? ? truncate(strip_tags(@gallery.description).squish, length: 200) : "#{@gallery.title} — a photo gallery from West Baton Rouge Presbyterian Church in Port Allen, Louisiana." %>
+<% content_for :og_url, gallery_url(@gallery) %>
+<% content_for :json_ld, json_ld_tag(gallery_json_ld(@gallery)) %>
 
 <%# ===========================================================================
     Cinematic hero — the cover photo, full-bleed, with the title set over a warm

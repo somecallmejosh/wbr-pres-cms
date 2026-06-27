@@ -85,4 +85,51 @@ module EventsHelper
     return if event.location.blank?
     "https://www.google.com/maps/dir/?api=1&destination=#{CGI.escape(event.location)}"
   end
+
+  # schema.org/Event structured data for an event detail page. Emitted via
+  # `content_for :json_ld` so a share/search result shows date, place, and image.
+  def event_json_ld(event)
+    data = {
+      "@context" => "https://schema.org",
+      "@type" => "Event",
+      "name" => event.title,
+      "startDate" => event_iso8601(event.event_date, event.start_time),
+      "eventStatus" => "https://schema.org/EventScheduled",
+      "eventAttendanceMode" => "https://schema.org/OfflineEventAttendanceMode",
+      "url" => event_url(event),
+      "image" => og_image_url(event.image),
+      "location" => {
+        "@type" => "Place",
+        "name" => event.location.presence || "West Baton Rouge Presbyterian Church",
+        "address" => {
+          "@type" => "PostalAddress",
+          "streetAddress" => "640 Florida Ave",
+          "addressLocality" => "Port Allen",
+          "addressRegion" => "LA",
+          "postalCode" => "70767",
+          "addressCountry" => "US"
+        }
+      },
+      "organizer" => {
+        "@type" => "Organization",
+        "name" => "West Baton Rouge Presbyterian Church",
+        "url" => root_url
+      }
+    }
+    data["endDate"] = event_iso8601(event.event_date, event.end_time) if event.end_time.present?
+    if event.description.present?
+      data["description"] = truncate(strip_tags(event.description).squish, length: 300)
+    end
+    data
+  end
+
+  private
+
+  # ISO 8601 timestamp built from an event's date column + a time column (whose
+  # own date part is irrelevant), mirroring #calendar_stamp's date/time merge.
+  def event_iso8601(date, time)
+    return if date.blank?
+    return date.iso8601 if time.blank?
+    Time.zone.local(date.year, date.month, date.day, time.hour, time.min).iso8601
+  end
 end

@@ -132,3 +132,55 @@ hairline rings, soft shadows, squircle radii) and genuinely mobile-friendly.
   persistence needed. On edit, the live PATCH path is unchanged (url present → `#save` runs).
 - **Tests**: galleries controller 27/27; galleries system 9/9 (incl. new reorder test).
   Rubocop clean across `app/` + touched test.
+
+## Social meta (Open Graph / Twitter) + JSON-LD for public pages
+
+### Problem
+Public pages share with no usable preview: the layout's default `og:image` is a
+root-relative path (`/theme/church-sketch.jpg`; scrapers need an absolute URL),
+the default description has the wrong location ("Baton Rouge, NJ"), no public
+view sets a tailored image/description, and there is no JSON-LD anywhere.
+
+### Plan
+- [ ] `ApplicationHelper`: `SITE_DESCRIPTION`, `SITE_OG_IMAGE_ID` (`wbr-pres-cms/image012`),
+      `social_image_url(id)` (absolute 1200x630 face-aware JPEG), `og_image_url(image=nil)`,
+      `json_ld_tag(data)`, `church_json_ld` (Church schema, real Port Allen address).
+- [ ] `EventsHelper`: `event_json_ld(event)` (schema.org/Event).
+- [ ] `GalleriesHelper` (new): `gallery_json_ld(gallery)` (schema.org/ImageGallery).
+- [ ] Layout: fix default description + og:image; emit baseline `church_json_ld` + `yield :json_ld`.
+- [x] Public views: tailored `og_image`/`og_description` + (show pages) `json_ld`.
+
+### Review
+- **Root cause**: layout already had OG/Twitter `content_for` plumbing, but the default
+  image was a root-relative path (scrapers need absolute) and no public view fed it data.
+- **Helpers** (`ApplicationHelper`): `social_image_url` builds an absolute https Cloudinary
+  URL — 1200x630 face-aware fill, delivered as **JPEG** (not f_auto) so older scrapers that
+  choke on AVIF/WebP still render the preview. `og_image_url(image=nil)` → the Image's photo
+  or the site image. `json_ld_tag`/`church_json_ld` emit baseline Church structured data with
+  the real Port Allen address, phone, email, and worship hours.
+- **Per-type JSON-LD**: `EventsHelper#event_json_ld` (schema.org/Event w/ ISO start/end built
+  from the date+time columns, Place, organizer); new `GalleriesHelper#gallery_json_ld`
+  (ImageGallery listing up to 12 photos).
+- **Layout**: fixed the wrong-location default description, switched default og:image to the
+  Cloudinary site image, added `<meta name="description">` + `og:image:width/height`, and
+  emits baseline Church JSON-LD on every page plus `yield :json_ld` for page-specific blocks.
+- **Views**: event#show / gallery#show set image + description + JSON-LD from their record
+  (image falls back to the site image); home uses the defaults; index/static pages set a
+  tailored share description (image correctly defaults to the home image per spec).
+- **Note on the home image**: used a 1200x630 face-aware crop of `wbr-pres-cms/image012`
+  (the OG standard, "some variation") rather than the supplied c_limit/w_1600 link, which
+  isn't the 1.91:1 ratio social cards expect.
+- **Tests**: new `test/integration/social_meta_test.rb` (5 tests, 23 assertions) asserts the
+  absolute share image, baseline Church JSON-LD on all 7 public routes, Event JSON-LD + event
+  image, image fallback, and ImageGallery JSON-LD. Full suite 212/212 green; RuboCop clean.
+
+### Follow-up: exact OG dimensions + favicon
+- **OG dimensions**: already exactly **1200x630** (the Open Graph / `summary_large_image`
+  standard) via `social_image_url` — confirmed, no change needed.
+- **Favicon**: replaced the default Rails red-circle placeholder with an on-brand mark — an
+  amber Latin cross (gradient `#fbbf24`→`#d97706`) on a stone-900 squircle with a hairline
+  amber ring, matching the site's Editorial-Luxury palette. Authored as `public/icon.svg`,
+  then rendered (rsvg-convert) to `public/icon.png` (512), `public/apple-touch-icon.png` (180),
+  and a multi-size `public/favicon.ico` (16/32/48). Layout now links `.ico` (legacy), `.svg`
+  (modern), and the 180px apple-touch-icon. The static `favicon.ico` also stops `/favicon.ico`
+  from falling through to the catch-all `errors#not_found` route. Verified legible at 32px.

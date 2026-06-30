@@ -4,6 +4,15 @@
 # See the Securing Rails Applications Guide for more information:
 # https://guides.rubyonrails.org/security.html#content-security-policy-header
 
+Rails.application.configure do
+  config.content_security_policy do |policy|
+    # Allow this site to be framed by itself and joshuabriley.com.
+    # Only frame-ancestors is set, so the rest of the page (scripts, Cloudinary
+    # images, Alpine CDN, etc.) is left unrestricted.
+    policy.frame_ancestors :self, "https://joshuabriley.com"
+  end
+end
+
 # Rails.application.configure do
 #   config.content_security_policy do |policy|
 #     policy.default_src :self, :https

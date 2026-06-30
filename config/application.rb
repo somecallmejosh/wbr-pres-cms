@@ -23,5 +23,10 @@ module WbrPresCms
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Allow this site to be embedded in an iframe by trusted origins.
+    # X-Frame-Options only supports DENY/SAMEORIGIN, so we drop it here and
+    # control framing via CSP frame-ancestors (see content_security_policy.rb).
+    config.action_dispatch.default_headers.delete("X-Frame-Options")
   end
 end
